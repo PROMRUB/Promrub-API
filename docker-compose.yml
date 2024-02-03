@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  promrub.services.api:
+    image: ${DOCKER_REGISTRY-}promrubservicesapi
+    build:
+      context: .
+      dockerfile: Promrub.Services.API/Dockerfile
