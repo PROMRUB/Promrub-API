@@ -2,6 +2,6 @@
 {
     public class GeneratePaymentLinkModel
     {
-        public string PaymentUrl { get; set; }
+        public string? PaymentUrl { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Promrub.Services.API.Models.Request
+namespace Promrub.Services.API.Models.RequestModels.Payment
 {
     public class GeneratePaymentTransactionLinkRequestModel
     {
