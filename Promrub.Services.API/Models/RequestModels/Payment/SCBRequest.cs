@@ -2,6 +2,7 @@
 {
     public class ScbQr30PaymentRequest
     {
+        public bool IsDev { get; set; }
         public bool? PromtRubServices { get; set; }
         public string? TransactionId { get; set; }
         public string? Amount { get; set; }

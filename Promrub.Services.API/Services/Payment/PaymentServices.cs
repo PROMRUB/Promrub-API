@@ -88,8 +88,10 @@ namespace Promrub.Services.API.Services.Payment
             var paymentDetails = paymentRepository.GetTransactionDetail(transactionId).FirstOrDefault();
             if (org is null || paymentDetails is null)
                 throw new ArgumentException("1102");
+            var mode = bool.Parse(configuration["IsDev"]);
             var request = new ScbQr30PaymentRequest
             {
+                IsDev = mode,
                 PromtRubServices = true,
                 Amount = paymentDetails.TotalTransactionPrices.ToString(),
                 BillerId = "010556109879888",
