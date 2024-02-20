@@ -51,6 +51,14 @@ namespace Promrub.Services.API.Entities
 
         [Column("org_description")]
         public string? OrgDescription { get; set; }
+        [Column("hv_mobile_banking")]
+        public bool? HvMobileBanking { get; set; }
+
+        [Column("hv_promtpay")]
+        public bool? HvPromptPay { get; set; }
+
+        [Column("hv_card")]
+        public bool? HvCard { get; set; }
 
         [Column("org_created_date")]
         public DateTime? OrgCreatedDate { get; set; }

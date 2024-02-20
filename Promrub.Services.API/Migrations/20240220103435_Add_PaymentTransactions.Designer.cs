@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Promrub.Services.API.PromServiceDbContext;
@@ -11,9 +12,10 @@ using Promrub.Services.API.PromServiceDbContext;
 namespace Promrub.Services.API.Migrations
 {
     [DbContext(typeof(PromrubDbContext))]
-    partial class PromrubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240220103435_Add_PaymentTransactions")]
+    partial class Add_PaymentTransactions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,18 +147,6 @@ namespace Promrub.Services.API.Migrations
                     b.Property<string>("District")
                         .HasColumnType("text")
                         .HasColumnName("district");
-
-                    b.Property<bool?>("HvCard")
-                        .HasColumnType("boolean")
-                        .HasColumnName("hv_card");
-
-                    b.Property<bool?>("HvMobileBanking")
-                        .HasColumnType("boolean")
-                        .HasColumnName("hv_mobile_banking");
-
-                    b.Property<bool?>("HvPromptPay")
-                        .HasColumnType("boolean")
-                        .HasColumnName("hv_promtpay");
 
                     b.Property<string>("No")
                         .HasColumnType("text")

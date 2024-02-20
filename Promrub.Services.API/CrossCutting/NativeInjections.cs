@@ -19,6 +19,8 @@ namespace Promrub.Services.API.CrossCutting
         {
             services.AddTransient<DataSeeder>();
 
+            services.AddHttpClient<IPaymentRepository, PaymentRepository>();
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IServiceCollection, ServiceCollection>();
 
@@ -32,6 +34,7 @@ namespace Promrub.Services.API.CrossCutting
             services.AddScoped<IApiKeyRepository, ApiKeyRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
 
             services.AddTransient<IAuthorizationHandler, GenericRbacHandler>();
             services.AddScoped<IBasicAuthenticationRepo, BasicAuthenticationRepo>();

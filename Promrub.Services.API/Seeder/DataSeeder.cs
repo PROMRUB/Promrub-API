@@ -257,11 +257,11 @@ namespace Promrub.Services.API.Seeder
             UpdateApiKeyRole();
             SeedDefaultRoles2();
 
-            SeedProvinces();
-            SeedDistrict();
-            SeedSubDistrict();
-            SeedBank();
-            SeedPaymentMethod();
+            //SeedProvinces();
+            //SeedDistrict();
+            //SeedSubDistrict();
+            //SeedBank();
+            //SeedPaymentMethod();
         }
     }
 }
