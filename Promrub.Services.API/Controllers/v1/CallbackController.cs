@@ -19,7 +19,7 @@ namespace Promrub.Services.API.Controllers.v1
         }
 
         [HttpPost]
-        [Route("/action/SCBCallback")]
+        [Route("action/SCBCallback")]
         [MapToApiVersion("1")]
         public async Task<IActionResult> SCBCallback(ScbCallbackRequest request)
         {
