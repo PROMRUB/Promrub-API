@@ -1,7 +1,10 @@
-﻿namespace Promrub.Services.API.Interfaces
+﻿using Promrub.Services.API.Entities;
+using Promrub.Services.API.Models.ResponseModels.Role;
+
+namespace Promrub.Services.API.Interfaces
 {
     public interface IRoleService
     {
-        //public IEnumerable<MRole> GetRolesList(string orgId, string rolesList);
+        public List<RoleListResponse> GetRolesList(string orgId, string rolesList);
     }
 }

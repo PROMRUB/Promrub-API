@@ -1,12 +1,22 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Promrub.Services.API.Models.ResponseModels.Common;
+using System.Reflection.PortableExecutable;
 
 namespace Promrub.Services.API.Handlers
 {
     public static class ResponseHandler
     {
-        public static StatusResponseModel ResponseMessage(string code,string? header)
+        public static object Response(string code, string? header)
+        {
+            return new { Status = ResponseMessage(code, header) };
+        }
+
+        public static object Response<TModel>(string code, string? header, TModel data) { 
+            return new { Status = ResponseMessage(code,header), Data = data } ;
+        }
+
+        private static StatusResponseModel ResponseMessage(string code,string? header)
         {
             string message = string.Empty; 
             switch (code)

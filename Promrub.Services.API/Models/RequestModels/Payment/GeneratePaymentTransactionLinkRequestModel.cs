@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Promrub.Services.API.Models.Request
+namespace Promrub.Services.API.Models.RequestModels.Payment
 {
     public class GeneratePaymentTransactionLinkRequestModel
     {
         public string? PosId { get; set; }
         public string? TransactionId { get; set; }
-        public List<RequestItemList> RequestItemList { get; set; } = new List<RequestItemList>();
+        public List<PaymentTransactionRequestItemList> RequestItemList { get; set; } = new List<PaymentTransactionRequestItemList>();
         public int ItemTotal { get; set; }
         public int QuantityTotal { get; set; }
         public decimal TotalItemsPrices { get; set; }
@@ -14,7 +14,7 @@ namespace Promrub.Services.API.Models.Request
         public decimal TotalTransactionPrices { get; set; }
     }
 
-    public class RequestItemList
+    public class PaymentTransactionRequestItemList
     {
         public int Quantity { get; set; }
         public string? ItemName { get; set; }

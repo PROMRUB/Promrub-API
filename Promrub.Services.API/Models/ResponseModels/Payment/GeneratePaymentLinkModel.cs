@@ -1,7 +1,12 @@
-﻿namespace Promrub.Services.API.Models.ResponseModels.Payment
+﻿using System.Security.Policy;
+
+namespace Promrub.Services.API.Models.ResponseModels.Payment
 {
     public class GeneratePaymentLinkModel
     {
-        public string PaymentUrl { get; set; }
+        public GeneratePaymentLinkModel(string url,string orgId, string transactionId) {
+            PaymentUrl = url + $"?org={orgId}&transactionId={transactionId}";
+        }
+        public string? PaymentUrl { get; set; }
     }
 }
