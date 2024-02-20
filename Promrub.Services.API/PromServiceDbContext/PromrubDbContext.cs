@@ -22,7 +22,9 @@ namespace Promrub.Services.API.PromServiceDbContext
         public DbSet<UserEntity>? Users { get; set; }
         public DbSet<OrganizationUserEntity>? OrganizationUsers { get; set; }
         public DbSet<PaymentTransactionEntity>? PaymentTransactions { get; set; }
+        public DbSet<PaymentChannelEntity> paymentChannels { get; set; }
         public DbSet<PaymentTransactionItemEntity>? PaymentTransactionItems { get; set; }
+        public DbSet<ReceiptNumbersEntity>? ReceiptNumbers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,7 +39,9 @@ namespace Promrub.Services.API.PromServiceDbContext
             modelBuilder.Entity<UserEntity>();
             modelBuilder.Entity<OrganizationUserEntity>();
             modelBuilder.Entity<PaymentTransactionEntity>();
+            modelBuilder.Entity<PaymentChannelEntity>();
             modelBuilder.Entity<PaymentTransactionItemEntity>();
+            modelBuilder.Entity<ReceiptNumbersEntity>();
         }
     }
 }

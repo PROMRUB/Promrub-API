@@ -10,8 +10,8 @@ namespace Promrub.Services.API.Configurations
         public OrganizationConfigurations()
         {
             CreateMap<OrganizationRequest, OrganizationEntity>()
-                .ForMember(x => x.OrgId, opt => opt.MapFrom( x => Guid.NewGuid()))
-                .ForMember(x => x.OrgCreatedDate, opt => opt.MapFrom( x => DateTime.UtcNow));
+                .ForMember(dest => dest.OrgId, opt => opt.MapFrom(_ => Guid.NewGuid()))
+                .ForMember(dest => dest.OrgCreatedDate, opt => opt.MapFrom(_ => DateTime.UtcNow));
             CreateMap<OrganizationEntity, OrganizationResponse>();
         }
     }

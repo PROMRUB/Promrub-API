@@ -7,6 +7,7 @@ using Promrub.Services.API.Repositories;
 using Promrub.Services.API.Utils;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 
 namespace Promrub.Services.API.Services.Payment
@@ -16,25 +17,35 @@ namespace Promrub.Services.API.Services.Payment
         private readonly IMapper mapper;
         private readonly IConfiguration configuration;
         private readonly IOrganizationRepository organizationRepository;
+        private readonly IPaymentChannelRepository paymentChannelRepository;
         private readonly IPaymentRepository paymentRepository;
         public PaymentServices(IMapper mapper,
             IConfiguration configuration,
             IOrganizationRepository organizationRepository,
+            IPaymentChannelRepository paymentChannelRepository,
             IPaymentRepository paymentRepository)
         {
             this.mapper = mapper;
             this.configuration = configuration;
             this.organizationRepository = organizationRepository;
+            this.paymentChannelRepository = paymentChannelRepository;
             this.paymentRepository = paymentRepository;
+        }
+
+        private void SetOrgId(string orgId)
+        {
+            organizationRepository!.SetCustomOrgId(orgId);
+            paymentRepository!.SetCustomOrgId(orgId);
+            paymentChannelRepository.SetCustomOrgId(orgId);
         }
 
         public async Task<GeneratePaymentLinkModel> GeneratePaymentTransaction(string orgId, GeneratePaymentTransactionLinkRequestModel request)
         {
-            organizationRepository!.SetCustomOrgId(orgId);
+            SetOrgId(orgId);
             var organization = await organizationRepository.GetOrganization();
-            if(organization is null)
+            if (organization is null)
                 throw new ArgumentException("1102");
-            var transactionId = ServiceUtils.GenerateTransaction(orgId,16);
+            var transactionId = ServiceUtils.GenerateTransaction(orgId, 16);
             var transactionQuery = mapper.Map<GeneratePaymentTransactionLinkRequestModel, PaymentTransactionEntity>(request);
             paymentRepository!.SetCustomOrgId(orgId);
             paymentRepository.AddTransaction(transactionId, transactionQuery);
@@ -50,32 +61,35 @@ namespace Promrub.Services.API.Services.Payment
 
         public async Task<PaymentTransactionDetails> GetPaymentTransactionDetails(string orgId, string transactionId)
         {
-            organizationRepository!.SetCustomOrgId(orgId);
-            paymentRepository!.SetCustomOrgId(orgId);
+            SetOrgId(orgId);
             var org = await organizationRepository.GetOrganization();
             var paymentDetails = paymentRepository.GetTransactionDetail(transactionId).FirstOrDefault();
-            if (org is null|| paymentDetails is null)
+            if (org is null || paymentDetails is null)
                 throw new ArgumentException("1102");
+            var promptpatList = mapper.Map<List<PaymentChannelEntity>, List<PaymentChannelList>>(await paymentChannelRepository.GetPaymentChannels());
             var result = new PaymentTransactionDetails()
             {
                 OrgName = org.OrgName,
                 Prices = paymentDetails!.TotalTransactionPrices,
                 HvMobileBanking = org.HvMobileBanking,
+                MobileBankingList = new List<PaymentChannelList>(),
                 HvPromptPay = org.HvPromptPay,
-                HvCard = org.HvCard
+                PrompayList = promptpatList,
+                HvCard = org.HvCard,
+                CardList = new List<PaymentChannelList>()
             };
             return result;
         }
 
         public async Task<Qr30GenerateResponse> GetPromtPayQrCode(string orgId, string transactionId)
         {
-            organizationRepository!.SetCustomOrgId(orgId);
-            paymentRepository!.SetCustomOrgId(orgId);
+            SetOrgId(orgId);
             var org = await organizationRepository.GetOrganization();
             var paymentDetails = paymentRepository.GetTransactionDetail(transactionId).FirstOrDefault();
             if (org is null || paymentDetails is null)
                 throw new ArgumentException("1102");
-            var request = new ScbQr30PaymentRequest { 
+            var request = new ScbQr30PaymentRequest
+            {
                 PromtRubServices = true,
                 Amount = paymentDetails.TotalTransactionPrices.ToString(),
                 BillerId = "010556109879888",
@@ -83,7 +97,23 @@ namespace Promrub.Services.API.Services.Payment
             };
             var result = await paymentRepository.QRGenerate(request);
             return mapper.Map<ScbQrGenerateData, Qr30GenerateResponse>(result.Data!);
+        }
 
+        public async Task<bool> SCBCallback(ScbCallbackRequest request)
+        {
+            var paymentDetails = paymentRepository.GetTransactionDetail(request.TransactionId!).FirstOrDefault();
+            var receiptData = await paymentRepository.ReceiptNumberAsync(paymentDetails!.OrgId);
+            var receiptNo = "RCP" + receiptData.ReceiptDate + "-" + receiptData.Allocated!.Value.ToString("D4") + "." + paymentDetails.OrgId;
+            var receiptDate = DateTime.UtcNow;
+            var receipt = new PaymentTransactionEntity
+            {
+                TransactionId = request.PromrubReferenceNo,
+                ReceiptNo = receiptNo,
+                ReceiptDate = receiptDate,
+                ReceiptAmount = (decimal?)request.Amount
+            };
+            await paymentRepository.ReceiptUpdate(receipt);
+            return true;
         }
     }
 }

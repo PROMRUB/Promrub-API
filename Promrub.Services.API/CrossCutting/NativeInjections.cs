@@ -28,12 +28,14 @@ namespace Promrub.Services.API.CrossCutting
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPaymentChannelServices, PaymentChannelServices>();
             services.AddScoped<IPaymentServices, PaymentServices>();
 
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IApiKeyRepository, ApiKeyRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPaymentChannelRepository, PaymentChannelRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
 
             services.AddTransient<IAuthorizationHandler, GenericRbacHandler>();

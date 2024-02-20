@@ -13,5 +13,10 @@ namespace Promrub.Services.API.Repositories
         {
             orgId = customOrgId;
         }
+
+        public void Commit()
+        {
+            context!.SaveChanges();
+        }
     }
 }

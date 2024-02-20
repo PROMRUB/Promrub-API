@@ -10,7 +10,7 @@ namespace Promrub.Services.API.Configurations
         public UserConfigurations()
         {
             CreateMap<UserRequest, UserEntity>()
-                .ForMember(x => x.UserCreatedDate, opt => opt.MapFrom(x => DateTime.UtcNow));
+                .ForMember(dest => dest.UserCreatedDate, opt => opt.MapFrom(_ => DateTime.UtcNow));
             CreateMap<UserEntity, UserResponse>();
         }
     }

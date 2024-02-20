@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using PasswordGenerator;
 using Promrub.Services.API.Entities;
@@ -57,6 +58,11 @@ namespace Promrub.Services.API.Repositories
                 return context!.PaymentTransactions!.Where(x => x.OrgId!.Equals(orgId) && x.TransactionId! == transactionId);
         }
 
+        public IQueryable<PaymentTransactionEntity> GetTransactionDetailById(string transactionId)
+        {
+            return context!.PaymentTransactions!.Where(x => x.TransactionId! == transactionId);
+        }
+
         public async Task<ScbQrGenerateResponse> QRGenerate(ScbQr30PaymentRequest request)
         {
             var json = JsonConvert.SerializeObject(request, serializerSettings);
@@ -66,9 +72,47 @@ namespace Promrub.Services.API.Repositories
             return response;
         }
 
-        public void Commit()
+        public async Task<ReceiptNumbersEntity> ReceiptNumberAsync(string? orgId)
         {
+            var currentDate = DateTime.Today.Date.ToUniversalTime().ToString("yyMMdd");
+            var query = await context!.ReceiptNumbers!.Where(x => x.ReceiptDate == currentDate && x.OrgId == orgId).FirstOrDefaultAsync();
+            bool HaveReciept = true;
+            while (HaveReciept)
+            {
+                if (query == null)
+                {
+                    var newRec = new ReceiptNumbersEntity
+                    {
+                        ReceiptId = Guid.NewGuid(),
+                        OrgId = orgId,
+                        ReceiptDate = currentDate,
+                        Allocated = 0
+                    };
+                    context.ReceiptNumbers!.Add(newRec);
+                    context.SaveChanges();
+                    query = await context.ReceiptNumbers!.Where(x => x.ReceiptDate == currentDate && x.OrgId == orgId).FirstOrDefaultAsync();
+                }
+                else
+                {
+                    HaveReciept = false;
+                }
+            }
+            query!.Allocated++;
+            context.SaveChanges();
+            return query;
+        }
+
+        public async Task<PaymentTransactionEntity> ReceiptUpdate(PaymentTransactionEntity request)
+        {
+
+            var query = await context!.PaymentTransactions!.Where(x => x.TransactionId == request.TransactionId).FirstOrDefaultAsync();
+            if (query == null)
+                throw new ArgumentException("1102");
+            query.ReceiptNo = request.ReceiptNo;
+            query.ReceiptDate = request.ReceiptDate;
+            query.PaymentStatus = 3;
             context!.SaveChanges();
+            return query;
         }
     }
 }

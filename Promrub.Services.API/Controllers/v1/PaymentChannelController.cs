@@ -3,33 +3,32 @@ using Microsoft.AspNetCore.Mvc;
 using Promrub.Services.API.Handlers;
 using Promrub.Services.API.Interfaces;
 using Promrub.Services.API.Models.RequestModels.Payment;
-using Promrub.Services.API.Models.ResponseModels.ApiKey;
 
 namespace Promrub.Services.API.Controllers.v1
 {
     [ApiController]
     [Route("v{version:apiVersion}/api/[controller]")]
     [ApiVersion("1")]
-    public class CallbackController : BaseController
+    public class PaymentChannelController : BaseController
     {
-        private readonly IPaymentServices services;
-        public CallbackController(IPaymentServices services)
+        private readonly IPaymentChannelServices services;
+
+        public PaymentChannelController(IPaymentChannelServices services)
         {
             this.services = services;
         }
 
         [HttpPost]
-        [Route("/action/SCBCallback")]
+        [Route("org/{id}/action/AddPaymentChannel")]
         [MapToApiVersion("1")]
-        public async Task<IActionResult> SCBCallback(ScbCallbackRequest request)
+        public IActionResult AddPaymentChannel(string id, [FromBody] PaymentChannelRequest request)
         {
             try
             {
-                if (!ModelState.IsValid)
+                if (!ModelState.IsValid || string.IsNullOrEmpty(id))
                     throw new ArgumentException("1101");
-                await services.SCBCallback(request);
+                services.AddPaymentChannel(id, request);
                 return Ok(ResponseHandler.Response("1000", null));
-
             }
             catch (Exception ex)
             {

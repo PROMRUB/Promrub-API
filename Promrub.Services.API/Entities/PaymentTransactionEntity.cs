@@ -34,6 +34,17 @@ namespace Promrub.Services.API.Entities
         [Column("total_transaction_prices")]
         public decimal TotalTransactionPrices { get; set; }
 
+        [Column("receipt_no")]
+        public string? ReceiptNo { get; set; }
+        [Column("receipt_date")]
+        public DateTime? ReceiptDate { get; set; }
+
+        [Column("receipt_amount")]
+        public decimal? ReceiptAmount { get; set; }
+
+        [Column("payment_status")]
+        public int? PaymentStatus { get; set; }
+
         [Column("create_at")]
         public DateTime? CreateAt { get; set; }
     }
