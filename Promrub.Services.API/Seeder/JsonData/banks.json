@@ -1,0 +1,42 @@
+[
+  {
+    "bankCode": "002",
+    "bankAbbr": "BBL",
+    "bankNameEn": "BANGKOK BANK PUBLIC COMPANY LIMITED",
+    "bankNameTh": "ธนาคารกรุงเทพ",
+    "bankSwiftCode": "BKKBTHBK",
+    "isActive": false
+  },
+  {
+    "bankCode": "004",
+    "bankAbbr": "KBANK",
+    "bankNameEn": "Kasikornbank Public Company Limited",
+    "bankNameTh": "ธนาคารกสิกรไทย",
+    "bankSwiftCode": "KASITHBK",
+    "isActive": false
+  },
+  {
+    "bankCode": "014",
+    "bankAbbr": "SCB",
+    "bankNameEn": "The Siam Commercial Bank Public Company Limited",
+    "bankNameTh": "ธนาคารไทยพาณิชย์",
+    "bankSwiftCode": "SICOTHBK",
+    "isActive": true
+  },
+  {
+    "bankCode": "025",
+    "bankAbbr": "BAY",
+    "bankNameEn": "Bank of Ayudhya Public Company Limited",
+    "bankNameTh": "ธนาคารกรุงศรีอยุธยา",
+    "bankSwiftCode": "AYUDTHBK",
+    "isActive": false
+  },
+  {
+    "bankCode": "030",
+    "bankAbbr": "GSB",
+    "bankNameEn": "Government Savings Bank",
+    "bankNameTh": "ธนาคารออมสิน",
+    "bankSwiftCode": "GSBATHBK",
+    "isActive": false
+  }
+]

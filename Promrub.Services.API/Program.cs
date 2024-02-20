@@ -8,6 +8,7 @@ using Promrub.Services.API.CrossCutting;
 using Promrub.Services.API.Helpers;
 using Promrub.Services.API.Models.ResponseModels.Common;
 using Promrub.Services.API.PromServiceDbContext;
+using Promrub.Services.API.Seeder;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
@@ -35,6 +36,18 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddApiVersioning();
 
+
+builder.Services.AddAuthentication("BasicOrBearer")
+    .AddScheme<AuthenticationSchemeOptions, AuthenticationHandlerProxy>("BasicOrBearer", null);
+
+builder.Services.AddAuthorization(options => {
+    var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder("BasicOrBearer");
+    defaultAuthorizationPolicyBuilder = defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
+    options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
+
+    options.AddPolicy("GenericRolePolicy", policy => policy.AddRequirements(new GenericRbacRequirement()));
+});
+
 builder.Services.AddSwaggerGen(config =>
 {
     config.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "Promrub API", Version = "v1", Description = "Promrub API Version 1", });
@@ -50,6 +63,7 @@ builder.Services.AddSwaggerGen(config =>
         version = version.Replace("v", "");
         return versions.Any(v => v.ToString() == version && maps.AsEnumerable().Any(v => v.ToString() == version));
     });
+
     config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -57,6 +71,7 @@ builder.Services.AddSwaggerGen(config =>
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
+
     config.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -75,23 +90,15 @@ builder.Services.AddSwaggerGen(config =>
 
 NativeInjections.RegisterServices(builder.Services);
 
-builder.Services.AddAuthentication("BasicOrBearer")
-                .AddScheme<AuthenticationSchemeOptions, AuthenticationHandlerProxy>("BasicOrBearer", null);
-builder.Services.AddAuthorization(options =>
-{
-    var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder("BasicOrBearer");
-    defaultAuthorizationPolicyBuilder = defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
-    options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
-
-    options.AddPolicy("GenericRolePolicy", policy => policy.AddRequirements(new GenericRbacRequirement()));
-});
-
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<PromrubDbContext>();
     dbContext.Database.Migrate();
+
+    var service = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+    service.Seed();
 }
 
 app.UseSwagger();

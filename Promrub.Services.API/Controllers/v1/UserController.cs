@@ -3,36 +3,35 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Promrub.Services.API.Handlers;
 using Promrub.Services.API.Interfaces;
-using Promrub.Services.API.Models.RequestModels.Payment;
-using Promrub.Services.API.Models.ResponseModels.Payment;
-using System.Reflection.PortableExecutable;
-using System.Transactions;
+using Promrub.Services.API.Models.RequestModels.User;
+using Promrub.Services.API.Models.ResponseModels.Organization;
+using Promrub.Services.API.Models.ResponseModels.User;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Promrub.Services.API.Controllers.v1
 {
     [ApiController]
     [Route("v{version:apiVersion}/api/[controller]")]
     [ApiVersion("1")]
-    public class PaymentController : BaseController
+    public class UserController : BaseController
     {
-        private readonly IPaymentServices services;
-
-        public PaymentController(IPaymentServices services)
+        private readonly IUserService services;
+        public UserController(IUserService services)
         {
             this.services = services;
         }
 
-        [HttpPost]
-        [Route("org/{id}/action/GeneratePaymentTransaction")]
+        [HttpGet]
+        [Route("org/{id}/action/AdminGetUsers")]
         [MapToApiVersion("1")]
-        public IActionResult GeneratePaymentTransaction(string id, [FromBody] GeneratePaymentTransactionLinkRequestModel request)
+        public IActionResult AdminGetUsers(string id)
         {
             try
             {
                 if (!ModelState.IsValid || string.IsNullOrEmpty(id))
                     throw new ArgumentException("1101");
-                var result = services.GeneratePaymentTransaction(id, request);
-                return Ok(ResponseHandler.Response("1000", null, result));
+                var result = services.GetUsers(id);
+                return Ok(ResponseHandler.Response<List<UserResponse>>("1000", null, result));
             }
             catch (Exception ex)
             {
@@ -40,17 +39,17 @@ namespace Promrub.Services.API.Controllers.v1
             }
         }
 
-
-        [HttpGet]
-        [Route("org/{id}/action/InquiryTransaction/{transactionId}")]
+        [HttpPost]
+        [Route("org/{id}/action/AdminAddUser")]
         [MapToApiVersion("1")]
-        public IActionResult InquiryTransaction(string id, string transactionId)
+        public IActionResult AdminAddUser(string id, [FromBody] UserRequest request)
         {
             try
             {
                 if (!ModelState.IsValid || string.IsNullOrEmpty(id))
                     throw new ArgumentException("1101");
-                return Ok(ResponseHandler.Response("1000", null, new InquiryTransactionResponseModel()));
+                services.AddUser(id, request);
+                return Ok(ResponseHandler.Response("1000", null));
             }
             catch (Exception ex)
             {

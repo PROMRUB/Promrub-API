@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PasswordGenerator;
 using Promrub.Services.API.Entities;
 using Promrub.Services.API.Interfaces;
 using Promrub.Services.API.PromServiceDbContext;
@@ -7,9 +8,10 @@ namespace Promrub.Services.API.Repositories
 {
     public class ApiKeyRepository : BaseRepository, IApiKeyRepository
     {
-        public ApiKeyRepository(PromrubDbContext ctx)
+        private readonly Password password = new Password(32);
+        public ApiKeyRepository(PromrubDbContext context)
         {
-            context = ctx;
+            this.context = context;
         }
 
         public Task<ApiKeyEntity> GetApiKey(string apiKey)
@@ -22,6 +24,7 @@ namespace Promrub.Services.API.Repositories
         public void AddApiKey(ApiKeyEntity apiKey)
         {
             apiKey.OrgId = orgId;
+            apiKey.ApiKey = password.Next();
             context!.ApiKeys!.Add(apiKey);
             context.SaveChanges();
         }
@@ -42,7 +45,7 @@ namespace Promrub.Services.API.Repositories
         public IEnumerable<ApiKeyEntity> GetApiKeys()
         {
             var query = context!.ApiKeys!
-                .Where(x => x.OrgId!.Equals(orgId)).ToList();
+                .Where(x => x.OrgId!.Equals(orgId));
             return query;
         }
     }

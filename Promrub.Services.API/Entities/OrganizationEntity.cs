@@ -25,6 +25,30 @@ namespace Promrub.Services.API.Entities
         [Column("org_name")]
         public string? OrgName { get; set; }
 
+        [Column("tax_id")]
+        public string? TaxId { get; set; }
+
+        [Column("branch_id")]
+        public string? BrnId { get; set; }
+
+        [Column("house_no")]
+        public string? No { get; set; }
+
+        [Column("road")]
+        public string? Road { get; set; }
+
+        [Column("provice")]
+        public string? Provice { get; set; }
+
+        [Column("district")]
+        public string? District { get; set; }
+
+        [Column("sub_district")]
+        public string? SubDistrict { get; set; }
+
+        [Column("post_code")]
+        public string? PostCode { get; set; }
+
         [Column("org_description")]
         public string? OrgDescription { get; set; }
 

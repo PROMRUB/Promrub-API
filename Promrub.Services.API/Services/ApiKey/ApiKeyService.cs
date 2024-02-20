@@ -54,9 +54,6 @@ namespace Promrub.Services.API.Services.ApiKey
         public async void AddApiKey(string orgId, ApiKeyRequest apiKey)
         {
             repository!.SetCustomOrgId(orgId);
-            var query = await repository!.GetApiKey(apiKey.ApiKey!);
-            if (query != null)
-                throw new ArgumentException("1111");
             var request = mapper.Map<ApiKeyRequest, ApiKeyEntity>(apiKey);
             repository!.AddApiKey(request);
         }

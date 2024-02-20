@@ -1,9 +1,19 @@
-﻿namespace Promrub.Services.API.Models.RequestModels.Organization
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Promrub.Services.API.Models.RequestModels.Organization
 {
     public class OrganizationRequest
     {
-        public Guid? OrgId { get; set; }
         public string? OrgCustomId { get; set; }
         public string? OrgName { get; set; }
+        public string? TaxId { get; set; }
+        public string? BrnId { get; set; }
+        public string? No { get; set; }
+        public string? Road { get; set; }
+        public int? Provice { get; set; }
+        public int? District { get; set; }
+        public int? SubDistrict { get; set; }
+        public string? PostCode { get; set; }
+        public string? OrgDescription { get; set; }
     }
 }

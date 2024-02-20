@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PasswordGenerator;
 using Promrub.Services.API.Entities;
 using Promrub.Services.API.Models.RequestModels.ApiKey;
 using Promrub.Services.API.Models.ResponseModels.ApiKey;

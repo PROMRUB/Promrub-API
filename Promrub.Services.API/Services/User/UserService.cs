@@ -2,6 +2,7 @@
 using Promrub.Services.API.Entities;
 using Promrub.Services.API.Interfaces;
 using Promrub.Services.API.Models.Authentications;
+using Promrub.Services.API.Models.RequestModels.User;
 using Promrub.Services.API.Models.ResponseModels.User;
 
 namespace Promrub.Services.API.Services.User
@@ -32,12 +33,13 @@ namespace Promrub.Services.API.Services.User
             return mapper.Map<UserEntity,UserResponse>(query);
         }
 
-        public void AddUser(string orgId, UserEntity user)
+        public void AddUser(string orgId, UserRequest request)
         {
             repository!.SetCustomOrgId(orgId);
-            if (IsEmailExist(orgId, user!.UserEmail!) || IsUserNameExist(orgId, user!.UserName!))
+            if (IsEmailExist(orgId, request!.UserEmail!) || IsUserNameExist(orgId, request!.UserName!))
                 throw new ArgumentException("1111");
-            repository!.AddUser(user);
+            var query = mapper.Map<UserRequest, UserEntity>(request);
+            repository!.AddUser(query);
         }
 
         public bool IsEmailExist(string orgId, string email)

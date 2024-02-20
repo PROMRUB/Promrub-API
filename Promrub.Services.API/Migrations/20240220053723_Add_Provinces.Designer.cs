@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Promrub.Services.API.PromServiceDbContext;
@@ -11,9 +12,10 @@ using Promrub.Services.API.PromServiceDbContext;
 namespace Promrub.Services.API.Migrations
 {
     [DbContext(typeof(PromrubDbContext))]
-    partial class PromrubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240220053723_Add_Provinces")]
+    partial class Add_Provinces
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,74 +63,6 @@ namespace Promrub.Services.API.Migrations
                     b.HasIndex("OrgId");
 
                     b.ToTable("ApiKeys");
-                });
-
-            modelBuilder.Entity("Promrub.Services.API.Entities.BankEntity", b =>
-                {
-                    b.Property<Guid?>("BankId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("bank_id");
-
-                    b.Property<string>("BankAbbr")
-                        .HasColumnType("text")
-                        .HasColumnName("bank_abbr");
-
-                    b.Property<int?>("BankCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("bank_code");
-
-                    b.Property<string>("BankNameEn")
-                        .HasColumnType("text")
-                        .HasColumnName("bank_name_en");
-
-                    b.Property<string>("BankNameTh")
-                        .HasColumnType("text")
-                        .HasColumnName("bank_name_th");
-
-                    b.Property<string>("BankSwiftCode")
-                        .HasColumnType("text")
-                        .HasColumnName("bank_swift_code");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_active");
-
-                    b.HasKey("BankId");
-
-                    b.ToTable("Bank");
-                });
-
-            modelBuilder.Entity("Promrub.Services.API.Entities.DistrictEntity", b =>
-                {
-                    b.Property<Guid?>("DistrictId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("district_id");
-
-                    b.Property<int?>("DistrictCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("district_code");
-
-                    b.Property<string>("DistrictNameEn")
-                        .HasColumnType("text")
-                        .HasColumnName("district_name_en");
-
-                    b.Property<string>("DistrictNameTh")
-                        .HasColumnType("text")
-                        .HasColumnName("district_name_th");
-
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("text")
-                        .HasColumnName("postal_code");
-
-                    b.Property<int?>("ProvinceCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("province_code");
-
-                    b.HasKey("DistrictId");
-
-                    b.ToTable("Districts");
                 });
 
             modelBuilder.Entity("Promrub.Services.API.Entities.OrganizationEntity", b =>
@@ -231,34 +165,6 @@ namespace Promrub.Services.API.Migrations
                     b.ToTable("OrganizationsUsers");
                 });
 
-            modelBuilder.Entity("Promrub.Services.API.Entities.PaymentMethodEntity", b =>
-                {
-                    b.Property<Guid?>("PaymentMethodId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("payment_method_id");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_active");
-
-                    b.Property<int?>("PaymentMethodCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("payment_method_code");
-
-                    b.Property<string>("PaymentMethodNameEn")
-                        .HasColumnType("text")
-                        .HasColumnName("payment_method_name_en");
-
-                    b.Property<string>("PaymentMethodNameTh")
-                        .HasColumnType("text")
-                        .HasColumnName("payment_method_name_th");
-
-                    b.HasKey("PaymentMethodId");
-
-                    b.ToTable("PaymentMethods");
-                });
-
             modelBuilder.Entity("Promrub.Services.API.Entities.ProvinceEntity", b =>
                 {
                     b.Property<Guid?>("ProviceId")
@@ -317,42 +223,6 @@ namespace Promrub.Services.API.Migrations
                         .IsUnique();
 
                     b.ToTable("Roles");
-                });
-
-            modelBuilder.Entity("Promrub.Services.API.Entities.SubDistrictEntity", b =>
-                {
-                    b.Property<Guid?>("SubDistrictId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("sub_district_id");
-
-                    b.Property<int?>("DistrictCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("district_code");
-
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("text")
-                        .HasColumnName("postal_code");
-
-                    b.Property<int?>("ProvinceCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("province_code");
-
-                    b.Property<int?>("SubDistrictCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("sub_district_code");
-
-                    b.Property<string>("SubDistrictNameEn")
-                        .HasColumnType("text")
-                        .HasColumnName("sub_district_name_en");
-
-                    b.Property<string>("SubDistrictNameTh")
-                        .HasColumnType("text")
-                        .HasColumnName("sub_district_name_th");
-
-                    b.HasKey("SubDistrictId");
-
-                    b.ToTable("SubDistricts");
                 });
 
             modelBuilder.Entity("Promrub.Services.API.Entities.UserEntity", b =>

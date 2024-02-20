@@ -4,8 +4,10 @@ using Promrub.Services.API.ExternalServices.Cache;
 using Promrub.Services.API.Handlers;
 using Promrub.Services.API.Interfaces;
 using Promrub.Services.API.Repositories;
+using Promrub.Services.API.Seeder;
 using Promrub.Services.API.Services.ApiKey;
 using Promrub.Services.API.Services.Organization;
+using Promrub.Services.API.Services.Payment;
 using Promrub.Services.API.Services.Role;
 using Promrub.Services.API.Services.User;
 
@@ -15,6 +17,8 @@ namespace Promrub.Services.API.CrossCutting
     {
         public static void RegisterServices(IServiceCollection services)
         {
+            services.AddTransient<DataSeeder>();
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IServiceCollection, ServiceCollection>();
 
@@ -22,6 +26,7 @@ namespace Promrub.Services.API.CrossCutting
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPaymentServices, PaymentServices>();
 
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IApiKeyRepository, ApiKeyRepository>();

@@ -1,0 +1,20 @@
+[
+    {
+        "paymentMethodCode": 1,
+        "paymentMethodNameEn": "Mobile Banking",
+        "paymentMethodNameTh": "แอพธนาคาร",
+        "isActive": true
+    },
+    {
+        "paymentMethodCode": 2,
+        "paymentMethodNameEn": "Qr Code",
+        "paymentMethodNameTh": "พร้อมเพย์ (Qr Code)",
+        "isActive": true
+    },
+    {
+        "paymentMethodCode": 3,
+        "paymentMethodNameEn": "Credit / Debit Card",
+        "paymentMethodNameTh": "บัตรเครดิต / เดบิต",
+        "isActive": true
+    },
+]

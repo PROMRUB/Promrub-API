@@ -12,7 +12,6 @@ namespace Promrub.Services.API.Controllers.v1
 {
     [ApiController]
     [Route("v{version:apiVersion}/api/[controller]")]
-    [Authorize(Policy = "GenericRolePolicy")]
     [ApiVersion("1")]
     public class OrganizationController : BaseController
     {
@@ -25,6 +24,7 @@ namespace Promrub.Services.API.Controllers.v1
 
         [HttpGet]
         [Route("org/{id}/action/GetOrganization")]
+        [MapToApiVersion("1")]
         public async Task<IActionResult> GetOrganization(string id)
         {
             try
@@ -40,9 +40,9 @@ namespace Promrub.Services.API.Controllers.v1
             }
         }
 
-        [ExcludeFromCodeCoverage]
         [HttpGet]
         [Route("org/{id}/action/AdminGetUserAllowedOrganization/{userName}")]
+        [MapToApiVersion("1")]
         public async Task<IActionResult> AdminGetUserAllowedOrganization(string id, string userName)
         {
             try
@@ -58,9 +58,9 @@ namespace Promrub.Services.API.Controllers.v1
             }
         }
 
-        [ExcludeFromCodeCoverage]
         [HttpPost]
         [Route("org/{id}/action/AddUserToOrganization")]
+        [MapToApiVersion("1")]
         public IActionResult AddUserToOrganization(string id, [FromBody] OrganizationUserRequest request)
         {
             try
@@ -76,9 +76,9 @@ namespace Promrub.Services.API.Controllers.v1
             }
         }
 
-        [ExcludeFromCodeCoverage]
         [HttpPost]
         [Route("org/{id}/action/AdminAddOrganization")]
+        [MapToApiVersion("1")]
         public IActionResult AdminAddOrganization(string id, [FromBody] OrganizationRequest request)
         {
             try
@@ -94,9 +94,9 @@ namespace Promrub.Services.API.Controllers.v1
             }
         }
 
-        [ExcludeFromCodeCoverage]
         [HttpPost]
         [Route("org/{id}/action/AdminAddUserToOrganization")]
+        [MapToApiVersion("1")]
         public IActionResult AdminAddUserToOrganization(string id, [FromBody] OrganizationUserRequest request)
         {
             try
