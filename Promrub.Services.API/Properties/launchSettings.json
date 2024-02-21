@@ -8,14 +8,22 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:7146;http://localhost:5224"
+      "applicationUrl": "https://localhost:7146;http://localhost:5224",
+      "hotReloadEnabled": false
     },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "IsDev": "true",
+        "PostgreSQL:Host": "localhost",
+        "PostgreSQL:Database": "promrub-dev",
+        "PostgreSQL:User": "admin",
+        "PostgreSQL:Password": "Initial1!",
+        "PaymentUrl": "https:/dev-payment-channel.promrub.com",
+        "SCBServicesUrl": "https://api.promrub.prom.co.th/scb/",
+        "SCBGenerateQRUrl": "v1/QRGenerate/CreateQR30Async"
       }
     },
     "Docker": {

@@ -15,6 +15,30 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("IsDev")))
+    throw new ArgumentNullException($"{0} is Null", "IsDev");
+
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PostgreSQL:Host")))
+    throw new ArgumentNullException($"{0} is Null", "PostgreSQL:Host");
+
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PostgreSQL:Database")))
+    throw new ArgumentNullException($"{0} is Null", "PostgreSQL:Database");
+
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PostgreSQL:User")))
+    throw new ArgumentNullException($"{0} is Null", "PostgreSQL:User");
+
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PostgreSQL:Password")))
+    throw new ArgumentNullException($"{0} is Null", "PostgreSQL:Password");
+
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PaymentUrl")))
+    throw new ArgumentNullException($"{0} is Null", "PaymentUrl");
+
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SCBServicesUrl")))
+    throw new ArgumentNullException($"{0} is Null", "SCBServicesUrl");
+
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SCBGenerateQRUrl")))
+    throw new ArgumentNullException($"{0} is Null", "SCBServicesUrl");
+
 builder.Services.AddControllers()
     .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
 
@@ -25,6 +49,14 @@ Log.Logger = log;
 
 var cfg = builder.Configuration;
 
+cfg["IsDev"] = Environment.GetEnvironmentVariable("IsDev")!;
+cfg["PostgreSQL:Host"] = Environment.GetEnvironmentVariable("PostgreSQL:Host")!;
+cfg["PostgreSQL:Database"] = Environment.GetEnvironmentVariable("PostgreSQL:Database")!;
+cfg["PostgreSQL:User"] = Environment.GetEnvironmentVariable("PostgreSQL:User")!;
+cfg["PostgreSQL:Password"] = Environment.GetEnvironmentVariable("PostgreSQL:Password")!;
+cfg["PaymentUrl"] = Environment.GetEnvironmentVariable("PaymentUrl")!;
+cfg["SCBServicesUrl"] = Environment.GetEnvironmentVariable("SCBServicesUrl")!;
+cfg["SCBGenerateQRUrl"] = Environment.GetEnvironmentVariable("SCBGenerateQRUrl")!;
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
