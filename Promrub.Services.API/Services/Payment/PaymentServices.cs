@@ -103,7 +103,7 @@ namespace Promrub.Services.API.Services.Payment
 
         public async Task<bool> SCBCallback(ScbCallbackRequest request)
         {
-            var paymentDetails = paymentRepository.GetTransactionDetail(request.TransactionId!).FirstOrDefault();
+            var paymentDetails = paymentRepository.GetTransactionDetailById(request.TransactionId!).FirstOrDefault();
             var receiptData = await paymentRepository.ReceiptNumberAsync(paymentDetails!.OrgId);
             var receiptNo = "RCP" + receiptData.ReceiptDate + "-" + receiptData.Allocated!.Value.ToString("D4") + "." + paymentDetails.OrgId;
             var receiptDate = DateTime.UtcNow;
