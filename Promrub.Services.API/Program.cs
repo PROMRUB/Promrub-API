@@ -133,6 +133,11 @@ using (var scope = app.Services.CreateScope())
     service.Seed();
 }
 
+app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
