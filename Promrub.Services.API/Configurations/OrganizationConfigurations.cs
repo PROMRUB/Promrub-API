@@ -12,7 +12,8 @@ namespace Promrub.Services.API.Configurations
             CreateMap<OrganizationRequest, OrganizationEntity>()
                 .ForMember(dest => dest.OrgId, opt => opt.MapFrom(_ => Guid.NewGuid()))
                 .ForMember(dest => dest.OrgCreatedDate, opt => opt.MapFrom(_ => DateTime.UtcNow));
-            CreateMap<OrganizationEntity, OrganizationResponse>();
+            CreateMap<OrganizationEntity, OrganizationResponse>()
+                .ForMember(dest => dest.OrgName, opt => opt.MapFrom(src => src.DisplayName));
         }
     }
 }
