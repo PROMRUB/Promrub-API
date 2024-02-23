@@ -41,12 +41,14 @@ namespace Promrub.Services.API.Services.Payment
 
         public async Task<GeneratePaymentLinkModel> GeneratePaymentTransaction(string orgId, GeneratePaymentTransactionLinkRequestModel request)
         {
+            var refTransactionId = request.TransactionId;
             SetOrgId(orgId);
             var organization = await organizationRepository.GetOrganization();
             if (organization is null)
                 throw new ArgumentException("1102");
             var transactionId = ServiceUtils.GenerateTransaction(orgId, 16);
             var transactionQuery = mapper.Map<GeneratePaymentTransactionLinkRequestModel, PaymentTransactionEntity>(request);
+            transactionQuery.RefTransactionId = refTransactionId;
             paymentRepository!.SetCustomOrgId(orgId);
             paymentRepository.AddTransaction(transactionId, transactionQuery);
             var orderList = mapper.Map<List<PaymentTransactionRequestItemList>, List<PaymentTransactionItemEntity>>(request.RequestItemList);
@@ -69,7 +71,8 @@ namespace Promrub.Services.API.Services.Payment
             var promptpatList = mapper.Map<List<PaymentChannelEntity>, List<PaymentChannelList>>(await paymentChannelRepository.GetPaymentChannels());
             var result = new PaymentTransactionDetails()
             {
-                OrgName = org.OrgName,
+                RefTransactionId = paymentDetails.RefTransactionId,
+                OrgName = org.DisplayName,
                 Prices = paymentDetails!.TotalTransactionPrices,
                 HvMobileBanking = org.HvMobileBanking,
                 MobileBankingList = new List<PaymentChannelList>(),
@@ -105,7 +108,7 @@ namespace Promrub.Services.API.Services.Payment
         {
             var paymentDetails = paymentRepository.GetTransactionDetailById(request.TransactionId!).FirstOrDefault();
             var receiptData = await paymentRepository.ReceiptNumberAsync(paymentDetails!.OrgId);
-            var receiptNo = "RCP" + receiptData.ReceiptDate + "-" + receiptData.Allocated!.Value.ToString("D4") + "." + paymentDetails.OrgId;
+            var receiptNo = "Abbr.RCP" + receiptData.ReceiptDate + "-" + receiptData.Allocated!.Value.ToString("D4");
             var receiptDate = DateTime.UtcNow;
             var receipt = new PaymentTransactionEntity
             {

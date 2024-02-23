@@ -25,6 +25,9 @@ namespace Promrub.Services.API.Entities
         [Column("org_name")]
         public string? OrgName { get; set; }
 
+        [Column("display_name")]
+        public string? DisplayName { get; set; }
+
         [Column("tax_id")]
         public string? TaxId { get; set; }
 

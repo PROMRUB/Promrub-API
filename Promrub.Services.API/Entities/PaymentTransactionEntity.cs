@@ -16,6 +16,10 @@ namespace Promrub.Services.API.Entities
 
         [Column("pos_id")]
         public string? PosId { get; set; }
+
+        [Column("ref_transaction_id")]
+        public string? RefTransactionId { get; set; }
+
         [Column("transaction_id")]
         public string? TransactionId { get; set; }
 

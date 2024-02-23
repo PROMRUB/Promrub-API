@@ -11,6 +11,7 @@ namespace Promrub.Services.API.PromServiceDbContext
         {
             Configuration = configuration;
         }
+
         public DbSet<ProvinceEntity>? Provinces { get; set; }
         public DbSet<DistrictEntity>? District { get; set; }
         public DbSet<SubDistrictEntity>? SubDistrict { get; set; }

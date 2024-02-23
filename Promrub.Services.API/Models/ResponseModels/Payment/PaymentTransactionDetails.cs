@@ -2,6 +2,7 @@
 {
     public class PaymentTransactionDetails
     {
+        public string? RefTransactionId { get; set; }
         public string? OrgName { get; set; }
         public decimal? Prices { get; set; }
         public bool? HvMobileBanking { get; set; }
