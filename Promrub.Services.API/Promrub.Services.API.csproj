@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="EnyimMemcachedCore" Version="3.0.1" />
+    <PackageReference Include="HtmlRenderer.PdfSharp" Version="1.5.0.5" />
     <PackageReference Include="LinqKit" Version="1.2.5" />
     <PackageReference Include="Marvin.StreamExtensions" Version="1.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
@@ -29,6 +30,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.22" />
     <PackageReference Include="PasswordGenerator" Version="2.1.0" />
+    <PackageReference Include="PDFsharp" Version="1.32.3057" />
+    <PackageReference Include="QuestPDF" Version="2023.12.6" />
     <PackageReference Include="Serilog" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
     <PackageReference Include="Serilog.Sinks.SyslogMessages" Version="3.0.1" />
