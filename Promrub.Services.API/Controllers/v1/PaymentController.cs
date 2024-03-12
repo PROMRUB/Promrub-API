@@ -7,6 +7,8 @@ using Promrub.Services.API.Models.RequestModels.Payment;
 using Promrub.Services.API.Models.ResponseModels.Organization;
 using Promrub.Services.API.Models.ResponseModels.Payment;
 using Promrub.Services.API.Services.Payment;
+using System;
+using System.IO;
 using System.Reflection.PortableExecutable;
 using System.Transactions;
 
@@ -89,6 +91,24 @@ namespace Promrub.Services.API.Controllers.v1
                 if (!ModelState.IsValid || string.IsNullOrEmpty(id))
                     throw new ArgumentException("1101");
                 return Ok(ResponseHandler.Response("1000", null, new InquiryTransactionResponseModel()));
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseHandler.Response(ex.Message, null));
+            }
+        }
+
+        [HttpGet]
+        [Route("org/{id}/action/GetReceipt/{transactionId}")]
+        [MapToApiVersion("1")]
+        public async Task<IActionResult> GetReceipt(string id, string transactionId)
+        {
+            try
+            {
+                if (!ModelState.IsValid || string.IsNullOrEmpty(id))
+                    throw new ArgumentException("1101");
+                var result = await services.GenerateReceipt(id, transactionId);
+                return File(result, "application/pdf", "receipt.pdf");
             }
             catch (Exception ex)
             {

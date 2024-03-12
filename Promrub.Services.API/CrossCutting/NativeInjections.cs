@@ -23,7 +23,6 @@ namespace Promrub.Services.API.CrossCutting
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IServiceCollection, ServiceCollection>();
-
             services.AddScoped<IApiKeyService, ApiKeyService>();
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IRoleService, RoleService>();
