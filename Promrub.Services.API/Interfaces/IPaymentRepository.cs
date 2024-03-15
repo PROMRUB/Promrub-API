@@ -10,6 +10,7 @@ namespace Promrub.Services.API.Interfaces
         public PaymentTransactionEntity AddTransaction(string transactionId, PaymentTransactionEntity request);
         public void AddTransactionItem(PaymentTransactionItemEntity request);
         public IQueryable<PaymentTransactionEntity> GetTransactionDetail(string transactionId);
+        public IQueryable<PaymentTransactionItemEntity> GetTransactionItem(Guid transactionId);
         public IQueryable<PaymentTransactionEntity> GetTransactionDetailById(string transactionId);
         public Task<ScbQrGenerateResponse> QRGenerate(ScbQr30PaymentRequest request);
         public Task<ReceiptNumbersEntity> ReceiptNumberAsync(string? orgId);
