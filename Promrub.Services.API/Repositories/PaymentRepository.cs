@@ -66,6 +66,10 @@ namespace Promrub.Services.API.Repositories
         {
                 return context!.PaymentTransactions!.Where(x => x.OrgId!.Equals(orgId) && x.TransactionId! == transactionId);
         }
+        public IQueryable<PaymentTransactionItemEntity> GetTransactionItem(Guid transactionId)
+        {
+            return context!.PaymentTransactionItems!.Where(x => x.OrgId!.Equals(orgId) && x.PaymentTransactionId! == transactionId);
+        }
 
         public IQueryable<PaymentTransactionEntity> GetTransactionDetailById(string transactionId)
         {
