@@ -22,6 +22,7 @@ using System.Text;
 using SkiaSharp;
 using QuestPDF.Drawing;
 using QuestPDF;
+using QuestPDF.Infrastructure;
 using static System.Net.Mime.MediaTypeNames;
 using Promrub.Services.API.Extensions;
 
@@ -137,20 +138,20 @@ namespace Promrub.Services.API.Services.Payment
                 container.Page(page =>
                 {
                     page.ContinuousSize(63, Unit.Millimetre);
-                    page.MarginTop(12, Unit.Millimetre);
+                    page.MarginTop(1, Unit.Millimetre);
                     page.MarginLeft(2, Unit.Millimetre);
                     page.MarginRight(2, Unit.Millimetre);
                     page.PageColor(Colors.White);
-                    page.DefaultTextStyle(x => x.FontSize(6));
+                    page.DefaultTextStyle(x => x.FontSize(8));
 
                     page.Header()
                         .AlignCenter()
-                        .Width(45, Unit.Point)
-                        .Height(45, Unit.Point)
+                        .Width(100)
+                        .Height(100)
                         .Image(bytes);
 
                     page.Content()
-                        .PaddingVertical(2, Unit.Millimetre)
+                        .PaddingVertical(1, Unit.Millimetre)
                         .Column(x =>
                         {
                             x.Spacing(1);
@@ -168,10 +169,19 @@ namespace Promrub.Services.API.Services.Payment
                                 .FontFamily("Prompt");
 
                             x.Item()
-                                .Text(text =>
+                                .Grid(grid =>
                                 {
-                                    text.Span("RD :00000000000000").DirectionFromLeftToRight();
-                                    text.Span(" 10 : DI reihsaC").DirectionFromRightToLeft();
+                                    grid.Columns();
+                                    grid.Item(8)
+                                        .AlignLeft()
+                                        .Text("RD: 0000000000000")
+                                        .FontFamily("Prompt");
+
+                                    grid.Item(4)
+                                        .AlignRight()
+                                        .Text("Cashier Id: 01")
+                                        .FontFamily("Prompt");
+                                    
                                 });
 
                             x.Item()
@@ -185,89 +195,159 @@ namespace Promrub.Services.API.Services.Payment
                                 .Bold();
 
                             x.Item()
-                                .LineHorizontal(2);
+                                .LineHorizontal(1);
 
                             x.Item()
-                                .Text("ชิ้น                   ราย              หน่วยละ             รวมเงิน")
-                                .FontFamily("Prompt")
-                                .Bold();
+                                .Grid(grid =>
+                                {
+                                    grid.Columns();
+                                    grid.Item(2)
+                                        .AlignCenter()
+                                        .Text("ชิ้น")
+                                        .FontFamily("Prompt")
+                                        .Bold();
+
+                                    grid.Item(6)
+                                        .AlignCenter()
+                                        .Text("รายการ")
+                                        .FontFamily("Prompt")
+                                        .Bold();
+
+                                    grid.Columns();
+                                    grid.Item(2)
+                                        .AlignCenter()
+                                        .Text("หน่วยละ")
+                                        .FontFamily("Prompt")
+                                        .Bold();
+
+                                    grid.Columns();
+                                    grid.Item(2)
+                                        .AlignCenter()
+                                        .Text("รวมเงิน")
+                                        .FontFamily("Prompt")
+                                        .Bold();
+
+                                });
 
                             x.Item()
-                                .LineHorizontal(2);
+                                .LineHorizontal(1);
 
                             foreach(var item in paymentItems)
                             {
                                 x.Item()
-                                .Text(item.Quantity + " " + item.ItemName + " " + item.Price + " " + item.TotalPrices)
-                                .FontFamily("Prompt")
-                                .Bold();
+                                .Grid(grid =>
+                                {
+                                    grid.Columns();
+                                    grid.Item(2)
+                                        .AlignLeft()
+                                        .Text(item.Quantity)
+                                        .FontFamily("Prompt");
+
+                                    grid.Item(6)
+                                        .AlignLeft()
+                                        .Text(item.ItemName)
+                                        .FontFamily("Prompt");
+
+                                    grid.Columns();
+                                    grid.Item(2)
+                                        .AlignRight()
+                                        .Text(((decimal)item.Price).ToString("N2"))
+                                        .FontFamily("Prompt");
+
+                                    grid.Columns();
+                                    grid.Item(2)
+                                        .AlignRight()
+                                        .Text(((decimal)item.TotalPrices).ToString("N2"))
+                                        .FontFamily("Prompt");
+
+                                });
                             }
 
                             x.Item()
-                                .LineHorizontal(2);
+                                .LineHorizontal(1);
 
                             x.Item()
-                                .Text("รายการ : " + paymentDetails.ItemTotal + "     จำนวนชิ้น : " + paymentDetails.QuantityTotal)
+                                .Text("รายการ : " + paymentDetails.ItemTotal + "          จำนวนชิ้น : " + paymentDetails.QuantityTotal)
                                 .FontFamily("Prompt")
                                 .Bold();
 
                             x.Item()
-                                .Text(text =>
+                                .Grid(grid =>
                                 {
-                                    text.Span("รวมเป็นเงิน").DirectionFromLeftToRight()
-                                    .FontFamily("Prompt");
-                                    text.Span(StringExtensions.Reverse(paymentDetails.TotalItemsPrices.ToString()));
-                                });
+                                    grid.Columns();
+                                    grid.Item(8)
+                                        .AlignLeft()
+                                        .Text("รวมเป็นเงิน")
+                                        .FontFamily("Prompt");
 
+                                    grid.Item(4)
+                                        .AlignRight()
+                                        .Text(paymentDetails.TotalItemsPrices.ToString("N2"))
+                                        .FontFamily("Prompt");
 
-                            x.Item()
-                                .Text(text =>
-                                {
-                                    text.Span("ส่วนลด").DirectionFromLeftToRight()
-                                    .FontFamily("Prompt");
-                                    text.Span(StringExtensions.Reverse(paymentDetails.TotalDiscount.ToString()));
-                                });
-
-                            x.Item()
-                                .Text(text =>
-                                {
-                                    text.Span("ส่วนลด").DirectionFromLeftToRight()
-                                    .FontFamily("Prompt").FontSize(8).Bold();
-                                    text.Span(StringExtensions.Reverse(paymentDetails.TotalTransactionPrices.ToString()))
-                                    .FontSize(8).Bold();
                                 });
 
                             x.Item()
-                                .LineHorizontal(2);
+                                .Grid(grid =>
+                                {
+                                    grid.Columns();
+                                    grid.Item(8)
+                                        .AlignLeft()
+                                        .Text("ส่วนลด")
+                                        .FontFamily("Prompt");
+
+                                    grid.Item(4)
+                                        .AlignRight()
+                                        .Text(paymentDetails.TotalTransactionPrices.ToString("N2"))
+                                        .FontFamily("Prompt");
+
+                                });
 
                             x.Item()
-                            .Text(text =>
-                            {
-                                text.Span("รับชำระด้วย").DirectionFromLeftToRight()
-                                .FontFamily("Prompt");
-                                text.Span(StringExtensions.Reverse("QR Code")).DirectionFromRightToLeft()
-                                .FontFamily("Prompt");
-                            });
+                                .LineHorizontal(1);
 
                             x.Item()
-                                .LineHorizontal(2);
+                                .Grid(grid =>
+                                {
+                                    grid.Columns();
+                                    grid.Item(8)
+                                        .AlignLeft()
+                                        .Text("รับชำระด้วย")
+                                        .FontFamily("Prompt");
+
+                                    grid.Item(4)
+                                        .AlignRight()
+                                        .Text("QR Code")
+                                        .FontFamily("Prompt");
+
+                                });
 
                             x.Item()
-                            .Text(text =>
-                            {
-                                text.Span("รับชำระโดย").DirectionFromLeftToRight()
-                                .FontFamily("Prompt");
-                                text.Span(StringExtensions.Reverse("Employee ID")).DirectionFromRightToLeft()
-                                .FontFamily("Prompt");
-                            });
+                                .LineHorizontal(1);
 
                             x.Item()
-                                .LineHorizontal(2);
+                                .Grid(grid =>
+                                {
+                                    grid.Columns();
+                                    grid.Item(8)
+                                        .AlignLeft()
+                                        .Text("รับชำระโดย")
+                                        .FontFamily("Prompt");
+
+                                    grid.Item(4)
+                                        .AlignRight()
+                                        .Text("00001")
+                                        .FontFamily("Prompt");
+
+                                });
+
+                            x.Item()
+                                .LineHorizontal(1);
 
                             x.Item()
                                 .AlignCenter()
-                                .Width(26, Unit.Point)
-                                .Height(26, Unit.Point)
+                                .Width(13, Unit.Point)
+                                .Height(13, Unit.Point)
                                 .Image(promptBytes);
 
                             x.Item()
@@ -281,9 +361,6 @@ namespace Promrub.Services.API.Services.Payment
                         .AlignCenter()
                         .Text(x =>
                         {
-                            x.Span("Page ");
-                            x.CurrentPageNumber();
-
                         });
 
                 });
