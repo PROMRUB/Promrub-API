@@ -33,18 +33,21 @@ namespace Promrub.Services.API.Services.Payment
         private readonly IMapper mapper;
         private readonly IConfiguration configuration;
         private readonly IOrganizationRepository organizationRepository;
+        private readonly IPosRepository posRepository;
         private readonly IPaymentChannelRepository paymentChannelRepository;
         private readonly IPaymentRepository paymentRepository;
 
         public PaymentServices(IMapper mapper,
             IConfiguration configuration,
             IOrganizationRepository organizationRepository,
+            IPosRepository posRepository,
             IPaymentChannelRepository paymentChannelRepository,
             IPaymentRepository paymentRepository)
         {
             this.mapper = mapper;
             this.configuration = configuration;
             this.organizationRepository = organizationRepository;
+            this.posRepository = posRepository;
             this.paymentChannelRepository = paymentChannelRepository;
             this.paymentRepository = paymentRepository;
         }
@@ -55,6 +58,7 @@ namespace Promrub.Services.API.Services.Payment
             organizationRepository!.SetCustomOrgId(orgId);
             paymentRepository!.SetCustomOrgId(orgId);
             paymentChannelRepository.SetCustomOrgId(orgId);
+            posRepository.SetCustomOrgId(orgId);
         }
 
         public async Task<GeneratePaymentLinkModel> GeneratePaymentTransaction(string orgId, GeneratePaymentTransactionLinkRequestModel request)
@@ -128,6 +132,7 @@ namespace Promrub.Services.API.Services.Payment
         {
             SetOrgId(orgId);
             var org = await organizationRepository.GetOrganization();
+            var pos = posRepository.GetPosByOrg().FirstOrDefault();
             var paymentDetails = paymentRepository.GetTransactionDetail(transactionId).FirstOrDefault();
             var paymentItems = paymentRepository.GetTransactionItem((Guid)paymentDetails.PaymentTransactionId!).ToList();
             if (org is null || paymentDetails is null)
@@ -176,7 +181,7 @@ namespace Promrub.Services.API.Services.Payment
                                     grid.Columns();
                                     grid.Item(8)
                                         .AlignLeft()
-                                        .Text("RD: 0000000000000")
+                                        .Text("POS# " + pos.PosKey)
                                         .FontFamily("Prompt");
 
                                     grid.Item(4)
