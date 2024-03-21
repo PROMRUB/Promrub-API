@@ -172,7 +172,7 @@ namespace Promrub.Services.API.Services.Payment
                                 .FontFamily("Prompt");
 
                             x.Item()
-                                .Text("TAX ID : " + org.TaxId+ " (VAT Included)")
+                                .Text("TAX ID: " + org.TaxId+ " (VAT Included)")
                                 .FontFamily("Prompt");
 
                             x.Item()
@@ -192,14 +192,12 @@ namespace Promrub.Services.API.Services.Payment
                                 });
 
                             x.Item()
-                                .Text("เลขที่เอกสาร :" + paymentDetails.ReceiptNo.Split(".")[1])
-                                .FontFamily("Prompt")
-                                .Bold();
+                                .Text("เลขที่เอกสาร: " + paymentDetails.ReceiptNo.Split(".")[1])
+                                .FontFamily("Prompt");
 
                             x.Item()
-                                .Text("วันที่ : " + paymentDetails.ReceiptDate!.Value.ToString("dd/MM/yyyy"))
-                                .FontFamily("Prompt")
-                                .Bold();
+                                .Text("วันที่: " + paymentDetails.ReceiptDate!.Value.ToString("dd/MM/yyyy"))
+                                .FontFamily("Prompt");
 
                             x.Item()
                                 .LineHorizontal(1);
@@ -211,28 +209,24 @@ namespace Promrub.Services.API.Services.Payment
                                     grid.Item(2)
                                         .AlignCenter()
                                         .Text("ชิ้น")
-                                        .FontFamily("Prompt")
-                                        .Bold();
+                                        .FontFamily("Prompt");
 
                                     grid.Item(6)
                                         .AlignCenter()
                                         .Text("รายการ")
-                                        .FontFamily("Prompt")
-                                        .Bold();
+                                        .FontFamily("Prompt");
 
                                     grid.Columns();
                                     grid.Item(2)
                                         .AlignCenter()
                                         .Text("หน่วยละ")
-                                        .FontFamily("Prompt")
-                                        .Bold();
+                                        .FontFamily("Prompt");
 
                                     grid.Columns();
                                     grid.Item(2)
                                         .AlignCenter()
                                         .Text("รวมเงิน")
-                                        .FontFamily("Prompt")
-                                        .Bold();
+                                        .FontFamily("Prompt");
 
                                 });
 
@@ -274,9 +268,8 @@ namespace Promrub.Services.API.Services.Payment
                                 .LineHorizontal(1);
 
                             x.Item()
-                                .Text("รายการ : " + paymentDetails.ItemTotal + "          จำนวนชิ้น : " + paymentDetails.QuantityTotal)
-                                .FontFamily("Prompt")
-                                .Bold();
+                                .Text("รายการ: " + paymentDetails.ItemTotal + "          จำนวนชิ้น: " + paymentDetails.QuantityTotal)
+                                .FontFamily("Prompt");
 
                             x.Item()
                                 .Grid(grid =>
