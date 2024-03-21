@@ -21,5 +21,5 @@ RUN dotnet publish "./Promrub.Services.API.csproj" -c $BUILD_CONFIGURATION -o /a
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ADD Fonts/Prompt.ttf /app/Fonts/
+ADD Promrub.Services.API/Fonts/Prompt.ttf /app/Fonts/
 ENTRYPOINT ["dotnet", "Promrub.Services.API.dll"]
