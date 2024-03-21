@@ -97,7 +97,9 @@ namespace Promrub.Services.API.Services.Payment
                 HvPromptPay = org.HvPromptPay,
                 PrompayList = promptpatList,
                 HvCard = org.HvCard,
-                CardList = new List<PaymentChannelList>()
+                CardList = new List<PaymentChannelList>(),
+                PaymentStatus = paymentDetails!.PaymentStatus,
+                RedirectUrl = org.RedirectUrl!
             };
             return result;
         }
@@ -161,7 +163,7 @@ namespace Promrub.Services.API.Services.Payment
                                 .FontFamily("Prompt");
 
                             x.Item()
-                                .Text(org.DisplayName + "(" + org.BrnId +")")
+                                .Text(org.OrgName + "(" + org.BrnId +")")
                                 .FontFamily("Prompt");
 
                             x.Item()
@@ -179,18 +181,18 @@ namespace Promrub.Services.API.Services.Payment
 
                                     grid.Item(4)
                                         .AlignRight()
-                                        .Text("Cashier Id: 01")
+                                        .Text("Cashier ID: 01")
                                         .FontFamily("Prompt");
                                     
                                 });
 
                             x.Item()
-                                .Text("เลขที่เอกสาร :" + paymentDetails.ReceiptNo)
+                                .Text("เลขที่เอกสาร :" + paymentDetails.ReceiptNo.Split(".")[1])
                                 .FontFamily("Prompt")
                                 .Bold();
 
                             x.Item()
-                                .Text("วันที่ : " + paymentDetails.ReceiptDate)
+                                .Text("วันที่ : " + paymentDetails.ReceiptDate!.Value.ToString("dd/MM/yyyy"))
                                 .FontFamily("Prompt")
                                 .Bold();
 

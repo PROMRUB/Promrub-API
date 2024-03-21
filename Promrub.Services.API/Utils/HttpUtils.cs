@@ -55,10 +55,8 @@ namespace Promrub.Services.API.Utils
             IEnumerable<KeyValuePair<string, string>> headers, CancellationToken cancellationToken,
             string json)
         {
-            var activity = Activity.Current;
             try
             {
-                activity?.AddEvent(new(json));
                 using (var request = new HttpRequestMessage(HttpMethod.Post, url))
                 {
                     if (headers != null)
@@ -72,9 +70,7 @@ namespace Promrub.Services.API.Utils
                     using (var response = await httpClient
                         .SendAsync(request))
                     {
-                        activity?.AddEvent(new(response.StatusCode.ToString()));
                         var stream = await response.Content.ReadAsStreamAsync();
-                        activity?.AddEvent(new(stream.ToString()));
                         if (typeof(TOut) == typeof(string))
                         {
                             var str = await response.Content.ReadAsStringAsync();

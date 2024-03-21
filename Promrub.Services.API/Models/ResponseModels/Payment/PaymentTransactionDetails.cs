@@ -11,6 +11,8 @@
         public List<PaymentChannelList> PrompayList { get; set; }
         public bool? HvCard { get; set; }
         public List<PaymentChannelList> CardList { get; set; }
+        public int? PaymentStatus { get; set; }
+        public string RedirectUrl { get; set; }
     }
 
     public class PaymentChannelList
