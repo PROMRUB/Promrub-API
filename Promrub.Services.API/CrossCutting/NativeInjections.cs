@@ -34,6 +34,7 @@ namespace Promrub.Services.API.CrossCutting
             services.AddScoped<IApiKeyRepository, ApiKeyRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPosRepository, PosRepository>();
             services.AddScoped<IPaymentChannelRepository, PaymentChannelRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
 
