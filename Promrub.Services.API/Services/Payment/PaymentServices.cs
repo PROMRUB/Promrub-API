@@ -140,6 +140,7 @@ namespace Promrub.Services.API.Services.Payment
                 throw new ArgumentException("1102");
             FontManager.RegisterFont(File.OpenRead(Path.Combine("Fonts", "Prompt.ttf")));
             byte[] bytes = Convert.FromBase64String(org.OrgLogo!.Split(",")[1]);
+            string brn = org.BrnId == "00000" ? " สำนักงานใหญ่" : " (" + org.BrnId + ")";
             byte[] promptBytes = Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAARlSURBVHgBnVZdSJtXGD750dhoNNEau4m/2YaMddPB2KhbwW3Mi13sovu5GPVigg4GBmEXgw224c0QNEOGF7vYdrNBN5BuDFqLNaShWFtrsBUL0WBqQxF/Yo2Nf4na5znNkc9PrV974OV83znveZ7393yfSTzFmJqaKkun0x9ub28nbTZbwOPxzBg9azKqODEx0QwSn8VicWxtbQmQ3cvJyTlTU1Nzw8h5sxEleOJOpVK/ZmdnOxYWFsTy8jKJypLJ5N/C4DBEBE/e2tnZkbokWVlZkevwrDIUClUawTBEhLEID8T6+roAoZS1tTW198AIgCEi5OEqptHV1VVRXFwsHA6HXM/Nze2pq6t7dqKWlpYs/ZrJZDoD4L+Qp6Tdbl8A2U8ojO/0et3d3ccOwtxXdT6f712z2fwfQvU/gL5ta2uLqL2urq6yrKysSpBaQBZubm6+r3Cw9w3OfQEZ9Xq9nx1JBIt+BpgXBfDYZbP5R6vVehLzaRAcZ344MrmKQPwwKh+F8WkGIg0jClpbW1e1uFY9Ebxwsk8AymeBXvkezUlCgRJnpWmJPHj3UJcjs2dFLt2Yo08kgnUpHoQXIi8vTxISQJHD210iViINUHuKrLa2NqbH3VcMADhHT0gi44AQKmKS6IXrFJ7JyFhDQ0P6SCJYaEe4pLUkiUajwu/3y2cFqoSNGwwGpY4iglGvoTBOHUkE5a9pKUPAg7hm5G2ABO8jokGRSETk5+dLXYaRgr3P9bh7qq63t9eFKa480oZHAclDCKXKEQ1ikVDoNefNzc04SrzoUI+g9DoBCUAwJRy8fpaWlgQv1bm5OTE/Py82NjZ2ibW6MKKws7PzhBZ7T9VB0UULabk6xMF7jR6wzHEzSC94HS0uLsrriGvaQV1EIudQj0BwS3mjDlAIyrDMzs7u5ofPNIg51BKoRi8qKpo/lAhWTMPaB1QmoRJ1WxcUFMjCSCQSwuVyyTWSKT16mmmHW01NTclDiXBtpDD9qSXiYfYUyZijeDwuZ5Y2Q8nQKQL16YDu70I39t0MONQNi77KdPsYimMZ8+nCwsLdyuJgXlg4GRJ+Ql4FAfH4H3FOj2vRL/T39y81Nja+j8cTPT09Xw4MDNgBer60tPQkgPNUjpjHTDn/29HREUJV9oHoAgyKtbe39z2RqKKi4hTGXFVV1fVAIHAH35+HCNU7+GfwI/n9g4ODt91u95WRkZHfkK/E8PCwD2Q3x8fHbdh/cXJy8nwsFhtFHx0rKSk5jhDHFfaehi0vL/8DVvWhYZ+H8ifIUQLW34aVl0D4HN4ZNy90ovX19XeHhoZYQA/RT2cx/4K9BDx8Cbkbwlr9zMzMDwd6BCs/QhW9ibi/gtdtyD+QMsT/Pay/wV8shO9lECVQDDYk/wUQXIR+HHIW4Qxj7wOIC3IHFTp2YDHwIwfxQMnudDqvwfVcPCcBcBkkTpC8jfePoeOExTa8u8PhcBCRSGE9MD09Hayurg4hIjb8B17WYj8CkP2nL3RAlU0AAAAASUVORK5CYII=");
             byte[] pdfBytes = Document.Create(container =>
             {
@@ -152,16 +153,21 @@ namespace Promrub.Services.API.Services.Payment
                     page.PageColor(Colors.White);
                     page.DefaultTextStyle(x => x.FontSize(8));
 
-                    page.Header()
-                        .AlignCenter()
-                        .Width(100)
-                        .Height(100)
-                        .Image(bytes);
-
                     page.Content()
                         .PaddingVertical(1, Unit.Millimetre)
                         .Column(x =>
                         {
+                            x.Item()
+                                .Grid(grid =>
+                                {
+                                    grid.Columns();
+                                    grid.Item(12)
+                                        .AlignCenter()
+                                        .PaddingTop(2, Unit.Millimetre)
+                                        .Width(100)
+                                        .Image(bytes);
+                                });
+
                             x.Spacing(1);
 
                             x.Item()
@@ -175,7 +181,7 @@ namespace Promrub.Services.API.Services.Payment
                                 });
 
                             x.Item()
-                                .Text(org.OrgName + org.BrnId == "00000" ? "สำนักงานใหญ่" : "(" + org.BrnId + ")")
+                                .Text(org.OrgName + brn)
                                 .FontFamily("Prompt");
 
                             x.Item()
@@ -191,7 +197,7 @@ namespace Promrub.Services.API.Services.Payment
                                 .FontFamily("Prompt");
 
                             x.Item()
-                                .Text("เลขที่: " + paymentDetails.ReceiptNo.Split(".")[1])
+                                .Text("เลขที่: " + paymentDetails)
                                 .FontFamily("Prompt");
 
                             x.Item()
@@ -395,7 +401,6 @@ namespace Promrub.Services.API.Services.Payment
             organizationRepository.SetCustomOrgId(paymentDetails.OrgId!);
             var orgDetail = await organizationRepository.GetOrganization();
             var receiptData = await paymentRepository.ReceiptNumberAsync(paymentDetails!.OrgId, paymentDetails.PosId);
-            
             var receiptNo = "EX" + receiptData.ReceiptDate + "-" + receiptData.Allocated!.Value.ToString("D6");
             var receiptDate = DateTime.UtcNow;
             string token = string.Empty;
