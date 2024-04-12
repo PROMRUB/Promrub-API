@@ -16,9 +16,11 @@ namespace Promrub.Services.API.Models.RequestModels.Payment
 
     public class PaymentTransactionRequestItemList
     {
-        public int Quantity { get; set; }
-        public string? ItemName { get; set; }
-        public decimal? Price { get; set; }
-        public decimal? TotalPrices { get; set; }
+        public int Quantity { get; set; } = 0;
+        public string? ItemName { get; set; } = string.Empty;
+        public decimal? Price { get; set; } = 0;
+        public decimal? TotalPrices { get; set; } = 0;
+        public decimal? Percentage { get; set; } = 0;
+        public decimal? TotalDiscount { get; set; } = 0;
     }
 }

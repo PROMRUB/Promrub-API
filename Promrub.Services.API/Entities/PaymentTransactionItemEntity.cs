@@ -27,5 +27,11 @@ namespace Promrub.Services.API.Entities
 
         [Column("total_prices")]
         public decimal? TotalPrices { get; set; }
+
+        [Column("percentage")]
+        public decimal? Percentage { get; set; }
+
+        [Column("total_discount")]
+        public decimal? TotalDiscount { get; set; }
     }
 }
