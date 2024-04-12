@@ -197,11 +197,11 @@ namespace Promrub.Services.API.Services.Payment
                                 .FontFamily("Prompt");
 
                             x.Item()
-                                .Text("เลขที่: " + paymentDetails)
+                                .Text("เลขที่: " + paymentDetails.ReceiptNo)
                                 .FontFamily("Prompt");
 
                             x.Item()
-                                .Text("REF: " + paymentDetails.RefTransactionId)
+                                .Text("REF#: " + paymentDetails.RefTransactionId)
                                 .FontFamily("Prompt");
 
                             x.Item()
