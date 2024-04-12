@@ -85,9 +85,9 @@ namespace Promrub.Services.API.Repositories
             return response;
         }
 
-        public async Task<ReceiptNumbersEntity> ReceiptNumberAsync(string? orgId)
+        public async Task<ReceiptNumbersEntity> ReceiptNumberAsync(string? orgId,string posId)
         {
-            var currentDate = DateTime.Today.Date.ToUniversalTime().ToString("yyMMdd");
+            var currentDate = DateTime.Today.Date.ToUniversalTime().ToString("yyMMdd") + posId.Substring(posId.Length - 4, 4);
             var query = await context!.ReceiptNumbers!.Where(x => x.ReceiptDate == currentDate && x.OrgId == orgId).FirstOrDefaultAsync();
             bool HaveReciept = true;
             while (HaveReciept)

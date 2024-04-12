@@ -170,12 +170,12 @@ namespace Promrub.Services.API.Services.Payment
                                     grid.Columns();
                                     grid.Item(12)
                                         .AlignCenter()
-                                        .Text("ใบเสร็จรับเงิน/กำกับภาษีอย่างย่อ")
+                                        .Text("ใบเสร็จรับเงิน/ใบกำกับภาษีอย่างย่อ")
                                         .FontFamily("Prompt");
                                 });
 
                             x.Item()
-                                .Text(org.OrgName + "(" + org.BrnId + ")")
+                                .Text(org.OrgName + org.BrnId == "00000" ? "สำนักงานใหญ่" : "(" + org.BrnId + ")")
                                 .FontFamily("Prompt");
 
                             x.Item()
@@ -303,7 +303,7 @@ namespace Promrub.Services.API.Services.Payment
 
                                     grid.Item(4)
                                         .AlignRight()
-                                        .Text(paymentDetails.TotalItemsPrices.ToString("N2"))
+                                        .Text(paymentDetails.TotalTransactionPrices.ToString("N2"))
                                         .FontFamily("Prompt");
 
                                 });
@@ -319,7 +319,7 @@ namespace Promrub.Services.API.Services.Payment
 
                                     grid.Item(4)
                                         .AlignRight()
-                                        .Text(paymentDetails.TotalTransactionPrices.ToString("N2"))
+                                        .Text(paymentDetails.TotalDiscount.ToString("N2"))
                                         .FontFamily("Prompt");
 
                                 });
@@ -357,7 +357,7 @@ namespace Promrub.Services.API.Services.Payment
 
                                     grid.Item(4)
                                         .AlignRight()
-                                        .Text("00001")
+                                        .Text("660009")
                                         .FontFamily("Prompt");
 
                                 });
@@ -394,8 +394,9 @@ namespace Promrub.Services.API.Services.Payment
             var paymentDetails = paymentRepository.GetTransactionDetailById(request.TransactionId!).FirstOrDefault();
             organizationRepository.SetCustomOrgId(paymentDetails.OrgId!);
             var orgDetail = await organizationRepository.GetOrganization();
-            var receiptData = await paymentRepository.ReceiptNumberAsync(paymentDetails!.OrgId);
-            var receiptNo = "Abbr.RCP" + receiptData.ReceiptDate + "-" + receiptData.Allocated!.Value.ToString("D4");
+            var receiptData = await paymentRepository.ReceiptNumberAsync(paymentDetails!.OrgId, paymentDetails.PosId);
+            
+            var receiptNo = "EX" + receiptData.ReceiptDate + "-" + receiptData.Allocated!.Value.ToString("D6");
             var receiptDate = DateTime.UtcNow;
             string token = string.Empty;
             var receipt = new PaymentTransactionEntity
