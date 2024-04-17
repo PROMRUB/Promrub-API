@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using IndexAttribute = Microsoft.EntityFrameworkCore.IndexAttribute;
+using Promrub.Services.API.Enum;
 
 namespace Promrub.Services.API.Entities
 {
@@ -24,6 +25,12 @@ namespace Promrub.Services.API.Entities
 
         [Column("org_name")]
         public string? OrgName { get; set; }
+
+        [Column("display_name")]
+        public string? DisplayName { get; set; }
+
+        [Column("org_logo")]
+        public string? OrgLogo { get; set; }
 
         [Column("tax_id")]
         public string? TaxId { get; set; }
@@ -59,6 +66,24 @@ namespace Promrub.Services.API.Entities
 
         [Column("hv_card")]
         public bool? HvCard { get; set; }
+
+        [Column("authorization_type")]
+        public EnumAuthorizationType Security { get; set; }
+
+        [Column("security_credential")]
+        public string? SecurityCredential { get; set; }
+
+        [Column("security_password")]
+
+        public string? SecurityPassword { get; set; }
+
+        [Column("callback_url")]
+
+        public string? CallbackUrl { get; set; }
+
+        [Column("redirect_url")]
+
+        public string? RedirectUrl { get; set; }
 
         [Column("org_created_date")]
         public DateTime? OrgCreatedDate { get; set; }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Promrub.Services.API.PromServiceDbContext;
@@ -11,9 +12,10 @@ using Promrub.Services.API.PromServiceDbContext;
 namespace Promrub.Services.API.Migrations
 {
     [DbContext(typeof(PromrubDbContext))]
-    partial class PromrubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240223083251_Add_Display_Name")]
+    partial class Add_Display_Name
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,10 +144,6 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("text")
                         .HasColumnName("branch_id");
 
-                    b.Property<string>("CallbackUrl")
-                        .HasColumnType("text")
-                        .HasColumnName("callback_url");
-
                     b.Property<string>("DisplayName")
                         .HasColumnType("text")
                         .HasColumnName("display_name");
@@ -182,10 +180,6 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("text")
                         .HasColumnName("org_description");
 
-                    b.Property<string>("OrgLogo")
-                        .HasColumnType("text")
-                        .HasColumnName("org_logo");
-
                     b.Property<string>("OrgName")
                         .HasColumnType("text")
                         .HasColumnName("org_name");
@@ -198,25 +192,9 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("text")
                         .HasColumnName("provice");
 
-                    b.Property<string>("RedirectUrl")
-                        .HasColumnType("text")
-                        .HasColumnName("redirect_url");
-
                     b.Property<string>("Road")
                         .HasColumnType("text")
                         .HasColumnName("road");
-
-                    b.Property<int>("Security")
-                        .HasColumnType("integer")
-                        .HasColumnName("authorization_type");
-
-                    b.Property<string>("SecurityCredential")
-                        .HasColumnType("text")
-                        .HasColumnName("security_credential");
-
-                    b.Property<string>("SecurityPassword")
-                        .HasColumnType("text")
-                        .HasColumnName("security_password");
 
                     b.Property<string>("SubDistrict")
                         .HasColumnType("text")
@@ -281,10 +259,6 @@ namespace Promrub.Services.API.Migrations
                     b.Property<int?>("BankCode")
                         .HasColumnType("integer")
                         .HasColumnName("bank_code");
-
-                    b.Property<string>("BillerId")
-                        .HasColumnType("text")
-                        .HasColumnName("biller_id");
 
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("timestamp with time zone")
@@ -426,10 +400,6 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("payment_transaction_id");
 
-                    b.Property<decimal?>("Percentage")
-                        .HasColumnType("numeric")
-                        .HasColumnName("percentage");
-
                     b.Property<decimal?>("Price")
                         .HasColumnType("numeric")
                         .HasColumnName("price");
@@ -438,10 +408,6 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("quantity");
 
-                    b.Property<decimal?>("TotalDiscount")
-                        .HasColumnType("numeric")
-                        .HasColumnName("total_discount");
-
                     b.Property<decimal?>("TotalPrices")
                         .HasColumnType("numeric")
                         .HasColumnName("total_prices");
@@ -449,29 +415,6 @@ namespace Promrub.Services.API.Migrations
                     b.HasKey("PaymentTransactionItemId");
 
                     b.ToTable("PaymentTransactionItems");
-                });
-
-            modelBuilder.Entity("Promrub.Services.API.Entities.PosEntity", b =>
-                {
-                    b.Property<Guid>("PosId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("pos_id");
-
-                    b.Property<string>("OrgId")
-                        .HasColumnType("text")
-                        .HasColumnName("org_id");
-
-                    b.Property<string>("PosKey")
-                        .HasColumnType("text")
-                        .HasColumnName("pos_key");
-
-                    b.HasKey("PosId");
-
-                    b.HasIndex("PosId")
-                        .IsUnique();
-
-                    b.ToTable("Pos");
                 });
 
             modelBuilder.Entity("Promrub.Services.API.Entities.ProvinceEntity", b =>

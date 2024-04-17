@@ -2,6 +2,7 @@
 {
     public class PaymentTransactionDetails
     {
+        public string? RefTransactionId { get; set; }
         public string? OrgName { get; set; }
         public decimal? Prices { get; set; }
         public bool? HvMobileBanking { get; set; }
@@ -10,6 +11,8 @@
         public List<PaymentChannelList> PrompayList { get; set; }
         public bool? HvCard { get; set; }
         public List<PaymentChannelList> CardList { get; set; }
+        public int? PaymentStatus { get; set; }
+        public string RedirectUrl { get; set; }
     }
 
     public class PaymentChannelList

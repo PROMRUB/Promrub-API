@@ -39,6 +39,15 @@ namespace Promrub.Services.API.Repositories
             this.configuration = configuration;
         }
 
+        private List<KeyValuePair<string, string>> Header(string token)
+        {
+            List<KeyValuePair<string, string>>? headers = new List<KeyValuePair<string, string>>();
+            
+            headers?.Add(new KeyValuePair<string, string>("Authorization", token));
+
+            return headers ?? new List<KeyValuePair<string, string>>();
+        }
+
         public PaymentTransactionEntity AddTransaction(string transactionId, PaymentTransactionEntity request)
         {
             request.TransactionId = transactionId;
@@ -57,6 +66,10 @@ namespace Promrub.Services.API.Repositories
         {
                 return context!.PaymentTransactions!.Where(x => x.OrgId!.Equals(orgId) && x.TransactionId! == transactionId);
         }
+        public IQueryable<PaymentTransactionItemEntity> GetTransactionItem(Guid transactionId)
+        {
+            return context!.PaymentTransactionItems!.Where(x => x.OrgId!.Equals(orgId) && x.PaymentTransactionId! == transactionId);
+        }
 
         public IQueryable<PaymentTransactionEntity> GetTransactionDetailById(string transactionId)
         {
@@ -72,9 +85,9 @@ namespace Promrub.Services.API.Repositories
             return response;
         }
 
-        public async Task<ReceiptNumbersEntity> ReceiptNumberAsync(string? orgId)
+        public async Task<ReceiptNumbersEntity> ReceiptNumberAsync(string? orgId,string posId)
         {
-            var currentDate = DateTime.Today.Date.ToUniversalTime().ToString("yyMMdd");
+            var currentDate = DateTime.Today.Date.ToUniversalTime().ToString("yyMMdd") + posId.Substring(posId.Length - 4, 4);
             var query = await context!.ReceiptNumbers!.Where(x => x.ReceiptDate == currentDate && x.OrgId == orgId).FirstOrDefaultAsync();
             bool HaveReciept = true;
             while (HaveReciept)
@@ -113,6 +126,14 @@ namespace Promrub.Services.API.Repositories
             query.PaymentStatus = 3;
             context!.SaveChanges();
             return query;
+        }
+
+        public async Task<OrganizationCallbackResponse> Callback(string url, OrganizationCallbackRequest request, string token)
+        {
+            var jsonRequest = JsonConvert.SerializeObject(request, serializerSettings);
+            var responseCallback = await HttpUtils.Post<OrganizationCallbackResponse>(httpClient == null ? new HttpClient() : httpClient,
+            url, Header(token), cancelToken, jsonRequest);
+            return responseCallback;
         }
     }
 }

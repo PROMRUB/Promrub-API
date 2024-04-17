@@ -3,12 +3,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using PdfSharp.Fonts;
 using Promrub.Services.API.Authentications;
 using Promrub.Services.API.CrossCutting;
 using Promrub.Services.API.Helpers;
 using Promrub.Services.API.Models.ResponseModels.Common;
 using Promrub.Services.API.PromServiceDbContext;
 using Promrub.Services.API.Seeder;
+using Promrub.Services.API.Utils;
+using QuestPDF.Infrastructure;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
@@ -48,6 +51,8 @@ var log = new LoggerConfiguration()
 Log.Logger = log;
 
 var cfg = builder.Configuration;
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 cfg["IsDev"] = Environment.GetEnvironmentVariable("IsDev")!;
 cfg["PostgreSQL:Host"] = Environment.GetEnvironmentVariable("PostgreSQL_Host")!;
@@ -132,6 +137,11 @@ using (var scope = app.Services.CreateScope())
     var service = scope.ServiceProvider.GetRequiredService<DataSeeder>();
     service.Seed();
 }
+
+app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 
 app.UseSwagger();
 app.UseSwaggerUI();
