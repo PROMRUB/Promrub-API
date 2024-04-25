@@ -8,7 +8,11 @@ namespace Promrub.Services.API.Repositories
 {
     public class ApiKeyRepository : BaseRepository, IApiKeyRepository
     {
-        private readonly Password password = new Password(32);
+        private readonly Password password = new Password(includeLowercase: true,
+                       includeUppercase: true,
+                       includeNumeric: true,
+                       includeSpecial: false,
+                       passwordLength: 32);
         public ApiKeyRepository(PromrubDbContext context)
         {
             this.context = context;
