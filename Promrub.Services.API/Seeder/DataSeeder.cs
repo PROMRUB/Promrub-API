@@ -10,7 +10,11 @@ namespace Promrub.Services.API.Seeder
     public class DataSeeder
     {
         private readonly PromrubDbContext context;
-        private readonly Password pwd = new Password(32);
+        private readonly Password pwd = new Password(includeLowercase: true,
+                       includeUppercase: true,
+                       includeNumeric: true,
+                       includeSpecial: false,
+                       passwordLength: 32);
 
         public DataSeeder(PromrubDbContext context)
         {
