@@ -52,6 +52,7 @@ namespace Promrub.Services.API.Services.Payment
             this.posRepository = posRepository;
             this.paymentChannelRepository = paymentChannelRepository;
             this.paymentRepository = paymentRepository;
+            this.apiKeyRepository = apiKeyRepository;
         }
 
 
