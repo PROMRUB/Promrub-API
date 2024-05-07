@@ -81,10 +81,6 @@ namespace Promrub.Services.API.Entities
 
         public string? CallbackUrl { get; set; }
 
-        [Column("redirect_url")]
-
-        public string? RedirectUrl { get; set; }
-
         [Column("org_created_date")]
         public DateTime? OrgCreatedDate { get; set; }
 

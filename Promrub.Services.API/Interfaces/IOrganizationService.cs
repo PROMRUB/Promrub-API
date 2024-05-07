@@ -10,6 +10,7 @@ namespace Promrub.Services.API.Interfaces
         public bool IsUserNameExist(string orgId, string userName);
         public Task<bool> VerifyUserInOrganization(string orgId, string userName);
         public void AddOrganization(string orgId, OrganizationRequest org);
+        public Task<bool> UpdateOrganization(string orgId, OrganizationRequest org);
         public Task<List<OrganizationUserResponse>> GetUserAllowedOrganization(string userName);
     }
 }

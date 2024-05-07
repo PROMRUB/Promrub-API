@@ -14,6 +14,9 @@ namespace Promrub.Services.API.Entities
         [Column("org_id")]
         public string? OrgId { get; set; }
 
+        [Column("api_Key")]
+        public string? ApiKey { get; set; }
+
         [Column("pos_id")]
         public string? PosId { get; set; }
 
