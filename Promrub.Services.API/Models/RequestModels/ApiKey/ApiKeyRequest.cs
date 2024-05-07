@@ -4,5 +4,6 @@
     {
         public string? KeyDescription { get; set; }
         public string? RolesList { get; set; }
+        public string? RedirectUrl { get; set; }
     }
 }

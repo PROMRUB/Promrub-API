@@ -57,6 +57,13 @@ namespace Promrub.Services.API.Services.ApiKey
             var request = mapper.Map<ApiKeyRequest, ApiKeyEntity>(apiKey);
             repository!.AddApiKey(request);
         }
+        public async void Update(string orgId, ApiKeyRequest apiKey, string key)
+        {
+            repository!.SetCustomOrgId(orgId);
+            var request = await repository!.GetApiKey(key);
+            request.RedirectUrl = apiKey.RedirectUrl;
+            repository.UpdateApiKey(request);
+        }
 
         public void DeleteApiKeyById(string orgId, string keyId)
         {

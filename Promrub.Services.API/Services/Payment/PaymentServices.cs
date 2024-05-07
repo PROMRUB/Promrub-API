@@ -36,13 +36,15 @@ namespace Promrub.Services.API.Services.Payment
         private readonly IPosRepository posRepository;
         private readonly IPaymentChannelRepository paymentChannelRepository;
         private readonly IPaymentRepository paymentRepository;
+        private readonly IApiKeyRepository apiKeyRepository;
 
         public PaymentServices(IMapper mapper,
             IConfiguration configuration,
             IOrganizationRepository organizationRepository,
             IPosRepository posRepository,
             IPaymentChannelRepository paymentChannelRepository,
-            IPaymentRepository paymentRepository)
+            IPaymentRepository paymentRepository,
+            IApiKeyRepository apiKeyRepository)
         {
             this.mapper = mapper;
             this.configuration = configuration;
@@ -59,9 +61,10 @@ namespace Promrub.Services.API.Services.Payment
             paymentRepository!.SetCustomOrgId(orgId);
             paymentChannelRepository.SetCustomOrgId(orgId);
             posRepository.SetCustomOrgId(orgId);
+            apiKeyRepository.SetCustomOrgId(orgId);
         }
 
-        public async Task<GeneratePaymentLinkModel> GeneratePaymentTransaction(string orgId, GeneratePaymentTransactionLinkRequestModel request)
+        public async Task<GeneratePaymentLinkModel> GeneratePaymentTransaction(string orgId, GeneratePaymentTransactionLinkRequestModel request,string key)
         {
             var refTransactionId = request.TransactionId;
             SetOrgId(orgId);
@@ -70,6 +73,7 @@ namespace Promrub.Services.API.Services.Payment
                 throw new ArgumentException("1102");
             var transactionId = ServiceUtils.GenerateTransaction(orgId, 16);
             var transactionQuery = mapper.Map<GeneratePaymentTransactionLinkRequestModel, PaymentTransactionEntity>(request);
+            transactionQuery.ApiKey = key;
             transactionQuery.RefTransactionId = refTransactionId;
             paymentRepository!.SetCustomOrgId(orgId);
             paymentRepository.AddTransaction(transactionId, transactionQuery);
@@ -90,7 +94,8 @@ namespace Promrub.Services.API.Services.Payment
             var paymentDetails = paymentRepository.GetTransactionDetail(transactionId).FirstOrDefault();
             if (org is null || paymentDetails is null)
                 throw new ArgumentException("1102");
-            var promptpatList = mapper.Map<List<PaymentChannelEntity>, List<PaymentChannelList>>(await paymentChannelRepository.GetPaymentChannels());
+            var api = await apiKeyRepository.GetApiKey(paymentDetails.ApiKey!);
+            var promptpayList = mapper.Map<List<PaymentChannelEntity>, List<PaymentChannelList>>(await paymentChannelRepository.GetPaymentChannels());
             var result = new PaymentTransactionDetails()
             {
                 RefTransactionId = paymentDetails.RefTransactionId,
@@ -99,11 +104,11 @@ namespace Promrub.Services.API.Services.Payment
                 HvMobileBanking = org.HvMobileBanking,
                 MobileBankingList = new List<PaymentChannelList>(),
                 HvPromptPay = org.HvPromptPay,
-                PrompayList = promptpatList,
+                PrompayList = promptpayList,
                 HvCard = org.HvCard,
                 CardList = new List<PaymentChannelList>(),
                 PaymentStatus = paymentDetails!.PaymentStatus,
-                RedirectUrl = org.RedirectUrl!
+                RedirectUrl = api.RedirectUrl!
             };
             return result;
         }

@@ -33,9 +33,10 @@ namespace Promrub.Services.API.Controllers.v1
         {
             try
             {
-                if (!ModelState.IsValid || string.IsNullOrEmpty(id))
+                var key = Request.Headers["Authorization"].ToString();
+                if (!ModelState.IsValid || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(key))
                     throw new ArgumentException("1101");
-                var result = await services.GeneratePaymentTransaction(id, request);
+                var result = await services.GeneratePaymentTransaction(id, request, key);
                 return Ok(ResponseHandler.Response<GeneratePaymentLinkModel>("1000", null, result));
             }
             catch (Exception ex)

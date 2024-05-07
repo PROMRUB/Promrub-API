@@ -39,5 +39,8 @@ namespace Promrub.Services.API.Entities
 
         [Column("roles_list")]
         public string? RolesList { get; set; }
+
+        [Column("redirect_url")]
+        public string? RedirectUrl { get; set; }
     }
 }
