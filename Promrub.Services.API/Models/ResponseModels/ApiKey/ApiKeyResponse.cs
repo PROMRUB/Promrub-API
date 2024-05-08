@@ -11,5 +11,6 @@ namespace Promrub.Services.API.Models.ResponseModels.ApiKey
         public DateTime? KeyExpiredDate { get; set; }
         public string? KeyDescription { get; set; }
         public string? RolesList { get; set; }
+        public string? RedirectUrl { get; set; }
     }
 }
