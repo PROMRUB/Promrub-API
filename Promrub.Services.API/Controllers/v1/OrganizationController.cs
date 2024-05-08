@@ -113,6 +113,24 @@ namespace Promrub.Services.API.Controllers.v1
         }
 
         [HttpPost]
+        [Route("org/{id}/action/AdminUpdateSecurity")]
+        [MapToApiVersion("1")]
+        public IActionResult AdminUpdateSecurity(string id, [FromBody] OrganizationRequest request)
+        {
+            try
+            {
+                if (!ModelState.IsValid || string.IsNullOrEmpty(id))
+                    throw new ArgumentException("1101");
+                services.UpdateSecurity(id, request);
+                return Ok(ResponseHandler.Response("1000", null));
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseHandler.Response(ex.Message, null));
+            }
+        }
+
+        [HttpPost]
         [Route("org/{id}/action/AdminAddUserToOrganization")]
         [MapToApiVersion("1")]
         public IActionResult AdminAddUserToOrganization(string id, [FromBody] OrganizationUserRequest request)

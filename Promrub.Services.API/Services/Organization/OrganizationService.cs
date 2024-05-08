@@ -46,6 +46,19 @@ namespace Promrub.Services.API.Services.Organization
             repository.UpdateOrganization(orgDetail);
             return true;
         }
+        public async Task<bool> UpdateSecurity(string orgId, OrganizationRequest org)
+        {
+            var customOrgId = org.OrgCustomId;
+            if (repository!.IsCustomOrgIdExist(customOrgId!))
+                throw new ArgumentException("1111");
+            repository!.SetCustomOrgId(customOrgId!);
+            var orgDetail = await repository.GetOrganization();
+            orgDetail.Security = org.Security;
+            orgDetail.SecurityCredential = org.SecurityCredential;
+            orgDetail.SecurityPassword = org.SecurityPassword;
+            repository.UpdateOrganization(orgDetail);
+            return true;
+        }
 
         public async Task<OrganizationResponse> GetOrganization(string orgId)
         {
