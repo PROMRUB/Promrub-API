@@ -66,7 +66,6 @@ namespace Promrub.Services.API.Repositories
         }
         public void UpdateOrganization(OrganizationEntity org)
         {
-            context!.Organizations!.Update(org);
             context.SaveChanges();
         }
     }
