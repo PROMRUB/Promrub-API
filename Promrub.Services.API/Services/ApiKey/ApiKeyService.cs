@@ -5,6 +5,7 @@ using Promrub.Services.API.Models.RequestModels.ApiKey;
 using Promrub.Services.API.Models.ResponseModels.ApiKey;
 using Promrub.Services.API.Utils;
 using System.Runtime.CompilerServices;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Promrub.Services.API.Services.ApiKey
 {
@@ -37,6 +38,8 @@ namespace Promrub.Services.API.Services.ApiKey
         {
             repository!.SetCustomOrgId(orgId);
             var query = await repository!.GetApiKey(apiKey);
+            if (query == null)
+                throw new KeyNotFoundException("9500");
             return mapper.Map<ApiKeyEntity, ApiKeyResponse>(query);
         }
 
@@ -56,6 +59,15 @@ namespace Promrub.Services.API.Services.ApiKey
             repository!.SetCustomOrgId(orgId);
             var request = mapper.Map<ApiKeyRequest, ApiKeyEntity>(apiKey);
             repository!.AddApiKey(request);
+        }
+        public async void Update(string orgId, ApiKeyRequest apiKey, string key)
+        {
+            repository!.SetCustomOrgId(orgId);
+            var query = await repository!.GetApiKey(key);
+            if (query == null)
+                throw new KeyNotFoundException("9500");
+            query.RedirectUrl = apiKey.RedirectUrl;
+            repository.UpdateApiKey(query);
         }
 
         public void DeleteApiKeyById(string orgId, string keyId)

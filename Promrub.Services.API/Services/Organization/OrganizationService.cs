@@ -4,6 +4,7 @@ using Promrub.Services.API.Interfaces;
 using Promrub.Services.API.Models.RequestModels.Organization;
 using Promrub.Services.API.Models.ResponseModels.Organization;
 using Promrub.Services.API.Services.User;
+using System.Runtime.CompilerServices;
 
 namespace Promrub.Services.API.Services.Organization
 {
@@ -30,6 +31,33 @@ namespace Promrub.Services.API.Services.Organization
             repository!.SetCustomOrgId(customOrgId!);
             var request = mapper.Map<OrganizationRequest,OrganizationEntity>(org);
             repository!.AddOrganization(request);
+        }
+
+        public async Task<bool> UpdateOrganization(string orgId, OrganizationRequest org)
+        {
+            var customOrgId = org.OrgCustomId;
+            if (repository!.IsCustomOrgIdExist(customOrgId!))
+                throw new ArgumentException("1111");
+            repository!.SetCustomOrgId(customOrgId!);
+            var orgDetail = await repository.GetOrganization();
+            orgDetail.DisplayName = org.DisplayName;
+            orgDetail.CallbackUrl = org.CallBackUrl;
+            orgDetail.OrgLogo = org.OrgLogo;
+            repository.UpdateOrganization(orgDetail);
+            return true;
+        }
+        public async Task<bool> UpdateSecurity(string orgId, OrganizationRequest org)
+        {
+            var customOrgId = org.OrgCustomId;
+            if (repository!.IsCustomOrgIdExist(customOrgId!))
+                throw new ArgumentException("1111");
+            repository!.SetCustomOrgId(customOrgId!);
+            var orgDetail = await repository.GetOrganization();
+            orgDetail.Security = org.Security;
+            orgDetail.SecurityCredential = org.SecurityCredential;
+            orgDetail.SecurityPassword = org.SecurityPassword;
+            repository.UpdateOrganization(orgDetail);
+            return true;
         }
 
         public async Task<OrganizationResponse> GetOrganization(string orgId)

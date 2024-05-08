@@ -74,7 +74,26 @@ namespace Promrub.Services.API.Controllers.v1
                 return Ok(ResponseHandler.Response(ex.Message, null));
             }
         }
-        
+
+        [HttpPost]
+        [Route("org/{id}/action/UpdateApiKey")]
+        [MapToApiVersion("1")]
+        public IActionResult UpdateApiKey(string id, [FromBody] ApiKeyRequest request)
+        {
+            try
+            {
+                var key = Request.Headers["Authorization"].ToString().Split(" ")[1];
+                if (!ModelState.IsValid || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(key))
+                    throw new ArgumentException("1101");
+                services.Update(id, request, key);
+                return Ok(ResponseHandler.Response("1000", null));
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseHandler.Response(ex.Message, null));
+            }
+        }
+
         [HttpDelete]
         [Route("org/{id}/action/DeleteApiKeyById/{keyId}")]
         [MapToApiVersion("1")]

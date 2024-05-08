@@ -9,6 +9,7 @@ namespace Promrub.Services.API.Interfaces
         public Task<ApiKeyResponse> GetApiKey(string orgId, string apiKey);
         public Task<ApiKeyResponse> VerifyApiKey(string orgId, string apiKey);
         public void AddApiKey(string orgId, ApiKeyRequest apiKey);
+        public void Update(string orgId, ApiKeyRequest apiKey, string key);
         public void DeleteApiKeyById(string orgId, string keyId);
     }
 }

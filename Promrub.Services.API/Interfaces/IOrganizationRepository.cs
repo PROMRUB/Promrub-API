@@ -11,6 +11,7 @@ namespace Promrub.Services.API.Interfaces
         public bool IsCustomOrgIdExist(string orgCustomId);
         public Task<OrganizationUserEntity> GetUserInOrganization(string userName);
         public void AddOrganization(OrganizationEntity org);
+        public void UpdateOrganization(OrganizationEntity org);
         public Task<IEnumerable<OrganizationUserEntity>> GetUserAllowedOrganizationAsync(string userName);
     }
 }
