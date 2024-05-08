@@ -35,8 +35,6 @@ namespace Promrub.Services.API.Repositories
 
         public void UpdateApiKey(ApiKeyEntity apiKey)
         {
-            apiKey.OrgId = orgId;
-            apiKey.ApiKey = password.Next();
             context!.ApiKeys!.Update(apiKey);
             context.SaveChanges();
         }
