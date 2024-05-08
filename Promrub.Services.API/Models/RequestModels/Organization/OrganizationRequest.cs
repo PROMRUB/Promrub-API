@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Promrub.Services.API.Enum;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Promrub.Services.API.Models.RequestModels.Organization
 {
@@ -18,6 +19,8 @@ namespace Promrub.Services.API.Models.RequestModels.Organization
         public string? DisplayName { get; set; }
         public string? CallBackUrl { get; set; }
         public string? OrgLogo { get; set; }
-
+        public EnumAuthorizationType Security { get; set; }
+        public string? SecurityCredential { get; set; }
+        public string? SecurityPassword { get; set; }
     }
 }
