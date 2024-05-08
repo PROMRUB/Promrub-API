@@ -25,6 +25,13 @@ namespace Promrub.Services.API.Repositories
             return result!;
         }
 
+        public Task<ApiKeyEntity> GetApiKey(Guid apiKey)
+        {
+            var result = context!.ApiKeys!
+                .Where(x => x.OrgId!.Equals(orgId) && x.KeyId!.Equals(apiKey)).FirstOrDefaultAsync();
+            return result!;
+        }
+
         public void AddApiKey(ApiKeyEntity apiKey)
         {
             apiKey.OrgId = orgId;
@@ -35,8 +42,7 @@ namespace Promrub.Services.API.Repositories
 
         public void UpdateApiKey(ApiKeyEntity apiKey)
         {
-            context!.ApiKeys!.Update(apiKey);
-            context.SaveChanges();
+            context!.SaveChanges();
         }
         public void DeleteApiKeyById(string keyId)
         {
