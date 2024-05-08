@@ -82,7 +82,7 @@ namespace Promrub.Services.API.Controllers.v1
         {
             try
             {
-                var key = Request.Headers["Authorization"].ToString();
+                var key = Request.Headers["Authorization"].ToString().Split(" ")[1];
                 if (!ModelState.IsValid || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(key))
                     throw new ArgumentException("1101");
                 services.Update(id, request, key);
