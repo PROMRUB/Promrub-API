@@ -36,8 +36,6 @@ namespace Promrub.Services.API.Services.Organization
         public async Task<bool> UpdateOrganization(string orgId, OrganizationRequest org)
         {
             var customOrgId = org.OrgCustomId;
-            if (repository!.IsCustomOrgIdExist(customOrgId!))
-                throw new ArgumentException("1111");
             repository!.SetCustomOrgId(customOrgId!);
             var orgDetail = await repository.GetOrganization();
             orgDetail.DisplayName = org.DisplayName;
@@ -49,8 +47,6 @@ namespace Promrub.Services.API.Services.Organization
         public async Task<bool> UpdateSecurity(string orgId, OrganizationRequest org)
         {
             var customOrgId = org.OrgCustomId;
-            if (repository!.IsCustomOrgIdExist(customOrgId!))
-                throw new ArgumentException("1111");
             repository!.SetCustomOrgId(customOrgId!);
             var orgDetail = await repository.GetOrganization();
             orgDetail.Security = org.Security;
