@@ -78,13 +78,13 @@ namespace Promrub.Services.API.Controllers.v1
         [HttpPost]
         [Route("org/{id}/action/UpdateApiKey/{key}")]
         [MapToApiVersion("1")]
-        public IActionResult UpdateApiKey(string id, [FromBody] ApiKeyRequest request,Guid key)
+        public async Task<IActionResult> UpdateApiKey(string id, [FromBody] ApiKeyRequest request,Guid key)
         {
             try
             {
                 if (!ModelState.IsValid || string.IsNullOrEmpty(id) || key == Guid.Empty)
                     throw new ArgumentException("1101");
-                services.Update(id, request, key);
+                await services.Update(id, request, key);
                 return Ok(ResponseHandler.Response("1000", null));
             }
             catch (Exception ex)

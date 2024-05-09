@@ -40,10 +40,6 @@ namespace Promrub.Services.API.Repositories
             context.SaveChanges();
         }
 
-        public void UpdateApiKey(ApiKeyEntity apiKey)
-        {
-            context!.SaveChanges();
-        }
         public void DeleteApiKeyById(string keyId)
         {
             Guid id = Guid.Parse(keyId);
