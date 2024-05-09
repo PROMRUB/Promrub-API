@@ -43,7 +43,7 @@ namespace Promrub.Services.API.Services.Organization
             orgDetail.DisplayName = org.DisplayName;
             orgDetail.CallbackUrl = org.CallBackUrl;
             orgDetail.OrgLogo = org.OrgLogo;
-            repository.UpdateOrganization(orgDetail);
+            repository.Commit();
             return true;
         }
         public async Task<bool> UpdateSecurity(string orgId, OrganizationRequest org)
@@ -56,7 +56,7 @@ namespace Promrub.Services.API.Services.Organization
             orgDetail.Security = org.Security;
             orgDetail.SecurityCredential = org.SecurityCredential;
             orgDetail.SecurityPassword = org.SecurityPassword;
-            repository.UpdateOrganization(orgDetail);
+            repository.Commit();
             return true;
         }
 
