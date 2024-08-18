@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Promrub.Services.API.Authentications;
+using Promrub.Services.API.Controllers.v1;
 using Promrub.Services.API.ExternalServices.Cache;
 using Promrub.Services.API.Handlers;
 using Promrub.Services.API.Interfaces;
@@ -29,6 +30,8 @@ namespace Promrub.Services.API.CrossCutting
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPaymentChannelServices, PaymentChannelServices>();
             services.AddScoped<IPaymentServices, PaymentServices>();
+            services.AddScoped<IReceivePaymentService, ReceivePaymentService>();
+            services.AddScoped<ITaxReportService, TaxReportService>();
 
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IApiKeyRepository, ApiKeyRepository>();
