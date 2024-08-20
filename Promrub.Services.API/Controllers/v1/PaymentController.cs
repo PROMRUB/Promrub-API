@@ -29,21 +29,7 @@ namespace Promrub.Services.API.Controllers.v1
         [HttpPost]
         [Route("org/{id}/action/GeneratePaymentTransaction")]
         [MapToApiVersion("1")]
-        public async Task<IActionResult> GeneratePaymentTransaction(string id, [FromBody] GeneratePaymentTransactionLinkRequestModel request)
-        {
-            try
-            {
-                var key = Request.Headers["Authorization"].ToString().Split(" ")[1];
-                if (!ModelState.IsValid || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(key))
-                    throw new ArgumentException("1101");
-                var result = await services.GeneratePaymentTransaction(id, request, key);
-                return Ok(ResponseHandler.Response<GeneratePaymentLinkModel>("1000", null, result));
-            }
-            catch (Exception ex)
-            {
-                return Ok(ResponseHandler.Response(ex.Message, null));
-            }
-        }
+      
 
         [HttpGet]
         [Route("org/{id}/action/GetPaymentDetails/{transactionId}")]

@@ -65,7 +65,8 @@ cfg["SCBGenerateQRUrl"] = Environment.GetEnvironmentVariable("SCBGenerateQRUrl")
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-var connStr = $"Host={cfg["PostgreSQL:Host"]}; Database={cfg["PostgreSQL:Database"]}; Username={cfg["PostgreSQL:User"]}; Password={cfg["PostgreSQL:Password"]}";
+var connStr =
+    $"Host={cfg["PostgreSQL:Host"]}; Database={cfg["PostgreSQL:Database"]}; Username={cfg["PostgreSQL:User"]}; Password={cfg["PostgreSQL:Password"]}";
 builder.Services.AddDbContext<PromrubDbContext>(options => options.UseNpgsql(connStr));
 builder.Services.AddControllers();
 
@@ -134,8 +135,8 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<PromrubDbContext>();
     dbContext.Database.Migrate();
 
-    var service = scope.ServiceProvider.GetRequiredService<DataSeeder>();
-    service.Seed();
+    // var service = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+    // service.Seed();
 }
 
 app.UseCors(x => x
@@ -146,7 +147,7 @@ app.UseCors(x => x
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
