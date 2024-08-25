@@ -9,10 +9,10 @@ public class TaxReceiptEntityConfiguration : IEntityTypeConfiguration<TaxReceipt
     public void Configure(EntityTypeBuilder<TaxReceiptEntity> builder)
     {
         
-        builder.HasOne(b => b.PaymentTransaction)
-            .WithMany()
-            .HasForeignKey(x => x.PaymentTransactionId);
-        
+        // builder.HasOne(b => b.PaymentTransaction)
+        //     .WithMany()
+        //     .HasForeignKey(x => x.PaymentTransactionId);
+        //
         builder.HasOne(b => b.Tax)
             .WithMany()
             .HasForeignKey(x => x.TaxId);

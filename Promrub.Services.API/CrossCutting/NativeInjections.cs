@@ -6,6 +6,7 @@ using Promrub.Services.API.Handlers;
 using Promrub.Services.API.Interfaces;
 using Promrub.Services.API.Repositories;
 using Promrub.Services.API.Seeder;
+using Promrub.Services.API.Services;
 using Promrub.Services.API.Services.ApiKey;
 using Promrub.Services.API.Services.Organization;
 using Promrub.Services.API.Services.Payment;
@@ -42,6 +43,7 @@ namespace Promrub.Services.API.CrossCutting
             services.AddScoped<IPaymentChannelRepository, PaymentChannelRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IReceiptRepository, ReceiptScheduleRepository>();
+            services.AddScoped<ITaxRepository, TaxRepository>();
 
             services.AddTransient<IAuthorizationHandler, GenericRbacHandler>();
             services.AddScoped<IBasicAuthenticationRepo, BasicAuthenticationRepo>();

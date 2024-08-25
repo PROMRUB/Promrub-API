@@ -16,12 +16,9 @@ public class TaxReceiptEntity
     
     [Column("receipt_no")]
     public string ReceiptNo { get; set; }
-    
-    [Column("total_receipt")]
-    public string TotalReceipt { get; set; }
 
-    [Column("payment_transaction")]
-    public Guid PaymentTransactionId { get; set; }
-    public PaymentTransactionEntity PaymentTransaction { get; set; }
+    // [Column("payment_transaction")]
+    // public Guid PaymentTransactionId { get; set; }
+    // public PaymentTransactionEntity PaymentTransaction { get; set; }
     public DateTime CreatedDate { get; set; }
 }

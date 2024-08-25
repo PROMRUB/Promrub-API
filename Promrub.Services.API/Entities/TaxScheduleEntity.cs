@@ -27,4 +27,6 @@ public class TaxScheduleEntity
     
     [Column("total_receipt")]
     public string TotalReceipt { get; set; }
+
+    public List<TaxReceiptEntity> Item { get; set; }
 }
