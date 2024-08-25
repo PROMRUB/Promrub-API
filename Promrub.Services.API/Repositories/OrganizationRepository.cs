@@ -19,6 +19,14 @@ namespace Promrub.Services.API.Repositories
                 .FirstOrDefaultAsync();
             return result!;
         }
+        
+        public Task<OrganizationEntity> GetOrganizationWithOrgId(string orgId)
+        {
+            var result = context!.Organizations!
+                .Where(x => x.OrgCustomId!.Equals(orgId))
+                .FirstOrDefaultAsync();
+            return result!;
+        }
 
         public void AddUserToOrganization(OrganizationUserEntity user)
         {

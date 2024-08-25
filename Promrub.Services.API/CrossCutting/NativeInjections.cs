@@ -32,6 +32,7 @@ namespace Promrub.Services.API.CrossCutting
             services.AddScoped<IPaymentServices, PaymentServices>();
             services.AddScoped<IReceivePaymentService, ReceivePaymentService>();
             services.AddScoped<ITaxReportService, TaxReportService>();
+            services.AddScoped<MasterController.IMasterService, MasterController.MasterService>();
 
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IApiKeyRepository, ApiKeyRepository>();
@@ -40,6 +41,7 @@ namespace Promrub.Services.API.CrossCutting
             services.AddScoped<IPosRepository, PosRepository>();
             services.AddScoped<IPaymentChannelRepository, PaymentChannelRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IReceiptRepository, ReceiptScheduleRepository>();
 
             services.AddTransient<IAuthorizationHandler, GenericRbacHandler>();
             services.AddScoped<IBasicAuthenticationRepo, BasicAuthenticationRepo>();

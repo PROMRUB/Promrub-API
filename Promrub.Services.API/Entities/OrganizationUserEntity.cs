@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
 using IndexAttribute = Microsoft.EntityFrameworkCore.IndexAttribute;
 
 namespace Promrub.Services.API.Entities

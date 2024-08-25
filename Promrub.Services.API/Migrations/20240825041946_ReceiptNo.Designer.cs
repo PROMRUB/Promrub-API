@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Promrub.Services.API.PromServiceDbContext;
@@ -11,9 +12,10 @@ using Promrub.Services.API.PromServiceDbContext;
 namespace Promrub.Services.API.Migrations
 {
     [DbContext(typeof(PromrubDbContext))]
-    partial class PromrubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240825041946_ReceiptNo")]
+    partial class ReceiptNo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -566,6 +568,7 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnName("amount");
 
                     b.Property<string>("PosId")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("pos_id");
 
@@ -703,8 +706,8 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("amount");
 
-                    b.Property<string>("PosId")
-                        .HasColumnType("text")
+                    b.Property<Guid>("PosId")
+                        .HasColumnType("uuid")
                         .HasColumnName("pos_id");
 
                     b.Property<DateTime>("TaxDate")

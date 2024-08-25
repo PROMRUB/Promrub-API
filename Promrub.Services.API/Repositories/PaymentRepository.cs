@@ -48,6 +48,11 @@ namespace Promrub.Services.API.Repositories
             return headers ?? new List<KeyValuePair<string, string>>();
         }
 
+        public IQueryable<PaymentTransactionEntity> GetQuery()
+        {
+            return context.PaymentTransactions;
+        }
+
         public PaymentTransactionEntity AddTransaction(string transactionId, PaymentTransactionEntity request)
         {
             request.TransactionId = transactionId;

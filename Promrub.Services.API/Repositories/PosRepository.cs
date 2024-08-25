@@ -16,5 +16,16 @@ namespace Promrub.Services.API.Repositories
         {
             return context.Pos!.Where(context => context.OrgId.Equals(orgId));
         }
+        
+        public  IQueryable<PosEntity> GetPosByOrg(Guid orgId)
+        {
+            return context.Pos!.Where(context => context.OrgId.Equals(orgId));
+        }
+
+        public IQueryable<PosEntity> GetPosByOrgCustom(string orgId)
+        {
+            return context.Pos!.Where(context => context.OrgId.Equals(orgId));
+
+        }
     }
 }

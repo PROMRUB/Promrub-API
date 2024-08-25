@@ -6,5 +6,7 @@ namespace Promrub.Services.API.Interfaces
     {
         public void SetCustomOrgId(string customOrgId);
         public IQueryable<PosEntity> GetPosByOrg();
+        public IQueryable<PosEntity> GetPosByOrg(Guid orgId);
+        public IQueryable<PosEntity> GetPosByOrgCustom(string orgId);
     }
 }

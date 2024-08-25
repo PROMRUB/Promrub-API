@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Promrub.Services.API.Entities;
 using Promrub.Services.API.Handlers;
 using Promrub.Services.API.Models.ResponseModels.Payment;
+using Promrub.Services.API.PromServiceDbContext;
+using Promrub.Services.API.Repositories;
 using Promrub.Services.API.Utils;
 
 namespace Promrub.Services.API.Controllers.v1;
@@ -29,7 +33,7 @@ public class TaxReportController : BaseController
             var key = Request.Headers["Authorization"].ToString().Split(" ")[1];
             if (!ModelState.IsValid || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(key))
                 throw new ArgumentException("1101");
-            var result = await _service.GetTax();
+            var result = await _service.GetTax(request.Keyword,request.PosId,request.Payer,request.Page,request.PageSize);
             return Ok(ResponseHandler.Response("1000", null, result));
         }
         catch (Exception ex)
@@ -49,7 +53,7 @@ public class TaxReportController : BaseController
             var key = Request.Headers["Authorization"].ToString().Split(" ")[1];
             if (!ModelState.IsValid || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(key))
                 throw new ArgumentException("1101");
-            var result = await _service.GetTaxByDate();
+            var result = await _service.GetTaxByDate(request.Keyword,request.PosId,request.Payer,request.Page,request.PageSize);
             return Ok(ResponseHandler.Response("1000", null, result));
         }
         catch (Exception ex)
@@ -58,19 +62,48 @@ public class TaxReportController : BaseController
         }
     }
     
-    public record GetTaxQuery(string? Keyword,string? StartDate,string? EndDate,string? Payer);
+    public record GetTaxQuery(string? Keyword,string? StartDate,string? EndDate,Guid? PosId,Guid? Payer,int Page = 1,int PageSize = 10);
 
+}
+
+
+public interface ITaxRepository
+{
+    public IQueryable<TaxScheduleEntity> GetTaxScheduleQuery();
+    public void Add(TaxScheduleEntity entity);
+    public DbContext? Context();
+}
+
+public class TaxRepository(PromrubDbContext context) : BaseRepository, ITaxRepository
+{
+    public IQueryable<TaxScheduleEntity> GetTaxScheduleQuery()
+    {
+        return context.Tax.AsQueryable();
+    }
+
+    public void Add(TaxScheduleEntity entity)
+    {
+        context.Add(entity);
+    }
+
+    public DbContext? Context()
+    {
+        return this.context;
+    }
 }
 
 public interface ITaxReportService
 {
-    public Task<PagedList<TaxResponse>> GetTax();
-    public Task<PagedList<TaxResponse>> GetTaxByDate();
+    public Task<PagedList<TaxResponse>> GetTax(string keyword, Guid? posId, Guid? paymentChannel, int page,
+        int pageSize);
+    public Task<PagedList<TaxResponse>> GetTaxByDate(string keyword, Guid? posId, Guid? paymentChannel, int page,
+        int pageSize);
+    public Task Add(TaxScheduleEntity entity);
 }
 
 public class TaxReportService : ITaxReportService
 {
-    public async Task<PagedList<TaxResponse>> GetTax()
+    public async Task<PagedList<TaxResponse>> GetTax(string keyword, Guid? posId, Guid? paymentChannel, int page, int pageSize)
     {
         var list = new List<TaxResponse>()
         {
@@ -96,7 +129,7 @@ public class TaxReportService : ITaxReportService
         return new PagedList<TaxResponse>(list, 2, 1, 10);
     }
 
-    public async Task<PagedList<TaxResponse>> GetTaxByDate()
+    public async Task<PagedList<TaxResponse>> GetTaxByDate(string keyword, Guid? posId, Guid? paymentChannel, int page, int pageSize)
     {
         var list = new List<TaxResponse>()
         {
@@ -120,6 +153,20 @@ public class TaxReportService : ITaxReportService
             },
         };
         return new PagedList<TaxResponse>(list, 2, 1, 10);
+    }
+    
+    public Task Add(TaxScheduleEntity entity)
+    {
+        throw new NotImplementedException();
+    }
+    
+    private TaxResponse Generate(PaymentTransactionEntity transactionEntity)
+    {
+        var beforeVat = transactionEntity.TotalTransactionPrices;
+        var amount = 0;
+        var tax = 0;
+        var total = 0;
+        return new TaxResponse();
     }
 }
 
