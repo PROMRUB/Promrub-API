@@ -127,7 +127,7 @@ builder.Services.AddSwaggerGen(config =>
                 });
 });
 
-builder.Services.AddHostedService<Background>();
+// builder.Services.AddHostedService<Background>();
 
 NativeInjections.RegisterServices(builder.Services);
 
