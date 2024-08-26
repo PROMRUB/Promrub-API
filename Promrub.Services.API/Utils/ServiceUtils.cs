@@ -22,7 +22,7 @@ namespace Promrub.Services.API.Utils
 
         public static string GetOrgId(HttpRequest request)
         {
-            var pattern = @"^\/api\/(.+)\/org\/(.+)\/action\/(.+)$";
+            var pattern = @"^\/v1\/api\/(.+)\/org\/(.+)\/action\/(.+)$";
             var path = request.Path;
             MatchCollection matches = Regex.Matches(path, pattern, RegexOptions.None, TimeSpan.FromMilliseconds(100));
 
