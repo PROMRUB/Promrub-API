@@ -5,6 +5,7 @@ using Promrub.Services.API.Utils;
 using Serilog;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Text;
 using System.Text.Encodings.Web;
 
 namespace Promrub.Services.API.Authentications
@@ -39,7 +40,7 @@ namespace Promrub.Services.API.Authentications
             try
             {
                 var orgId = ServiceUtils.GetOrgId(Request);
-                var credentialBytes = Convert.FromBase64String(authHeader.Parameter!);
+                var credentialBytes = Encoding.UTF8.GetBytes(authHeader.Parameter!);
 
                 if (authHeader.Scheme.Equals("Basic"))
                 {
