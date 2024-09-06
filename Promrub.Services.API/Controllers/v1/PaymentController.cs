@@ -35,7 +35,7 @@ namespace Promrub.Services.API.Controllers.v1
         {
             try
             {
-                var profile = Request.Headers["Authorization"].ToString().Split(" ")[1];
+                var profile = Request.Headers["Authorization"];
                 var authHeader = AuthenticationHeaderValue.Parse(profile);
                 if (!ModelState.IsValid || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(profile))
                     throw new ArgumentException("1101");
