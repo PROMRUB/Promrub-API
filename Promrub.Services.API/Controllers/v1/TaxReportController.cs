@@ -25,8 +25,7 @@ public class TaxReportController : BaseController
     {
         try
         {
-            var key = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            if (!ModelState.IsValid || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(key))
+            if (!ModelState.IsValid || string.IsNullOrEmpty(id))
                 throw new ArgumentException("1101");
             var result = await _service.GetTax(request.Keyword, request.PosId, request.StartDate, request.EndDate,
                 request.Payer, request.Page, request.PageSize);
@@ -46,8 +45,7 @@ public class TaxReportController : BaseController
     {
         try
         {
-            var key = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            if (!ModelState.IsValid || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(key))
+            if (!ModelState.IsValid || string.IsNullOrEmpty(id))
                 throw new ArgumentException("1101");
             var result = await _service.GetTaxByDate(request.Keyword, request.PosId, request.StartDate, request.EndDate,
                 request.Payer, request.Page, request.PageSize);

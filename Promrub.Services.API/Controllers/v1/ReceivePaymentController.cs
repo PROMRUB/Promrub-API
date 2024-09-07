@@ -26,8 +26,7 @@ public class ReceivePaymentController : BaseController
     {
         try
         {
-            var key = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            if (!ModelState.IsValid || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(key))
+            if (!ModelState.IsValid || string.IsNullOrEmpty(id))
                 throw new ArgumentException("1101");
             var result = await _service.GetReceiveList(request.Keyword, request.PosId, request.StartDate,
                 request.EndDate, request.Payer, request.Page,
@@ -48,8 +47,7 @@ public class ReceivePaymentController : BaseController
     {
         try
         {
-            var key = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            if (!ModelState.IsValid || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(key))
+            if (!ModelState.IsValid || string.IsNullOrEmpty(id))
                 throw new ArgumentException("1101");
             var result = await _service.GetReceiveByDate(request.Keyword, request.PosId, request.StartDate,
                 request.EndDate, request.Payer, request.Page,
@@ -70,8 +68,7 @@ public class ReceivePaymentController : BaseController
     {
         try
         {
-            var key = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            if (!ModelState.IsValid || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(key))
+            if (!ModelState.IsValid || string.IsNullOrEmpty(id) )
                 throw new ArgumentException("1101");
             var datetime = DateTime.ParseExact(request.DateTime, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             await _service.GenerateSchedule(datetime);
