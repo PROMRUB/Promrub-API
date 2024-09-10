@@ -16,7 +16,6 @@ using System.Transactions;
 namespace Promrub.Services.API.Controllers.v1
 {
     [ApiController]
-    [Authorize(Policy = "GenericRolePolicy")]
     [Route("v{version:apiVersion}/api/[controller]")]
     [ApiVersion("1")]
     public class PaymentController : BaseController
@@ -29,6 +28,7 @@ namespace Promrub.Services.API.Controllers.v1
         }
 
         [HttpPost]
+        [Authorize(Policy = "GenericRolePolicy")]
         [Route("org/{id}/action/GeneratePaymentTransaction")]
         [MapToApiVersion("1")]
         public async Task<IActionResult> GeneratePaymentTransaction(string id, [FromBody] GeneratePaymentTransactionLinkRequestModel request)
@@ -89,6 +89,7 @@ namespace Promrub.Services.API.Controllers.v1
         }
 
         [HttpGet]
+        [Authorize(Policy = "GenericRolePolicy")]
         [Route("org/{id}/action/InquiryTransaction/{transactionId}")]
         [MapToApiVersion("1")]
         public IActionResult InquiryTransaction(string id, string transactionId)
