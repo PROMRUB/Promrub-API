@@ -2,10 +2,12 @@ using System.Globalization;
 using Promrub.Services.API.Handlers;
 using Microsoft.AspNetCore.Mvc;
 using Promrub.Services.API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Promrub.Services.API.Controllers.v1;
 
 [ApiController]
+[Authorize(Policy = "GenericRolePolicy")]
 [Route("v{version:apiVersion}/api/[controller]")]
 [ApiVersion("1")]
 public class ReceivePaymentController : BaseController
