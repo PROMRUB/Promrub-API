@@ -41,7 +41,7 @@ namespace Promrub.Services.API.Authentications
                 var orgId = ServiceUtils.GetOrgId(Request);
                 var credentialBytes = Convert.FromBase64String(authHeader.Parameter!);
 
-                if (authHeader.Scheme.Equals("Basic"))
+                if (authHeader.Scheme.ToUpper().Equals("BASIC"))
                 {
                     user = await Task.Run(() => AuthenticateBasic(orgId, credentialBytes, Request));
                 }

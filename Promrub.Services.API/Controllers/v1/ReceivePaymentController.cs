@@ -1,12 +1,13 @@
+using System.Globalization;
 using Promrub.Services.API.Handlers;
-using Promrub.Services.API.Models.RequestModels.Payment;
-using Promrub.Services.API.Models.ResponseModels.Payment;
 using Microsoft.AspNetCore.Mvc;
-using Promrub.Services.API.Utils;
+using Promrub.Services.API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Promrub.Services.API.Controllers.v1;
 
 [ApiController]
+[Authorize(Policy = "GenericRolePolicy")]
 [Route("v{version:apiVersion}/api/[controller]")]
 [ApiVersion("1")]
 public class ReceivePaymentController : BaseController
@@ -27,10 +28,11 @@ public class ReceivePaymentController : BaseController
     {
         try
         {
-            var key = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            if (!ModelState.IsValid || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(key))
+            if (!ModelState.IsValid || string.IsNullOrEmpty(id))
                 throw new ArgumentException("1101");
-            var result = await _service.GetReceiveList();
+            var result = await _service.GetReceiveList(request.Keyword, request.PosId, request.StartDate,
+                request.EndDate, request.Payer, request.Page,
+                request.PageSize);
             return Ok(ResponseHandler.Response("1000", null, result));
         }
         catch (Exception ex)
@@ -47,10 +49,11 @@ public class ReceivePaymentController : BaseController
     {
         try
         {
-            var key = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            if (!ModelState.IsValid || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(key))
+            if (!ModelState.IsValid || string.IsNullOrEmpty(id))
                 throw new ArgumentException("1101");
-            var result = await _service.GetReceiveByDate();
+            var result = await _service.GetReceiveByDate(request.Keyword, request.PosId, request.StartDate,
+                request.EndDate, request.Payer, request.Page,
+                request.PageSize);
             return Ok(ResponseHandler.Response("1000", null, result));
         }
         catch (Exception ex)
@@ -59,84 +62,28 @@ public class ReceivePaymentController : BaseController
         }
     }
 
-    public record GetReceiveQuery(string? Keyword, string? StartDate, string? EndDate, string? Payer);
-}
-
-public interface IReceivePaymentService
-{
-    public Task<PagedList<ReceivePaymentResponse>> GetReceiveList();
-    public Task<PagedList<ReceivePaymentByDateResponse>> GetReceiveByDate();
-}
-
-public class ReceivePaymentService : IReceivePaymentService
-{
-    public async Task<PagedList<ReceivePaymentResponse>> GetReceiveList()
+    [HttpPost]
+    [Route("org/{id}/generate_datetime")]
+    [MapToApiVersion("1")]
+    public async Task<IActionResult> GenerateDateTime(string id,
+        [FromBody] DateTimeQuery request)
     {
-        var list = new List<ReceivePaymentResponse>()
+        try
         {
-            new ReceivePaymentResponse
-            {
-                PosId = "POS_ID_123456789",
-                PaymentDateTime = "DD/MM/YYYY",
-                ReceiveNo = "RCPYYYMMDD_9999ABBTX",
-                Amount = 0,
-                PaidBy = "CSH",
-                InvoiceNo = "INVYYYYMMDD_99999"
-            },
-            new ReceivePaymentResponse
-            {
-                PosId = "POS_ID_123456789",
-                PaymentDateTime = "DD/MM/YYYY",
-                ReceiveNo = "RCPYYYMMDD_9999ABBTX",
-                Amount = 0,
-                PaidBy = "CSH",
-                InvoiceNo = "INVYYYYMMDD_99999"
-            },
-        };
-        return new PagedList<ReceivePaymentResponse>(list, 2, 1, 10);
+            if (!ModelState.IsValid || string.IsNullOrEmpty(id) )
+                throw new ArgumentException("1101");
+            var datetime = DateTime.ParseExact(request.DateTime, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            await _service.GenerateSchedule(datetime);
+            return Ok(ResponseHandler.Response("1000", null));
+        }
+        catch (Exception ex)
+        {
+            return Ok(ResponseHandler.Response(ex.Message, null));
+        }
     }
 
-    public async Task<PagedList<ReceivePaymentByDateResponse>> GetReceiveByDate()
-    {
-        var list = new List<ReceivePaymentByDateResponse>()
-        {
-            new ReceivePaymentByDateResponse
-            {
-                PosId = "POS_ID_123456789",
-                PaymentDateTime = "DD/MM/YYYY",
-                ReceiveNo = "RCPYYYMMDD_9999ABBTX",
-                Amount = (decimal)107.00,
-                PaidBy = "CSH"
-            },
-            new ReceivePaymentByDateResponse
-            {
-                PosId = "POS_ID_123456789",
-                PaymentDateTime = "DD/MM/YYYY",
-                ReceiveNo = "RCPYYYMMDD_9999ABBTX",
-                Amount = (decimal)107.00,
-                PaidBy = "CSH"
-            }
-        };
-        return new PagedList<ReceivePaymentByDateResponse>(list, 2, 1, 10);
-    }
-}
+    public record DateTimeQuery(string DateTime);
 
-public class ReceivePaymentByDateResponse
-{
-    public string PosId { get; set; }
-    public string PaymentDateTime { get; set; }
-    public decimal Amount { get; set; }
-    public string PaidBy { get; set; }
-    public string ReceiveNo { get; set; }
-}
-
-public class ReceivePaymentResponse
-{
-    public Guid Id { get; set; }
-    public string PosId { get; set; }
-    public string PaymentDateTime { get; set; }
-    public string ReceiveNo { get; set; }
-    public decimal Amount { get; set; }
-    public string PaidBy { get; set; }
-    public string InvoiceNo { get; set; }
+    public record GetReceiveQuery(string? Keyword, string? StartDate, string? EndDate, string? PosId, Guid? Payer,
+        int Page = 1, int PageSize = 10);
 }

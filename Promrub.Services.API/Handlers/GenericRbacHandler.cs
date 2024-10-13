@@ -28,7 +28,7 @@ namespace Promrub.Services.API.Handlers
 
         private string? IsRoleValid(List<RoleListResponse>? roles, string uri)
         {
-            var uriPattern = @"^\/api\/(.+)\/org\/(.+)\/action\/(.+)$";
+            var uriPattern = @"^\/v1\/api\/(.+)\/org\/(.+)\/action\/(.+)$";
             var matches = Regex.Matches(uri, uriPattern, RegexOptions.None, TimeSpan.FromMilliseconds(100));
 
             var group = matches[0].Groups[1].Value;

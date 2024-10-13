@@ -48,6 +48,11 @@ namespace Promrub.Services.API.Repositories
             return headers ?? new List<KeyValuePair<string, string>>();
         }
 
+        public IQueryable<PaymentTransactionEntity> GetQuery()
+        {
+            return context.PaymentTransactions;
+        }
+
         public PaymentTransactionEntity AddTransaction(string transactionId, PaymentTransactionEntity request)
         {
             request.TransactionId = transactionId;
@@ -124,6 +129,17 @@ namespace Promrub.Services.API.Repositories
             query.ReceiptNo = request.ReceiptNo;
             query.ReceiptDate = request.ReceiptDate;
             query.PaymentStatus = 3;
+            context!.SaveChanges();
+            return query;
+        }
+
+        public async Task<PaymentTransactionEntity> ExpireTransaction(PaymentTransactionEntity request)
+        {
+
+            var query = await context!.PaymentTransactions!.Where(x => x.TransactionId == request.TransactionId).FirstOrDefaultAsync();
+            if (query == null)
+                throw new ArgumentException("1102");
+            query.PaymentStatus = request.PaymentStatus;
             context!.SaveChanges();
             return query;
         }

@@ -13,5 +13,6 @@ namespace Promrub.Services.API.Interfaces
         public void AddOrganization(OrganizationEntity org);
         public Task<IEnumerable<OrganizationUserEntity>> GetUserAllowedOrganizationAsync(string userName);
         public void Commit();
+        public Task<OrganizationEntity> GetOrganizationWithOrgId(string orgId);
     }
 }

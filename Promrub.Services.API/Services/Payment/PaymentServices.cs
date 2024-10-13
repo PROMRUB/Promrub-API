@@ -25,6 +25,7 @@ using QuestPDF;
 using QuestPDF.Infrastructure;
 using static System.Net.Mime.MediaTypeNames;
 using Promrub.Services.API.Extensions;
+using Microsoft.AspNetCore.Http;
 
 namespace Promrub.Services.API.Services.Payment
 {
@@ -97,6 +98,7 @@ namespace Promrub.Services.API.Services.Payment
                 throw new ArgumentException("1102");
             var api = await apiKeyRepository.GetApiKey(paymentDetails.ApiKey!);
             var promptpayList = mapper.Map<List<PaymentChannelEntity>, List<PaymentChannelList>>(await paymentChannelRepository.GetPaymentChannels());
+            
             var result = new PaymentTransactionDetails()
             {
                 RefTransactionId = paymentDetails.RefTransactionId,
@@ -109,8 +111,18 @@ namespace Promrub.Services.API.Services.Payment
                 HvCard = org.HvCard,
                 CardList = new List<PaymentChannelList>(),
                 PaymentStatus = paymentDetails!.PaymentStatus,
-                RedirectUrl = api.RedirectUrl!
             };
+            if (paymentDetails.CreateAt.HasValue && (DateTime.Now - paymentDetails.CreateAt.Value).TotalMinutes > 5)
+            {
+                if (paymentDetails.PaymentStatus != 3 && paymentDetails.PaymentStatus != 4)
+                {
+                    result.PaymentStatus = 4;
+                    paymentDetails.PaymentStatus = 4;
+                    await paymentRepository.ExpireTransaction(paymentDetails);
+                }
+            }
+            var statusCode = result.PaymentStatus == 4 ? 1102 : result.PaymentStatus;
+            result.RedirectUrl = $"{api.RedirectUrl!}?transactionId={paymentDetails.RefTransactionId}&status={statusCode}";
             return result;
         }
 

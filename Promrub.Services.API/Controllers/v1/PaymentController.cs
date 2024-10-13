@@ -9,6 +9,7 @@ using Promrub.Services.API.Models.ResponseModels.Payment;
 using Promrub.Services.API.Services.Payment;
 using System;
 using System.IO;
+using System.Net.Http.Headers;
 using System.Reflection.PortableExecutable;
 using System.Transactions;
 
@@ -27,8 +28,27 @@ namespace Promrub.Services.API.Controllers.v1
         }
 
         [HttpPost]
+        [Authorize(Policy = "GenericRolePolicy")]
         [Route("org/{id}/action/GeneratePaymentTransaction")]
         [MapToApiVersion("1")]
+        public async Task<IActionResult> GeneratePaymentTransaction(string id, [FromBody] GeneratePaymentTransactionLinkRequestModel request)
+        {
+            try
+            {
+                var profile = Request.Headers["Authorization"];
+                var authHeader = AuthenticationHeaderValue.Parse(profile);
+                if (!ModelState.IsValid || string.IsNullOrEmpty(id) || string.IsNullOrEmpty(profile))
+                    throw new ArgumentException("1101");
+                var credentialBytes = Convert.FromBase64String(authHeader.Parameter!);
+                var key = APIKeyHandler.GetBasicAPIKey(credentialBytes);
+                var result = await services.GeneratePaymentTransaction(id, request, key);
+                return Ok(ResponseHandler.Response<GeneratePaymentLinkModel>("1000", null, result));
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseHandler.Response(ex.Message, null));
+            }
+        }
       
 
         [HttpGet]
@@ -69,6 +89,7 @@ namespace Promrub.Services.API.Controllers.v1
         }
 
         [HttpGet]
+        [Authorize(Policy = "GenericRolePolicy")]
         [Route("org/{id}/action/InquiryTransaction/{transactionId}")]
         [MapToApiVersion("1")]
         public IActionResult InquiryTransaction(string id, string transactionId)

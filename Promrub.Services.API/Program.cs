@@ -15,6 +15,7 @@ using QuestPDF.Infrastructure;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
+using Promrub.Services.API.BackgroundService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -125,6 +126,8 @@ builder.Services.AddSwaggerGen(config =>
                     }
                 });
 });
+
+// builder.Services.AddHostedService<Background>();
 
 NativeInjections.RegisterServices(builder.Services);
 

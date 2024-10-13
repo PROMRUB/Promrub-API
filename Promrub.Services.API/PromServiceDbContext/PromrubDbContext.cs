@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Promrub.Services.API.Configurations;
 using Promrub.Services.API.Entities;
 
 namespace Promrub.Services.API.PromServiceDbContext
@@ -27,6 +28,9 @@ namespace Promrub.Services.API.PromServiceDbContext
         public DbSet<PaymentChannelEntity> paymentChannels { get; set; }
         public DbSet<PaymentTransactionItemEntity>? PaymentTransactionItems { get; set; }
         public DbSet<ReceiptNumbersEntity>? ReceiptNumbers { get; set; }
+        public DbSet<TaxScheduleEntity>? Tax { get; set; }
+        public DbSet<TaxReceiptEntity>? TaxReceiptItem { get; set; }
+        public DbSet<ReceiptScheduleEntity>? ReceiptSchedule { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +49,10 @@ namespace Promrub.Services.API.PromServiceDbContext
             modelBuilder.Entity<PaymentChannelEntity>();
             modelBuilder.Entity<PaymentTransactionItemEntity>();
             modelBuilder.Entity<ReceiptNumbersEntity>();
+
+            modelBuilder.ApplyConfiguration(new TaxReceiptEntityConfiguration());
+            // modelBuilder.ApplyConfiguration(new PaymentTransactionItemEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ReceiptEntityConfiguration());
         }
     }
 }

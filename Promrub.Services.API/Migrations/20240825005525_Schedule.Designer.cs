@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Promrub.Services.API.PromServiceDbContext;
@@ -11,9 +12,10 @@ using Promrub.Services.API.PromServiceDbContext;
 namespace Promrub.Services.API.Migrations
 {
     [DbContext(typeof(PromrubDbContext))]
-    partial class PromrubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240825005525_Schedule")]
+    partial class Schedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -533,6 +535,10 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<Guid>("PaymentTransactionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("payment_transaction");
+
                     b.Property<Guid>("ReceiptId")
                         .HasColumnType("uuid")
                         .HasColumnName("receipt_id");
@@ -542,14 +548,11 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("text")
                         .HasColumnName("receipt_no");
 
-                    b.Property<Guid?>("ReceiptScheduleEntityReceiptId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ReceiptId");
+                    b.HasIndex("PaymentTransactionId");
 
-                    b.HasIndex("ReceiptScheduleEntityReceiptId");
+                    b.HasIndex("ReceiptId");
 
                     b.ToTable("ReceiptReceipt");
                 });
@@ -565,18 +568,13 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("amount");
 
-                    b.Property<string>("PosId")
-                        .HasColumnType("text")
+                    b.Property<Guid>("PosId")
+                        .HasColumnType("uuid")
                         .HasColumnName("pos_id");
 
-                    b.Property<DateTime>("ReceiptDate")
+                    b.Property<DateTime>("TaxDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("receipt_date");
-
-                    b.Property<string>("ReceiveNo")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("receive_no");
 
                     b.HasKey("ReceiptId");
 
@@ -662,8 +660,9 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<Guid>("PaymentTransactionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("payment_transaction");
 
                     b.Property<string>("ReceiptNo")
                         .IsRequired()
@@ -674,14 +673,16 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("tax_id");
 
-                    b.Property<Guid?>("TaxScheduleEntityTaxId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("TotalReceipt")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("total_receipt");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TaxId");
+                    b.HasIndex("PaymentTransactionId");
 
-                    b.HasIndex("TaxScheduleEntityTaxId");
+                    b.HasIndex("TaxId");
 
                     b.ToTable("TaxReceipt");
                 });
@@ -697,8 +698,8 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("amount");
 
-                    b.Property<string>("PosId")
-                        .HasColumnType("text")
+                    b.Property<Guid>("PosId")
+                        .HasColumnType("uuid")
                         .HasColumnName("pos_id");
 
                     b.Property<DateTime>("TaxDate")
@@ -755,42 +756,40 @@ namespace Promrub.Services.API.Migrations
 
             modelBuilder.Entity("Promrub.Services.API.Entities.ReceiptPaymentEntity", b =>
                 {
+                    b.HasOne("Promrub.Services.API.Entities.PaymentTransactionEntity", "PaymentTransaction")
+                        .WithMany()
+                        .HasForeignKey("PaymentTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Promrub.Services.API.Entities.ReceiptScheduleEntity", "Receipt")
                         .WithMany()
                         .HasForeignKey("ReceiptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Promrub.Services.API.Entities.ReceiptScheduleEntity", null)
-                        .WithMany("Item")
-                        .HasForeignKey("ReceiptScheduleEntityReceiptId");
+                    b.Navigation("PaymentTransaction");
 
                     b.Navigation("Receipt");
                 });
 
             modelBuilder.Entity("Promrub.Services.API.Entities.TaxReceiptEntity", b =>
                 {
+                    b.HasOne("Promrub.Services.API.Entities.PaymentTransactionEntity", "PaymentTransaction")
+                        .WithMany()
+                        .HasForeignKey("PaymentTransactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Promrub.Services.API.Entities.TaxScheduleEntity", "Tax")
                         .WithMany()
                         .HasForeignKey("TaxId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Promrub.Services.API.Entities.TaxScheduleEntity", null)
-                        .WithMany("Item")
-                        .HasForeignKey("TaxScheduleEntityTaxId");
+                    b.Navigation("PaymentTransaction");
 
                     b.Navigation("Tax");
-                });
-
-            modelBuilder.Entity("Promrub.Services.API.Entities.ReceiptScheduleEntity", b =>
-                {
-                    b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("Promrub.Services.API.Entities.TaxScheduleEntity", b =>
-                {
-                    b.Navigation("Item");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,6 +8,7 @@ public class PagedList<T>(List<T> items, int count, int pageNumber, int pageSize
     public int TotalPages { get; set; } = (int)Math.Ceiling(count / (double)pageSize);
     public int PageSize { get; set; } = pageSize;
     public int TotalCount { get; set; } = count;
+    public decimal TotalSummary { get; set; }
     public bool HasPrevious => (CurrentPage > 1);
     public bool HasNext => (CurrentPage < TotalPages);
     public List<T> Items { get; set; } = items;
