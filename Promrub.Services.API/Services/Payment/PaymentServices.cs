@@ -122,7 +122,7 @@ namespace Promrub.Services.API.Services.Payment
                 }
             }
             var statusCode = result.PaymentStatus == 4 ? 1102 : result.PaymentStatus;
-            result.RedirectUrl = $"{api.RedirectUrl!}/payment-result?transactionId={paymentDetails.RefTransactionId}&status={statusCode}";
+            result.RedirectUrl = $"{api.RedirectUrl!}?transactionId={paymentDetails.RefTransactionId}&status={statusCode}";
             return result;
         }
 
