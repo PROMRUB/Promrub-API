@@ -112,7 +112,7 @@ namespace Promrub.Services.API.Services.Payment
                 CardList = new List<PaymentChannelList>(),
                 PaymentStatus = paymentDetails!.PaymentStatus,
             };
-            if (paymentDetails.CreateAt.HasValue && (DateTime.Now - paymentDetails.CreateAt.Value).TotalMinutes > 15)
+            if (paymentDetails.CreateAt.HasValue && (DateTime.Now - paymentDetails.CreateAt.Value).TotalMinutes > 5)
             {
                 if (paymentDetails.PaymentStatus != 3 && paymentDetails.PaymentStatus != 4)
                 {
