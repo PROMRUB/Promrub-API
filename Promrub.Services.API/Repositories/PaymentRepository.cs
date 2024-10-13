@@ -133,6 +133,17 @@ namespace Promrub.Services.API.Repositories
             return query;
         }
 
+        public async Task<PaymentTransactionEntity> ExpireTransaction(PaymentTransactionEntity request)
+        {
+
+            var query = await context!.PaymentTransactions!.Where(x => x.TransactionId == request.TransactionId).FirstOrDefaultAsync();
+            if (query == null)
+                throw new ArgumentException("1102");
+            query.PaymentStatus = request.PaymentStatus;
+            context!.SaveChanges();
+            return query;
+        }
+
         public async Task<OrganizationCallbackResponse> Callback(string url, OrganizationCallbackRequest request, string token)
         {
             var jsonRequest = JsonConvert.SerializeObject(request, serializerSettings);
