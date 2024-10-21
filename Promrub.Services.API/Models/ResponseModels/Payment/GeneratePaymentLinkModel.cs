@@ -2,11 +2,8 @@
 
 namespace Promrub.Services.API.Models.ResponseModels.Payment
 {
-    public class GeneratePaymentLinkModel
+    public class GeneratePaymentLinkModel(string url,string orgId, string transactionId,string token)
     {
-        public GeneratePaymentLinkModel(string url,string orgId, string transactionId) {
-            PaymentUrl = url + $"?orgId={orgId}&transactionId={transactionId}";
-        }
-        public string? PaymentUrl { get; set; }
+        public string? PaymentUrl { get; set; } = url + $"?orgId={orgId}&transactionId={transactionId}&token={token}";
     }
 }

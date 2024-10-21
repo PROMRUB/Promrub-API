@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Promrub.Services.API.Handlers;
 using Promrub.Services.API.Interfaces;
 using Promrub.Services.API.Models.RequestModels.Payment;
-using Promrub.Services.API.Models.ResponseModels.ApiKey;
 
 namespace Promrub.Services.API.Controllers.v1
 {

@@ -12,6 +12,7 @@ namespace Promrub.Services.API.Models.RequestModels.Payment
         public decimal TotalItemsPrices { get; set; }
         public decimal TotalDiscount { get; set; }
         public decimal TotalTransactionPrices { get; set; }
+        public string? Token { get; set; }
     }
 
     public class PaymentTransactionRequestItemList

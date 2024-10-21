@@ -66,7 +66,8 @@ namespace Promrub.Services.API.Services.Payment
             apiKeyRepository.SetCustomOrgId(orgId);
         }
 
-        public async Task<GeneratePaymentLinkModel> GeneratePaymentTransaction(string orgId, GeneratePaymentTransactionLinkRequestModel request,string key)
+        public async Task<GeneratePaymentLinkModel> GeneratePaymentTransaction(string orgId,
+            GeneratePaymentTransactionLinkRequestModel request, string key)
         {
             var refTransactionId = request.TransactionId;
             SetOrgId(orgId);
@@ -74,19 +75,24 @@ namespace Promrub.Services.API.Services.Payment
             if (organization is null)
                 throw new ArgumentException("1102");
             var transactionId = ServiceUtils.GenerateTransaction(orgId, 16);
-            var transactionQuery = mapper.Map<GeneratePaymentTransactionLinkRequestModel, PaymentTransactionEntity>(request);
+            var transactionQuery =
+                mapper.Map<GeneratePaymentTransactionLinkRequestModel, PaymentTransactionEntity>(request);
             transactionQuery.ApiKey = key;
             transactionQuery.RefTransactionId = refTransactionId;
+            transactionQuery.Token = request.Token;
             paymentRepository!.SetCustomOrgId(orgId);
             paymentRepository.AddTransaction(transactionId, transactionQuery);
-            var orderList = mapper.Map<List<PaymentTransactionRequestItemList>, List<PaymentTransactionItemEntity>>(request.RequestItemList);
+            var orderList =
+                mapper.Map<List<PaymentTransactionRequestItemList>, List<PaymentTransactionItemEntity>>(
+                    request.RequestItemList);
             foreach (var item in orderList)
             {
                 item.PaymentTransactionId = transactionQuery.PaymentTransactionId;
                 paymentRepository.AddTransactionItem(item);
             }
+
             paymentRepository.Commit();
-            return new GeneratePaymentLinkModel(configuration["PaymentUrl"], orgId, transactionId);
+            return new GeneratePaymentLinkModel(configuration["PaymentUrl"], orgId, transactionId, request.Token ?? "");
         }
 
         public async Task<PaymentTransactionDetails> GetPaymentTransactionDetails(string orgId, string transactionId)
@@ -97,8 +103,10 @@ namespace Promrub.Services.API.Services.Payment
             if (org is null || paymentDetails is null)
                 throw new ArgumentException("1102");
             var api = await apiKeyRepository.GetApiKey(paymentDetails.ApiKey!);
-            var promptpayList = mapper.Map<List<PaymentChannelEntity>, List<PaymentChannelList>>(await paymentChannelRepository.GetPaymentChannels());
-            
+            var promptpayList =
+                mapper.Map<List<PaymentChannelEntity>, List<PaymentChannelList>>(
+                    await paymentChannelRepository.GetPaymentChannels());
+
             var result = new PaymentTransactionDetails()
             {
                 RefTransactionId = paymentDetails.RefTransactionId,
@@ -121,8 +129,10 @@ namespace Promrub.Services.API.Services.Payment
                     await paymentRepository.ExpireTransaction(paymentDetails);
                 }
             }
+
             var statusCode = result.PaymentStatus == 4 ? 1102 : result.PaymentStatus;
-            result.RedirectUrl = $"{api.RedirectUrl!}?transactionId={paymentDetails.RefTransactionId}&status={statusCode}";
+            result.RedirectUrl =
+                $"{api.RedirectUrl!}?transactionId={paymentDetails.RefTransactionId}&status={statusCode}";
             return result;
         }
 
@@ -131,7 +141,8 @@ namespace Promrub.Services.API.Services.Payment
             SetOrgId(orgId);
             var org = await organizationRepository.GetOrganization();
             var paymentDetails = paymentRepository.GetTransactionDetail(transactionId).FirstOrDefault();
-            var paymentChannelDetails = (await paymentChannelRepository.GetPaymentChannels()).Where(x => x.PaymentChannelType == 2).FirstOrDefault();
+            var paymentChannelDetails = (await paymentChannelRepository.GetPaymentChannels())
+                .Where(x => x.PaymentChannelType == 2).FirstOrDefault();
             if (org is null || paymentDetails is null)
                 throw new ArgumentException("1102");
             var mode = bool.Parse(configuration["IsDev"]);
@@ -153,13 +164,15 @@ namespace Promrub.Services.API.Services.Payment
             var org = await organizationRepository.GetOrganization();
             var pos = posRepository.GetPosByOrg().FirstOrDefault();
             var paymentDetails = paymentRepository.GetTransactionDetail(transactionId).FirstOrDefault();
-            var paymentItems = paymentRepository.GetTransactionItem((Guid)paymentDetails.PaymentTransactionId!).ToList();
+            var paymentItems = paymentRepository.GetTransactionItem((Guid)paymentDetails.PaymentTransactionId!)
+                .ToList();
             if (org is null || paymentDetails is null)
                 throw new ArgumentException("1102");
             FontManager.RegisterFont(File.OpenRead(Path.Combine("Fonts", "Prompt.ttf")));
             byte[] bytes = Convert.FromBase64String(org.OrgLogo!.Split(",")[1]);
             string brn = org.BrnId == "00000" ? " สำนักงานใหญ่" : " (" + org.BrnId + ")";
-            byte[] promptBytes = Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAARlSURBVHgBnVZdSJtXGD750dhoNNEau4m/2YaMddPB2KhbwW3Mi13sovu5GPVigg4GBmEXgw224c0QNEOGF7vYdrNBN5BuDFqLNaShWFtrsBUL0WBqQxF/Yo2Nf4na5znNkc9PrV974OV83znveZ7393yfSTzFmJqaKkun0x9ub28nbTZbwOPxzBg9azKqODEx0QwSn8VicWxtbQmQ3cvJyTlTU1Nzw8h5sxEleOJOpVK/ZmdnOxYWFsTy8jKJypLJ5N/C4DBEBE/e2tnZkbokWVlZkevwrDIUClUawTBEhLEID8T6+roAoZS1tTW198AIgCEi5OEqptHV1VVRXFwsHA6HXM/Nze2pq6t7dqKWlpYs/ZrJZDoD4L+Qp6Tdbl8A2U8ojO/0et3d3ccOwtxXdT6f712z2fwfQvU/gL5ta2uLqL2urq6yrKysSpBaQBZubm6+r3Cw9w3OfQEZ9Xq9nx1JBIt+BpgXBfDYZbP5R6vVehLzaRAcZ344MrmKQPwwKh+F8WkGIg0jClpbW1e1uFY9Ebxwsk8AymeBXvkezUlCgRJnpWmJPHj3UJcjs2dFLt2Yo08kgnUpHoQXIi8vTxISQJHD210iViINUHuKrLa2NqbH3VcMADhHT0gi44AQKmKS6IXrFJ7JyFhDQ0P6SCJYaEe4pLUkiUajwu/3y2cFqoSNGwwGpY4iglGvoTBOHUkE5a9pKUPAg7hm5G2ABO8jokGRSETk5+dLXYaRgr3P9bh7qq63t9eFKa480oZHAclDCKXKEQ1ikVDoNefNzc04SrzoUI+g9DoBCUAwJRy8fpaWlgQv1bm5OTE/Py82NjZ2ibW6MKKws7PzhBZ7T9VB0UULabk6xMF7jR6wzHEzSC94HS0uLsrriGvaQV1EIudQj0BwS3mjDlAIyrDMzs7u5ofPNIg51BKoRi8qKpo/lAhWTMPaB1QmoRJ1WxcUFMjCSCQSwuVyyTWSKT16mmmHW01NTclDiXBtpDD9qSXiYfYUyZijeDwuZ5Y2Q8nQKQL16YDu70I39t0MONQNi77KdPsYimMZ8+nCwsLdyuJgXlg4GRJ+Ql4FAfH4H3FOj2vRL/T39y81Nja+j8cTPT09Xw4MDNgBer60tPQkgPNUjpjHTDn/29HREUJV9oHoAgyKtbe39z2RqKKi4hTGXFVV1fVAIHAH35+HCNU7+GfwI/n9g4ODt91u95WRkZHfkK/E8PCwD2Q3x8fHbdh/cXJy8nwsFhtFHx0rKSk5jhDHFfaehi0vL/8DVvWhYZ+H8ifIUQLW34aVl0D4HN4ZNy90ovX19XeHhoZYQA/RT2cx/4K9BDx8Cbkbwlr9zMzMDwd6BCs/QhW9ibi/gtdtyD+QMsT/Pay/wV8shO9lECVQDDYk/wUQXIR+HHIW4Qxj7wOIC3IHFTp2YDHwIwfxQMnudDqvwfVcPCcBcBkkTpC8jfePoeOExTa8u8PhcBCRSGE9MD09Hayurg4hIjb8B17WYj8CkP2nL3RAlU0AAAAASUVORK5CYII=");
+            byte[] promptBytes = Convert.FromBase64String(
+                "iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAARlSURBVHgBnVZdSJtXGD750dhoNNEau4m/2YaMddPB2KhbwW3Mi13sovu5GPVigg4GBmEXgw224c0QNEOGF7vYdrNBN5BuDFqLNaShWFtrsBUL0WBqQxF/Yo2Nf4na5znNkc9PrV974OV83znveZ7393yfSTzFmJqaKkun0x9ub28nbTZbwOPxzBg9azKqODEx0QwSn8VicWxtbQmQ3cvJyTlTU1Nzw8h5sxEleOJOpVK/ZmdnOxYWFsTy8jKJypLJ5N/C4DBEBE/e2tnZkbokWVlZkevwrDIUClUawTBEhLEID8T6+roAoZS1tTW198AIgCEi5OEqptHV1VVRXFwsHA6HXM/Nze2pq6t7dqKWlpYs/ZrJZDoD4L+Qp6Tdbl8A2U8ojO/0et3d3ccOwtxXdT6f712z2fwfQvU/gL5ta2uLqL2urq6yrKysSpBaQBZubm6+r3Cw9w3OfQEZ9Xq9nx1JBIt+BpgXBfDYZbP5R6vVehLzaRAcZ344MrmKQPwwKh+F8WkGIg0jClpbW1e1uFY9Ebxwsk8AymeBXvkezUlCgRJnpWmJPHj3UJcjs2dFLt2Yo08kgnUpHoQXIi8vTxISQJHD210iViINUHuKrLa2NqbH3VcMADhHT0gi44AQKmKS6IXrFJ7JyFhDQ0P6SCJYaEe4pLUkiUajwu/3y2cFqoSNGwwGpY4iglGvoTBOHUkE5a9pKUPAg7hm5G2ABO8jokGRSETk5+dLXYaRgr3P9bh7qq63t9eFKa480oZHAclDCKXKEQ1ikVDoNefNzc04SrzoUI+g9DoBCUAwJRy8fpaWlgQv1bm5OTE/Py82NjZ2ibW6MKKws7PzhBZ7T9VB0UULabk6xMF7jR6wzHEzSC94HS0uLsrriGvaQV1EIudQj0BwS3mjDlAIyrDMzs7u5ofPNIg51BKoRi8qKpo/lAhWTMPaB1QmoRJ1WxcUFMjCSCQSwuVyyTWSKT16mmmHW01NTclDiXBtpDD9qSXiYfYUyZijeDwuZ5Y2Q8nQKQL16YDu70I39t0MONQNi77KdPsYimMZ8+nCwsLdyuJgXlg4GRJ+Ql4FAfH4H3FOj2vRL/T39y81Nja+j8cTPT09Xw4MDNgBer60tPQkgPNUjpjHTDn/29HREUJV9oHoAgyKtbe39z2RqKKi4hTGXFVV1fVAIHAH35+HCNU7+GfwI/n9g4ODt91u95WRkZHfkK/E8PCwD2Q3x8fHbdh/cXJy8nwsFhtFHx0rKSk5jhDHFfaehi0vL/8DVvWhYZ+H8ifIUQLW34aVl0D4HN4ZNy90ovX19XeHhoZYQA/RT2cx/4K9BDx8Cbkbwlr9zMzMDwd6BCs/QhW9ibi/gtdtyD+QMsT/Pay/wV8shO9lECVQDDYk/wUQXIR+HHIW4Qxj7wOIC3IHFTp2YDHwIwfxQMnudDqvwfVcPCcBcBkkTpC8jfePoeOExTa8u8PhcBCRSGE9MD09Hayurg4hIjb8B17WYj8CkP2nL3RAlU0AAAAASUVORK5CYII=");
             byte[] pdfBytes = Document.Create(container =>
             {
                 container.Page(page =>
@@ -254,7 +267,6 @@ namespace Promrub.Services.API.Services.Payment
                                         .AlignCenter()
                                         .Text("รวมเงิน")
                                         .FontFamily("Prompt");
-
                                 });
 
                             x.Item()
@@ -287,7 +299,6 @@ namespace Promrub.Services.API.Services.Payment
                                             .AlignRight()
                                             .Text(((decimal)item.TotalPrices).ToString("N2"))
                                             .FontFamily("Prompt");
-
                                     });
 
                                 x.Item()
@@ -298,7 +309,6 @@ namespace Promrub.Services.API.Services.Payment
                                             .AlignRight()
                                             .Text(DiscountPercentage((decimal)item.Percentage))
                                             .FontFamily("Prompt");
-
 
 
                                         grid.Columns();
@@ -313,7 +323,8 @@ namespace Promrub.Services.API.Services.Payment
                                 .LineHorizontal(1);
 
                             x.Item()
-                                .Text("รายการ: " + paymentDetails.ItemTotal + "          จำนวนชิ้น: " + paymentDetails.QuantityTotal)
+                                .Text("รายการ: " + paymentDetails.ItemTotal + "          จำนวนชิ้น: " +
+                                      paymentDetails.QuantityTotal)
                                 .FontFamily("Prompt");
 
                             x.Item()
@@ -329,7 +340,6 @@ namespace Promrub.Services.API.Services.Payment
                                         .AlignRight()
                                         .Text(paymentDetails.TotalTransactionPrices.ToString("N2"))
                                         .FontFamily("Prompt");
-
                                 });
 
                             x.Item()
@@ -345,7 +355,6 @@ namespace Promrub.Services.API.Services.Payment
                                         .AlignRight()
                                         .Text(paymentDetails.TotalDiscount.ToString("N2"))
                                         .FontFamily("Prompt");
-
                                 });
 
                             x.Item()
@@ -364,7 +373,6 @@ namespace Promrub.Services.API.Services.Payment
                                         .AlignRight()
                                         .Text("QR Code")
                                         .FontFamily("Prompt");
-
                                 });
 
                             x.Item()
@@ -383,7 +391,6 @@ namespace Promrub.Services.API.Services.Payment
                                         .AlignRight()
                                         .Text("660009")
                                         .FontFamily("Prompt");
-
                                 });
 
                             x.Item()
@@ -404,10 +411,7 @@ namespace Promrub.Services.API.Services.Payment
 
                     page.Footer()
                         .AlignCenter()
-                        .Text(x =>
-                        {
-                        });
-
+                        .Text(x => { });
                 });
             }).GeneratePdf();
             return new MemoryStream(pdfBytes);
@@ -439,12 +443,14 @@ namespace Promrub.Services.API.Services.Payment
                     var credential = orgDetail.SecurityCredential + ":" + orgDetail.SecurityPassword;
                     var credentialBytes = System.Text.Encoding.UTF8.GetBytes(credential);
                     token = "BASIC " + Convert.ToBase64String(credentialBytes);
-                    var result = await paymentRepository.Callback(orgDetail.CallbackUrl!, new OrganizationCallbackRequest(paymentDetails.RefTransactionId!, base64), token);
+                    var result = await paymentRepository.Callback(orgDetail.CallbackUrl!,
+                        new OrganizationCallbackRequest(paymentDetails.RefTransactionId!, base64), token);
                     break;
                 case EnumAuthorizationType.BEARERE:
                     token = "BEARER ";
                     break;
             }
+
             return true;
         }
 
