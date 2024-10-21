@@ -15,33 +15,32 @@ using QuestPDF.Infrastructure;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
-using Promrub.Services.API.BackgroundService;
 
 var builder = WebApplication.CreateBuilder(args);
-
-if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("IsDev")))
-    throw new ArgumentNullException($"{0} is Null", "IsDev");
-
-if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PostgreSQL_Host")))
-    throw new ArgumentNullException($"{0} is Null", "PostgreSQL_Host");
-
-if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PostgreSQL_Database")))
-    throw new ArgumentNullException($"{0} is Null", "PostgreSQL_Database");
-
-if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PostgreSQL_User")))
-    throw new ArgumentNullException($"{0} is Null", "PostgreSQL_User");
-
-if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PostgreSQL_Password")))
-    throw new ArgumentNullException($"{0} is Null", "PostgreSQL_Password");
-
-if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PaymentUrl")))
-    throw new ArgumentNullException($"{0} is Null", "PaymentUrl");
-
-if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SCBServicesUrl")))
-    throw new ArgumentNullException($"{0} is Null", "SCBServicesUrl");
-
-if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SCBGenerateQRUrl")))
-    throw new ArgumentNullException($"{0} is Null", "SCBServicesUrl");
+//
+// if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("IsDev")))
+//     throw new ArgumentNullException($"{0} is Null", "IsDev");
+//
+// if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PostgreSQL_Host")))
+//     throw new ArgumentNullException($"{0} is Null", "PostgreSQL_Host");
+//
+// if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PostgreSQL_Database")))
+//     throw new ArgumentNullException($"{0} is Null", "PostgreSQL_Database");
+//
+// if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PostgreSQL_User")))
+//     throw new ArgumentNullException($"{0} is Null", "PostgreSQL_User");
+//
+// if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PostgreSQL_Password")))
+//     throw new ArgumentNullException($"{0} is Null", "PostgreSQL_Password");
+//
+// if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PaymentUrl")))
+//     throw new ArgumentNullException($"{0} is Null", "PaymentUrl");
+//
+// if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SCBServicesUrl")))
+//     throw new ArgumentNullException($"{0} is Null", "SCBServicesUrl");
+//
+// if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SCBGenerateQRUrl")))
+//     throw new ArgumentNullException($"{0} is Null", "SCBServicesUrl");
 
 builder.Services.AddControllers()
     .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
@@ -67,7 +66,8 @@ cfg["SCBGenerateQRUrl"] = Environment.GetEnvironmentVariable("SCBGenerateQRUrl")
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var connStr =
-    $"Host={cfg["PostgreSQL:Host"]}; Database={cfg["PostgreSQL:Database"]}; Username={cfg["PostgreSQL:User"]}; Password={cfg["PostgreSQL:Password"]}";
+    $"Host=scaleup.cq959xqsa8na.ap-southeast-1.rds.amazonaws.com; Database=payment; Username=postgres; Password=12345678";
+    // $"Host={cfg["PostgreSQL:Host"]}; Database={cfg["PostgreSQL:Database"]}; Username={cfg["PostgreSQL:User"]}; Password={cfg["PostgreSQL:Password"]}";
 builder.Services.AddDbContext<PromrubDbContext>(options => options.UseNpgsql(connStr));
 builder.Services.AddControllers();
 
@@ -126,8 +126,6 @@ builder.Services.AddSwaggerGen(config =>
                     }
                 });
 });
-
-// builder.Services.AddHostedService<Background>();
 
 NativeInjections.RegisterServices(builder.Services);
 
