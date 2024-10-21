@@ -58,5 +58,7 @@ namespace Promrub.Services.API.Entities
         [Column("auth_token")]
         public string? Token { get; set; }
 
+        [Column("is_redirect")]
+        public bool? IsRedirect { get; set; }
     }
 }
