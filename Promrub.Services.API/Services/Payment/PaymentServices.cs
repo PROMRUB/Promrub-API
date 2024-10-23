@@ -118,19 +118,20 @@ namespace Promrub.Services.API.Services.Payment
                 PrompayList = promptpayList,
                 HvCard = org.HvCard,
                 CardList = new List<PaymentChannelList>(),
-                PaymentStatus = paymentDetails!.PaymentStatus,
+                PaymentStatus = paymentDetails!.PaymentStatus == 3 ? 1000 : 1101,
             };
+
             if (paymentDetails.CreateAt.HasValue && (DateTime.Now - paymentDetails.CreateAt.Value).TotalMinutes > 5)
             {
                 if (paymentDetails.PaymentStatus != 3 && paymentDetails.PaymentStatus != 4)
                 {
-                    result.PaymentStatus = 4;
+                    result.PaymentStatus = 1102;
                     paymentDetails.PaymentStatus = 4;
                     await paymentRepository.ExpireTransaction(paymentDetails);
                 }
             }
 
-            var statusCode = result.PaymentStatus == 4 ? 1102 : result.PaymentStatus;
+            var statusCode = result.PaymentStatus;
             result.RedirectUrl =
                 $"{api.RedirectUrl!}?transactionId={paymentDetails.RefTransactionId}&status={statusCode}";
             return result;
