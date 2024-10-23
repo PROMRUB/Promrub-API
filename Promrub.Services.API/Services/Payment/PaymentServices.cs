@@ -123,11 +123,14 @@ namespace Promrub.Services.API.Services.Payment
 
             if (paymentDetails.CreateAt.HasValue && (DateTime.Now - paymentDetails.CreateAt.Value).TotalMinutes > 5)
             {
-                if (paymentDetails.PaymentStatus != 3 && paymentDetails.PaymentStatus != 4)
+                if (paymentDetails.PaymentStatus != 3)
                 {
                     result.PaymentStatus = 1102;
-                    paymentDetails.PaymentStatus = 4;
-                    await paymentRepository.ExpireTransaction(paymentDetails);
+                    if(paymentDetails.PaymentStatus != 4)
+                    {
+                        paymentDetails.PaymentStatus = 4;
+                        await paymentRepository.ExpireTransaction(paymentDetails);
+                    }
                 }
             }
 
