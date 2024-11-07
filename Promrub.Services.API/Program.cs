@@ -68,6 +68,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var connStr =
      $"Host={cfg["PostgreSQL:Host"]}; Database={cfg["PostgreSQL:Database"]}; Username={cfg["PostgreSQL:User"]}; Password={cfg["PostgreSQL:Password"]}";
 builder.Services.AddDbContext<PromrubDbContext>(options => options.UseNpgsql(connStr));
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
