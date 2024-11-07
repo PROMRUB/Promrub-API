@@ -60,5 +60,8 @@ namespace Promrub.Services.API.Entities
 
         [Column("is_redirect")]
         public bool? IsRedirect { get; set; }
+
+        [Column("saler")]
+        public string? Saler { get; set; }
     }
 }

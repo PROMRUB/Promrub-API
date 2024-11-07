@@ -490,14 +490,18 @@ namespace Promrub.Services.API.Services.Payment
                                             textGrid.Columns();
                                             textGrid.Item(8)
                                                 .AlignLeft()
-                                                .Text("Test")
-                                                .FontSize(8);
+                                                .Text(org.FullAddress)
+                                                .FontSize(8)
+                                                .FontFamily("Prompt"); ;
 
                                             textGrid.Columns();
                                             textGrid.Item(8)
                                                 .AlignLeft()
-                                                .Text("Tel.: ")
-                                                .FontSize(8);
+                                                .Text("โทรศัพท์: " + (org.TelNo ?? "") +
+                                                      (org.Website == null ? "" : " เว็บไซต์: " + org.Website) +
+                                                      (org.Email == null ? "" : " อีเมล: " + org.Email))
+                                                .FontSize(8)
+                                                .FontFamily("Prompt");
                                         });
 
                                     grid.Item(2)
@@ -620,11 +624,11 @@ namespace Promrub.Services.API.Services.Payment
 
                                         grid.Item(5)
                                             .AlignLeft()
-                                            .Text(item.ItemName)
+                                            .Text(string.IsNullOrEmpty(item.ItemCode) ? item.ItemName : item.ItemCode)
                                             .FontFamily("Prompt");
 
                                         grid.Item(2)
-                                            .AlignLeft()
+                                            .AlignRight()
                                             .Text(item.Quantity)
                                             .FontFamily("Prompt");
 
@@ -641,29 +645,32 @@ namespace Promrub.Services.API.Services.Payment
                                             .FontFamily("Prompt");
                                     });
 
-                                x.Item()
-                                    .PaddingLeft(8, Unit.Millimetre)
-                                    .PaddingRight(8, Unit.Millimetre)
-                                    .Grid(grid =>
-                                    {
-                                        grid.Columns();
-                                        grid.Item(1);
+                                if(!string.IsNullOrEmpty(item.ItemCode) && string.IsNullOrEmpty(item.ItemName))
+                                {
+                                    x.Item()
+                                        .PaddingLeft(8, Unit.Millimetre)
+                                        .PaddingRight(8, Unit.Millimetre)
+                                        .Grid(grid =>
+                                        {
+                                            grid.Columns();
+                                            grid.Item(1);
 
-                                        grid.Item(5)
-                                            .AlignLeft()
-                                            .Text(item.ItemName)
-                                            .FontFamily("Prompt");
+                                            grid.Item(5)
+                                                .AlignLeft()
+                                                .Text(item.ItemName)
+                                                .FontFamily("Prompt");
 
-                                        grid.Columns();
-                                        grid.Item(2)
-                                            .AlignRight();
+                                            grid.Columns();
+                                            grid.Item(2)
+                                                .AlignRight();
 
-                                        grid.Columns();
-                                        grid.Item(2);
+                                            grid.Columns();
+                                            grid.Item(2);
 
-                                        grid.Columns();
-                                        grid.Item(2);
-                                    });
+                                            grid.Columns();
+                                            grid.Item(2);
+                                        });
+                                }
                                 count++;
                             }
 
@@ -733,15 +740,21 @@ namespace Promrub.Services.API.Services.Payment
                                                     {
 
                                                         minGrid.Columns();
-                                                        minGrid.Item(6)
+                                                        minGrid.Item(4)
                                                             .AlignLeft()
                                                             .Text("รวมเงินทั้งหมด: ")
                                                             .FontFamily("Prompt");
 
                                                         minGrid.Columns();
-                                                        minGrid.Item(6)
-                                                            .AlignLeft()
+                                                        minGrid.Item(7)
+                                                            .AlignRight()
                                                             .Text(paymentDetails.TotalTransactionPrices.ToString("N2"))
+                                                            .FontFamily("Prompt");
+
+                                                        minGrid.Columns();
+                                                        minGrid.Item(1)
+                                                            .AlignRight()
+                                                            .Text("บาท")
                                                             .FontFamily("Prompt");
                                                     });
 
@@ -755,7 +768,7 @@ namespace Promrub.Services.API.Services.Payment
                                                     .FontFamily("Prompt");
 
                                             subGrid.Item(12)
-                                                    .Text($"รับชำระโดย: {paymentDetails.PosId}")
+                                                    .Text($"รับชำระโดย: {paymentDetails.Saler}")
                                                     .FontFamily("Prompt");
                                         });
                                 });

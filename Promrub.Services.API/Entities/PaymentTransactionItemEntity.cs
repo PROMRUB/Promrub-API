@@ -19,6 +19,9 @@ namespace Promrub.Services.API.Entities
         [Column("quantity")]
         public int Quantity{ get; set; }
 
+        [Column("item_code")]
+        public string? ItemCode { get; set; }
+
         [Column("item_name")]
         public string? ItemName { get; set; }
 
