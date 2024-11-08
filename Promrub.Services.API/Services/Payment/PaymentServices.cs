@@ -191,7 +191,7 @@ namespace Promrub.Services.API.Services.Payment
             Base64QRCode qrCode = new Base64QRCode(qrCodeData);
             string qrCodeImageAsBase64 = qrCode.GetGraphic(20);
             byte[] qrByte = promptBytes = Convert.FromBase64String(qrCodeImageAsBase64);
-            if((pos != null && !string.IsNullOrEmpty(pos.PosKey)) && false)
+            if(pos != null && false)
             {
                 pdfBytes = await PosCarbonReciept(bytes, org, brn, paymentDetails, paymentItems, pos, promptPowered, qrByte);
             }
