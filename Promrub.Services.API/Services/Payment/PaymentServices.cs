@@ -485,7 +485,7 @@ namespace Promrub.Services.API.Services.Payment
                                         .Grid(textGrid =>
                                         {
                                             textGrid.Columns();
-                                            textGrid.Item(8)
+                                            textGrid.Item(10)
                                                 .AlignLeft()
                                                 .Text(org.DisplayName)
                                                 .Bold()
@@ -493,14 +493,14 @@ namespace Promrub.Services.API.Services.Payment
                                                 .FontFamily("Prompt");
 
                                             textGrid.Columns();
-                                            textGrid.Item(8)
+                                            textGrid.Item(10)
                                                 .AlignLeft()
                                                 .Text(org.FullAddress)
                                                 .FontSize(8)
                                                 .FontFamily("Prompt"); ;
 
                                             textGrid.Columns();
-                                            textGrid.Item(8)
+                                            textGrid.Item(10)
                                                 .AlignLeft()
                                                 .Text("โทรศัพท์: " + (org.TelNo ?? "") +
                                                       (org.Website == null ? "" : " เว็บไซต์: " + org.Website) +
