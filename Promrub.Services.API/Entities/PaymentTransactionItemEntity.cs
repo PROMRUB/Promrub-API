@@ -13,6 +13,9 @@ namespace Promrub.Services.API.Entities
         [Column("org_id")]
         public string? OrgId { get; set; }
 
+        [Column("seq")]
+        public int? Seq { get; set; }
+
         [Column("payment_transaction_id")]
         public Guid? PaymentTransactionId { get; set; }
 

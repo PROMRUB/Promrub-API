@@ -90,7 +90,12 @@ namespace Promrub.Services.API.Services.Payment
             paymentRepository.AddTransaction(transactionId, transactionQuery);
             var orderList =
                 mapper.Map<List<PaymentTransactionRequestItemList>, List<PaymentTransactionItemEntity>>(
-                    request.RequestItemList);
+                    request.RequestItemList).Select((item, index) =>
+                    {
+                        item.Seq = index + 1; 
+                        return item;
+                    })
+                .ToList();
             foreach (var item in orderList)
             {
                 item.PaymentTransactionId = transactionQuery.PaymentTransactionId;
@@ -174,7 +179,7 @@ namespace Promrub.Services.API.Services.Payment
             var org = await organizationRepository.GetOrganization();
             var pos = posRepository.GetPosByOrg().FirstOrDefault();
             var paymentDetails = paymentRepository.GetTransactionDetail(transactionId).FirstOrDefault();
-            var paymentItems = paymentRepository.GetTransactionItem((Guid)paymentDetails.PaymentTransactionId!)
+            var paymentItems = paymentRepository.GetTransactionItem((Guid)paymentDetails.PaymentTransactionId!).OrderBy(x => x.Seq)
                 .ToList();
             if (org is null || paymentDetails is null)
                 throw new ArgumentException("1102");
