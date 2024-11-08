@@ -38,9 +38,14 @@ namespace Promrub.Services.API.Services.Organization
             var customOrgId = org.OrgCustomId;
             repository!.SetCustomOrgId(customOrgId!);
             var orgDetail = await repository.GetOrganization();
+            orgDetail.TaxId = org.TaxId;
             orgDetail.DisplayName = org.DisplayName;
             orgDetail.CallbackUrl = org.CallBackUrl;
             orgDetail.OrgLogo = org.OrgLogo;
+            orgDetail.FullAddress = org.FullAddress;
+            orgDetail.TelNo = org.TelNo;
+            orgDetail.Website = org.Website;
+            orgDetail.Email = org.Email;
             repository.Commit();
             return true;
         }

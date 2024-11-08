@@ -22,5 +22,9 @@ namespace Promrub.Services.API.Models.RequestModels.Organization
         public EnumAuthorizationType Security { get; set; }
         public string? SecurityCredential { get; set; }
         public string? SecurityPassword { get; set; }
+        public string? FullAddress { get; set; }
+        public string? TelNo { get; set; }
+        public string? Website { get; set; }
+        public string? Email { get; set; }
     }
 }
