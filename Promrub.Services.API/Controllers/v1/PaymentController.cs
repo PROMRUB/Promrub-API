@@ -1,17 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Promrub.Services.API.Handlers;
 using Promrub.Services.API.Interfaces;
 using Promrub.Services.API.Models.RequestModels.Payment;
-using Promrub.Services.API.Models.ResponseModels.Organization;
 using Promrub.Services.API.Models.ResponseModels.Payment;
-using Promrub.Services.API.Services.Payment;
-using System;
-using System.IO;
 using System.Net.Http.Headers;
-using System.Reflection.PortableExecutable;
-using System.Transactions;
 
 namespace Promrub.Services.API.Controllers.v1
 {

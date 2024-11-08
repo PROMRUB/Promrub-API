@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Promrub.Services.API.PromServiceDbContext;
@@ -11,9 +12,10 @@ using Promrub.Services.API.PromServiceDbContext;
 namespace Promrub.Services.API.Migrations
 {
     [DbContext(typeof(PromrubDbContext))]
-    partial class PromrubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241021150113_Add_Redirect_Pending")]
+    partial class Add_Redirect_Pending
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,14 +160,6 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("text")
                         .HasColumnName("district");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("text")
-                        .HasColumnName("email");
-
-                    b.Property<string>("FullAddress")
-                        .HasColumnType("text")
-                        .HasColumnName("full_address");
-
                     b.Property<bool?>("HvCard")
                         .HasColumnType("boolean")
                         .HasColumnName("hv_card");
@@ -233,14 +227,6 @@ namespace Promrub.Services.API.Migrations
                     b.Property<string>("TaxId")
                         .HasColumnType("text")
                         .HasColumnName("tax_id");
-
-                    b.Property<string>("TelNo")
-                        .HasColumnType("text")
-                        .HasColumnName("tel_no");
-
-                    b.Property<string>("Website")
-                        .HasColumnType("text")
-                        .HasColumnName("website");
 
                     b.HasKey("OrgId");
 
@@ -410,10 +396,6 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("text")
                         .HasColumnName("ref_transaction_id");
 
-                    b.Property<string>("Saler")
-                        .HasColumnType("text")
-                        .HasColumnName("saler");
-
                     b.Property<string>("Token")
                         .HasColumnType("text")
                         .HasColumnName("auth_token");
@@ -446,10 +428,6 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("payment_transaction_item_id");
 
-                    b.Property<string>("ItemCode")
-                        .HasColumnType("text")
-                        .HasColumnName("item_code");
-
                     b.Property<string>("ItemName")
                         .HasColumnType("text")
                         .HasColumnName("item_name");
@@ -473,10 +451,6 @@ namespace Promrub.Services.API.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer")
                         .HasColumnName("quantity");
-
-                    b.Property<int?>("Seq")
-                        .HasColumnType("integer")
-                        .HasColumnName("seq");
 
                     b.Property<decimal?>("TotalDiscount")
                         .HasColumnType("numeric")

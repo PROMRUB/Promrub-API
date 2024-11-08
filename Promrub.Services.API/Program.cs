@@ -15,7 +15,6 @@ using QuestPDF.Infrastructure;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
-using Promrub.Services.API.BackgroundService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,8 +66,9 @@ cfg["SCBGenerateQRUrl"] = Environment.GetEnvironmentVariable("SCBGenerateQRUrl")
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var connStr =
-    $"Host={cfg["PostgreSQL:Host"]}; Database={cfg["PostgreSQL:Database"]}; Username={cfg["PostgreSQL:User"]}; Password={cfg["PostgreSQL:Password"]}";
+     $"Host={cfg["PostgreSQL:Host"]}; Database={cfg["PostgreSQL:Database"]}; Username={cfg["PostgreSQL:User"]}; Password={cfg["PostgreSQL:Password"]}";
 builder.Services.AddDbContext<PromrubDbContext>(options => options.UseNpgsql(connStr));
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -126,8 +126,6 @@ builder.Services.AddSwaggerGen(config =>
                     }
                 });
 });
-
-// builder.Services.AddHostedService<Background>();
 
 NativeInjections.RegisterServices(builder.Services);
 

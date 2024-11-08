@@ -55,5 +55,13 @@ namespace Promrub.Services.API.Entities
         [Column("create_at")]
         public DateTime? CreateAt { get; set; }
 
+        [Column("auth_token")]
+        public string? Token { get; set; }
+
+        [Column("is_redirect")]
+        public bool? IsRedirect { get; set; }
+
+        [Column("saler")]
+        public string? Saler { get; set; }
     }
 }

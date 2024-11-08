@@ -9,8 +9,9 @@ namespace Promrub.Services.API.Configurations
     {
         public PaymentTransactionConfigurations() {
             CreateMap<GeneratePaymentTransactionLinkRequestModel, PaymentTransactionEntity>()
+                .ForMember(dest => dest.Saler, opt => opt.MapFrom(x => x.Cashier))
                 .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(_ => 1));
-            CreateMap<PaymentTransactionRequestItemList,PaymentTransactionItemEntity>();
+            CreateMap<PaymentTransactionRequestItemList, PaymentTransactionItemEntity>();
             CreateMap<ScbQrGenerateData, Qr30GenerateResponse>();
         }
     }

@@ -13,11 +13,17 @@ namespace Promrub.Services.API.Entities
         [Column("org_id")]
         public string? OrgId { get; set; }
 
+        [Column("seq")]
+        public int? Seq { get; set; }
+
         [Column("payment_transaction_id")]
         public Guid? PaymentTransactionId { get; set; }
 
         [Column("quantity")]
         public int Quantity{ get; set; }
+
+        [Column("item_code")]
+        public string? ItemCode { get; set; }
 
         [Column("item_name")]
         public string? ItemName { get; set; }

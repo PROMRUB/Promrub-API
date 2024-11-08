@@ -77,6 +77,23 @@ namespace Promrub.Services.API.Entities
 
         public string? SecurityPassword { get; set; }
 
+        [Column("full_address")]
+
+        public string? FullAddress { get; set; }
+
+        [Column("tel_no")]
+
+        public string? TelNo { get; set; }
+
+
+        [Column("website")]
+
+        public string? Website { get; set; }
+
+        [Column("email")]
+
+        public string? Email { get; set; }
+
         [Column("callback_url")]
 
         public string? CallbackUrl { get; set; }
