@@ -18,6 +18,24 @@ namespace Promrub.Services.API.Controllers.v1
             this.services = services;
         }
 
+        [HttpGet]
+        [Route("org/{id}/action/GetPaymentChannels")]
+        [MapToApiVersion("1")]
+        public async Task<IActionResult> GetPaymentChannels(string id)
+        {
+            try
+            {
+                if (!ModelState.IsValid || string.IsNullOrEmpty(id))
+                    throw new ArgumentException("1101");
+                var result = await services.GetPaymentChannel(id);
+                return Ok(ResponseHandler.Response("1000", null, result));
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseHandler.Response(ex.Message, null));
+            }
+        }
+
         [HttpPost]
         [Route("org/{id}/action/AddPaymentChannel")]
         [MapToApiVersion("1")]
@@ -28,6 +46,24 @@ namespace Promrub.Services.API.Controllers.v1
                 if (!ModelState.IsValid || string.IsNullOrEmpty(id))
                     throw new ArgumentException("1101");
                 services.AddPaymentChannel(id, request);
+                return Ok(ResponseHandler.Response("1000", null));
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseHandler.Response(ex.Message, null));
+            }
+        }
+
+        [HttpPost]
+        [Route("org/{id}/action/UpdateBillerId/{paymentChannalId}")]
+        [MapToApiVersion("1")]
+        public IActionResult UpdateBillerId(string id, Guid paymentChannalId, [FromBody] PaymentChannelRequest request)
+        {
+            try
+            {
+                if (!ModelState.IsValid || string.IsNullOrEmpty(id))
+                    throw new ArgumentException("1101");
+                services.UpdateBillerId(id, paymentChannalId, request);
                 return Ok(ResponseHandler.Response("1000", null));
             }
             catch (Exception ex)
