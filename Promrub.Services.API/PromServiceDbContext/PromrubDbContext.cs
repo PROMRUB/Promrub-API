@@ -31,6 +31,7 @@ namespace Promrub.Services.API.PromServiceDbContext
         public DbSet<TaxScheduleEntity>? Tax { get; set; }
         public DbSet<TaxReceiptEntity>? TaxReceiptItem { get; set; }
         public DbSet<ReceiptScheduleEntity>? ReceiptSchedule { get; set; }
+        public DbSet<CustomerTaxEntity>? CustomerTax { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,9 +50,10 @@ namespace Promrub.Services.API.PromServiceDbContext
             modelBuilder.Entity<PaymentChannelEntity>();
             modelBuilder.Entity<PaymentTransactionItemEntity>();
             modelBuilder.Entity<ReceiptNumbersEntity>();
+            modelBuilder.Entity<CustomerTaxEntity>();
 
             modelBuilder.ApplyConfiguration(new TaxReceiptEntityConfiguration());
-            // modelBuilder.ApplyConfiguration(new PaymentTransactionItemEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new CustomerTaxEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ReceiptEntityConfiguration());
         }
     }

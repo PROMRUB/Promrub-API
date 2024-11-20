@@ -8,6 +8,7 @@ using Promrub.Services.API.Repositories;
 using Promrub.Services.API.Seeder;
 using Promrub.Services.API.Services;
 using Promrub.Services.API.Services.ApiKey;
+using Promrub.Services.API.Services.CustomerTax;
 using Promrub.Services.API.Services.Organization;
 using Promrub.Services.API.Services.Payment;
 using Promrub.Services.API.Services.Role;
@@ -33,6 +34,7 @@ namespace Promrub.Services.API.CrossCutting
             services.AddScoped<IPaymentServices, PaymentServices>();
             services.AddScoped<IReceivePaymentService, ReceivePaymentService>();
             services.AddScoped<ITaxReportService, TaxReportService>();
+            services.AddScoped<ITaxReceiptService, TaxReceiptService>();
             services.AddScoped<MasterController.IMasterService, MasterController.MasterService>();
 
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
@@ -44,6 +46,7 @@ namespace Promrub.Services.API.CrossCutting
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IReceiptRepository, ReceiptScheduleRepository>();
             services.AddScoped<ITaxRepository, TaxRepository>();
+            services.AddScoped<ICustomerTaxRepository, CustomerTaxRepository>();
 
             services.AddTransient<IAuthorizationHandler, GenericRbacHandler>();
             services.AddScoped<IBasicAuthenticationRepo, BasicAuthenticationRepo>();
