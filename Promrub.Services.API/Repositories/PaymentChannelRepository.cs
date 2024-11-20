@@ -22,5 +22,13 @@ namespace Promrub.Services.API.Repositories
         {
             return await context!.paymentChannels.Where(x => x.OrgId!.Equals(orgId) && x.IsActive == true).ToListAsync();
         }
+
+        public async Task<PaymentChannelEntity> UpdateBillerId(Guid paymentChannelId, string billerId)
+        {
+            var query = context.paymentChannels.Where(x => x.PaymentChannelId == paymentChannelId).FirstOrDefault();
+            query.BillerId = billerId;
+            context!.SaveChanges();
+            return query;
+        }
     }
 }
