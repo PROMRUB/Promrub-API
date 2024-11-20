@@ -8,6 +8,7 @@ namespace Promrub.Services.API.Interfaces
         public void SetCustomOrgId(string customOrgId);
         public void AddPaymentChannel(PaymentChannelEntity request);
         public Task<List<PaymentChannelEntity>> GetPaymentChannels();
+        public Task<PaymentChannelEntity> UpdateBillerId(Guid paymentChannelId, string billerId);
         public void Commit();
     }
 }

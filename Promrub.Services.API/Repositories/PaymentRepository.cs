@@ -134,6 +134,11 @@ namespace Promrub.Services.API.Repositories
             return query;
         }
 
+        public async Task<PaymentTransactionEntity> GetPaymentTransaction(string transactionId)
+        {
+           return await context!.PaymentTransactions!.FirstOrDefaultAsync(x => x.TransactionId == transactionId);
+        }
+
         public async Task<PaymentTransactionEntity> ExpireTransaction(PaymentTransactionEntity request)
         {
 
@@ -151,6 +156,11 @@ namespace Promrub.Services.API.Repositories
             var responseCallback = await HttpUtils.Post<OrganizationCallbackResponse>(httpClient == null ? new HttpClient() : httpClient,
             url, Header(token), cancelToken, jsonRequest);
             return responseCallback;
+        }
+
+        public DbContext Context()
+        {
+            return context;
         }
     }
 }

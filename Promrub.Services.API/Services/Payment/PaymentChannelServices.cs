@@ -34,9 +34,7 @@ namespace Promrub.Services.API.Services.Payment
         public async Task UpdateBillerId(string orgId, Guid paymentChannelId, PaymentChannelRequest request)
         {
             paymentChannelRepository.SetCustomOrgId(orgId);
-            var query = (await paymentChannelRepository.GetPaymentChannels()).Where(x => x.PaymentChannelId == paymentChannelId).FirstOrDefault();
-            query.BillerId = request.BillerId;
-            paymentChannelRepository.Commit();
+            paymentChannelRepository.UpdateBillerId(paymentChannelId, request.BillerId);
         }
     }
 }
