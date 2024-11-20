@@ -695,35 +695,35 @@ namespace Promrub.Services.API.Services.Payment
                                         .Grid(subGrid =>
                                         {
                                             subGrid.Columns();
+
                                             subGrid.Item(12)
                                                 .AlignLeft()
                                                 .Text("สแกน QR Code นี้เพื่อ")
                                                 .Bold()
                                                 .FontFamily("Prompt");
 
-                                            subGrid.Columns();
                                             subGrid.Item(12)
                                                 .AlignLeft()
-                                                .Text("1. ชำระค่าจอดรถ")
+                                                .Text("1. ทำใบกำกับภาษีเต็มรูปแบบ")
                                                 .FontFamily("Prompt");
 
-                                            subGrid.Columns();
-                                            subGrid.Item(12)
-                                                .AlignLeft()
-                                                .Text("2. ทำส่วนลดค่าจอดรถ")
-                                                .FontFamily("Prompt");
+                                            //subGrid.Columns();
+                                            //subGrid.Item(12)
+                                            //    .AlignLeft()
+                                            //    .Text("1. ชำระค่าจอดรถ")
+                                            //    .FontFamily("Prompt");
 
-                                            subGrid.Columns();
-                                            subGrid.Item(12)
-                                                .AlignLeft()
-                                                .Text("3. ทำใบกำกับภาษีเต็มรูปแบบ")
-                                                .FontFamily("Prompt");
+                                            //subGrid.Columns();
+                                            //subGrid.Item(12)
+                                            //    .AlignLeft()
+                                            //    .Text("2. ทำส่วนลดค่าจอดรถ")
+                                            //    .FontFamily("Prompt");
 
-                                            subGrid.Columns();
-                                            subGrid.Item(12)
-                                                .AlignLeft()
-                                                .Text("4. อื่นๆ")
-                                                .FontFamily("Prompt");
+                                            //subGrid.Columns();
+                                            //subGrid.Item(12)
+                                            //    .AlignLeft()
+                                            //    .Text("4. อื่นๆ")
+                                            //    .FontFamily("Prompt");
 
                                         });
 
