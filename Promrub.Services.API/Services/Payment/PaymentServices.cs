@@ -30,6 +30,7 @@ using QRCoder;
 using System.Reflection.Emit;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Promrub.Services.API.Migrations;
 
 namespace Promrub.Services.API.Services.Payment
 {
@@ -173,7 +174,7 @@ namespace Promrub.Services.API.Services.Payment
             return mapper.Map<ScbQrGenerateData, Qr30GenerateResponse>(result.Data!);
         }
 
-        public async Task<MemoryStream> GenerateReceipt(string orgId, string transactionId)
+        public async Task<(MemoryStream, string ReceiptNo)> GenerateReceipt(string orgId, string transactionId)
         {
             SetOrgId(orgId);
             var org = await organizationRepository.GetOrganization();
@@ -204,7 +205,7 @@ namespace Promrub.Services.API.Services.Payment
             {
                 pdfBytes = await NA4Reciept(bytes, org, brn, paymentDetails, paymentItems, pos, promptPowered, qrByte);
             }
-            return new MemoryStream(pdfBytes);
+            return (new MemoryStream(pdfBytes), paymentDetails.ReceiptNo);
         }
 
         [Obsolete]
@@ -503,7 +504,7 @@ namespace Promrub.Services.API.Services.Payment
                                             textGrid.Item(10)
                                                 .AlignLeft()
                                                 .Text("โทรศัพท์: " + (org.TelNo ?? "") +
-                                                      (org.Website == null ? "" : " เว็บไซต์: " + org.Website) +
+                                                      (org.Website == null ? "" : " URL: " + org.Website) +
                                                       (org.Email == null ? "" : " อีเมล: " + org.Email))
                                                 .FontSize(8)
                                                 .FontFamily("Prompt");
@@ -819,7 +820,7 @@ namespace Promrub.Services.API.Services.Payment
             };
             await paymentRepository.ReceiptUpdate(receipt);
             var receiptDoc = await GenerateReceipt(paymentDetails.OrgId!, paymentDetails.TransactionId!);
-            var bytes = receiptDoc.ToArray();
+            var bytes = receiptDoc.Item1.ToArray();
             string base64 = "data:application/pdf;base64," + Convert.ToBase64String(bytes);
             switch (orgDetail.Security)
             {
