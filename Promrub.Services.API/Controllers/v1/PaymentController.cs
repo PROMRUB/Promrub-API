@@ -42,7 +42,7 @@ namespace Promrub.Services.API.Controllers.v1
                 return Ok(ResponseHandler.Response(ex.Message, null));
             }
         }
-      
+
 
         [HttpGet]
         [Route("org/{id}/action/GetPaymentDetails/{transactionId}")]
@@ -98,6 +98,25 @@ namespace Promrub.Services.API.Controllers.v1
                 return Ok(ResponseHandler.Response(ex.Message, null));
             }
         }
+
+        [HttpGet]
+        [Route("org/{id}/action/GetFullReceipt/{transactionId}")]
+        [MapToApiVersion("1")]
+        public async Task<IActionResult> GetFullReceipt(string id, string transactionId)
+        {
+            try
+            {
+                if (!ModelState.IsValid || string.IsNullOrEmpty(id))
+                    throw new ArgumentException("1101");
+                var result = await services.GenerateReceipt(id, transactionId);
+                return File(result.Item1, "application/pdf", $"{result.ReceiptNo}.pdf");
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseHandler.Response(ex.Message, null));
+            }
+        }
+
 
         [HttpGet]
         [Route("org/{id}/action/GetReceipt/{transactionId}")]
