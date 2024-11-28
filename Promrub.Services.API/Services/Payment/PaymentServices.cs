@@ -784,7 +784,7 @@ namespace Promrub.Services.API.Services.Payment
                                                         minGrid.Columns();
                                                         minGrid.Item(5)
                                                             .AlignLeft()
-                                                            .Text("รวมเงินทั้งหมด: ")
+                                                            .Text("QR30: ")
                                                             .FontFamily("Prompt");
 
                                                         minGrid.Columns();
