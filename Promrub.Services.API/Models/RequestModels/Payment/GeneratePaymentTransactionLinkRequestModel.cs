@@ -5,9 +5,10 @@ namespace Promrub.Services.API.Models.RequestModels.Payment
     public class GeneratePaymentTransactionLinkRequestModel
     {
         public string? PosId { get; set; }
-        public string? Cashier { get; set;}
+        public string? Cashier { get; set; }
         public string? TransactionId { get; set; }
         public List<PaymentTransactionRequestItemList> RequestItemList { get; set; } = new List<PaymentTransactionRequestItemList>();
+        public List<PaymentTransactionRequestDiscountList> CouponItemList { get; set; } = new List<PaymentTransactionRequestDiscountList>();
         public int ItemTotal { get; set; }
         public int QuantityTotal { get; set; }
         public decimal TotalItemsPrices { get; set; }
@@ -24,6 +25,13 @@ namespace Promrub.Services.API.Models.RequestModels.Payment
         public decimal? Price { get; set; } = 0;
         public decimal? TotalPrices { get; set; } = 0;
         public decimal? Percentage { get; set; } = 0;
+        public decimal? Discount { get; set; } = 0;
         public decimal? TotalDiscount { get; set; } = 0;
+        public decimal? GrandPrice { get; set; } = 0;
+    }
+    public class PaymentTransactionRequestDiscountList
+    {
+        public string? ItemCode { get; set; } = string.Empty;
+        public decimal? Price { get; set; } = 0;
     }
 }

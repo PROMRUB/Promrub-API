@@ -97,10 +97,23 @@ namespace Promrub.Services.API.Services.Payment
                         return item;
                     })
                 .ToList();
+            var couponist =
+                mapper.Map<List<PaymentTransactionRequestDiscountList>, List<CouponEntity>>(
+                    request.CouponItemList).Select((item, index) =>
+                    {
+                        return item;
+                    })
+                .ToList();
             foreach (var item in orderList)
             {
                 item.PaymentTransactionId = transactionQuery.PaymentTransactionId;
                 paymentRepository.AddTransactionItem(item);
+            }
+
+            foreach (var item in couponist)
+            {
+                item.PaymentTransactionId = transactionQuery.PaymentTransactionId;
+                paymentRepository.AddCouponItem(item);
             }
 
             paymentRepository.Commit();
@@ -182,6 +195,8 @@ namespace Promrub.Services.API.Services.Payment
             var paymentDetails = paymentRepository.GetTransactionDetail(transactionId).FirstOrDefault();
             var paymentItems = paymentRepository.GetTransactionItem((Guid)paymentDetails.PaymentTransactionId!).OrderBy(x => x.Seq)
                 .ToList();
+            var couponItems = paymentRepository.GetTransactionCoupon((Guid)paymentDetails.PaymentTransactionId!)
+                .ToList();
             if (org is null || paymentDetails is null)
                 throw new ArgumentException("1102");
             FontManager.RegisterFont(File.OpenRead(Path.Combine("Fonts", "Prompt.ttf")));
@@ -203,7 +218,7 @@ namespace Promrub.Services.API.Services.Payment
             }
             else
             {
-                pdfBytes = await NA4Reciept(bytes, org, brn, paymentDetails, paymentItems, pos, promptPowered, qrByte);
+                pdfBytes = await NA4Reciept(bytes, org, brn, paymentDetails, paymentItems, couponItems, pos, promptPowered, qrByte);
             }
             return (new MemoryStream(pdfBytes), paymentDetails.ReceiptNo);
         }
@@ -457,7 +472,7 @@ namespace Promrub.Services.API.Services.Payment
         }
 
         [Obsolete]
-        public async Task<byte[]> NA4Reciept(byte[] bytes, OrganizationEntity org, string brn, PaymentTransactionEntity paymentDetails, List<PaymentTransactionItemEntity> paymentItems, PosEntity pos, byte[] promptBytes, byte[] qrCode)
+        public async Task<byte[]> NA4Reciept(byte[] bytes, OrganizationEntity org, string brn, PaymentTransactionEntity paymentDetails, List<PaymentTransactionItemEntity> paymentItems, List<CouponEntity> couponItems, PosEntity pos, byte[] promptBytes, byte[] qrCode)
         {
             byte[] pdfBytes = Document.Create(container =>
             {
@@ -595,6 +610,390 @@ namespace Promrub.Services.API.Services.Payment
                                         .FontFamily("Prompt");
 
                                     grid.Columns();
+                                    grid.Item(1)
+                                        .AlignCenter()
+                                        .Text("จำนวน")
+                                        .FontFamily("Prompt");
+
+                                    grid.Columns();
+                                    grid.Item(2)
+                                        .AlignCenter()
+                                        .Text("จำนวนเงิน")
+                                        .FontFamily("Prompt");
+
+                                    grid.Columns();
+                                    grid.Item(1)
+                                        .AlignCenter()
+                                        .Text("ส่วนลด")
+                                        .FontFamily("Prompt");
+
+
+                                    grid.Columns();
+                                    grid.Item(2)
+                                        .AlignCenter()
+                                        .Text("จำนวนเงิน")
+                                        .FontFamily("Prompt");
+                                });
+
+                            x.Spacing(1);
+                            var count = 1;
+                            foreach (var item in paymentItems)
+                            {
+                                x.Item()
+                                    .PaddingLeft(8, Unit.Millimetre)
+                                    .PaddingRight(8, Unit.Millimetre)
+                                    .Grid(grid =>
+                                    {
+                                        grid.Columns();
+                                        grid.Item(1)
+                                            .AlignCenter()
+                                            .Text(count)
+                                            .FontFamily("Prompt");
+
+                                        grid.Item(5)
+                                            .AlignLeft()
+                                            .Text(string.IsNullOrEmpty(item.ItemCode) ? item.ItemName : item.ItemCode)
+                                            .FontFamily("Prompt");
+
+                                        grid.Item(2)
+                                            .AlignRight()
+                                            .Text(item.Quantity)
+                                            .FontFamily("Prompt");
+
+                                        grid.Columns();
+                                        grid.Item(2)
+                                            .AlignRight()
+                                            .Text(((decimal)item.TotalPrices).ToString("N2"))
+                                            .FontFamily("Prompt");
+
+                                        grid.Columns();
+                                        grid.Item(1)
+                                            .AlignRight()
+                                            .Text(((decimal)item.TotalDiscount).ToString("N2"))
+                                            .FontFamily("Prompt");
+
+                                        grid.Columns();
+                                        grid.Item(2)
+                                            .AlignRight()
+                                            .Text(((decimal)item.GrandTotal).ToString("N2"))
+                                            .FontFamily("Prompt");
+                                    });
+
+                                x.Item()
+                                        .PaddingLeft(8, Unit.Millimetre)
+                                        .PaddingRight(8, Unit.Millimetre)
+                                        .Grid(grid =>
+                                        {
+                                            grid.Columns();
+                                            grid.Item(1);
+
+                                            grid.Item(5)
+                                                .AlignLeft()
+                                                .Text(item.ItemName)
+                                                .FontSize(8)
+                                                .FontFamily("Prompt");
+
+                                            grid.Columns();
+                                            grid.Item(2)
+                                                .AlignRight();
+
+                                            grid.Columns();
+                                            grid.Item(2)
+                                                .AlignRight()
+                                                .Text($"{item.Price} (ea)")
+                                                .FontSize(8);
+
+                                            grid.Columns();
+                                            grid.Item(1)
+                                                .AlignRight()
+                                                .Text($"{item.Discount} (ea)")
+                                                .FontSize(8);
+
+                                            grid.Columns();
+                                            grid.Item(2);
+                                        });
+
+                                count++;
+                            }
+
+                            x.Item()
+                                .PaddingLeft(8, Unit.Millimetre)
+                                .PaddingRight(8, Unit.Millimetre)
+                                .LineHorizontal(1);
+
+                            x.Item()
+                                .PaddingLeft(8, Unit.Millimetre)
+                                .PaddingRight(8, Unit.Millimetre)
+                                .Grid(grid =>
+                                {
+                                    grid.Columns();
+                                    grid.Item(3)
+                                        .PaddingTop(2, Unit.Millimetre)
+                                        .Grid(subGrid =>
+                                        {
+                                            subGrid.Columns();
+
+                                            subGrid.Item(12)
+                                                .AlignLeft()
+                                                .Text("สแกน QR Code นี้เพื่อ")
+                                                .Bold()
+                                                .FontFamily("Prompt");
+
+                                            subGrid.Item(12)
+                                                .AlignLeft()
+                                                .Text("1. ทำใบกำกับภาษีเต็มรูปแบบ")
+                                                .FontFamily("Prompt");
+
+                                            //subGrid.Columns();
+                                            //subGrid.Item(12)
+                                            //    .AlignLeft()
+                                            //    .Text("1. ชำระค่าจอดรถ")
+                                            //    .FontFamily("Prompt");
+
+                                            //subGrid.Columns();
+                                            //subGrid.Item(12)
+                                            //    .AlignLeft()
+                                            //    .Text("2. ทำส่วนลดค่าจอดรถ")
+                                            //    .FontFamily("Prompt");
+
+                                            //subGrid.Columns();
+                                            //subGrid.Item(12)
+                                            //    .AlignLeft()
+                                            //    .Text("4. อื่นๆ")
+                                            //    .FontFamily("Prompt");
+
+                                        });
+
+                                    grid.Item(2)
+                                        .AlignLeft()
+                                        .Image(qrCode);
+
+                                    grid.Item(3);
+
+                                    grid.Item(4)
+                                        .PaddingTop(2, Unit.Millimetre)
+                                        .AlignRight()
+                                        .Grid(subGrid =>
+                                        {
+
+                                            subGrid.Columns();
+                                            subGrid.Item(12)
+                                                    .Grid(minGrid =>
+                                                    {
+
+                                                        minGrid.Columns();
+                                                        minGrid.Item(5)
+                                                            .AlignLeft()
+                                                            .Text("รวมเงินทั้งหมด: ")
+                                                            .FontFamily("Prompt");
+
+                                                        minGrid.Columns();
+                                                        minGrid.Item(7)
+                                                            .AlignRight()
+                                                            .Text(paymentDetails.TotalTransactionPrices.ToString("N2"))
+                                                            .FontFamily("Prompt");
+                                                    });
+
+                                            subGrid.Item(12)
+                                                    .LineHorizontal(2);
+
+                                            foreach (var item in couponItems)
+                                            {
+                                                subGrid.Item(12)
+                                                       .Grid(minGrid =>
+                                                       {
+
+                                                           minGrid.Columns();
+                                                           minGrid.Item(5)
+                                                               .AlignLeft()
+                                                               .Text(item.ItemName)
+                                                               .FontFamily("Prompt");
+
+                                                           minGrid.Columns();
+                                                           minGrid.Item(7)
+                                                               .AlignRight()
+                                                               .Text(item.Price?.ToString("N2"))
+                                                               .FontFamily("Prompt");
+                                                       });
+                                            }
+
+                                            subGrid.Item(12)
+                                                    .LineHorizontal(6);
+
+                                            subGrid.Spacing(2);
+
+                                            subGrid.Item(12)
+                                                    .Text("รับชำระด้วย: QR Code Tag 30")
+                                                    .FontFamily("Prompt");
+
+                                            subGrid.Item(12)
+                                                    .Text($"รับชำระโดย: {paymentDetails.Saler}")
+                                                    .FontFamily("Prompt");
+                                        });
+                                });
+                        });
+
+                    page.Footer()
+                        .AlignCenter()
+                        .Column(x =>
+                        {
+                            x.Item()
+                                .PaddingLeft(8, Unit.Millimetre)
+                                .PaddingRight(8, Unit.Millimetre)
+                                .Grid(grid =>
+                                {
+                                    grid.Columns();
+                                    grid.Item(12)
+                                        .AlignCenter()
+                                        .Image(promptBytes);
+                                });
+                        });
+
+                });
+            }).GeneratePdf();
+
+            return pdfBytes;
+        }
+
+        [Obsolete]
+        public async Task<byte[]> FullTaxReciept(byte[] bytes, OrganizationEntity org, string brn, PaymentTransactionEntity paymentDetails, List<PaymentTransactionItemEntity> paymentItems, PosEntity pos, byte[] promptBytes, byte[] qrCode)
+        {
+            byte[] pdfBytes = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.MarginTop(1, Unit.Millimetre);
+                    page.MarginLeft(2, Unit.Millimetre);
+                    page.MarginRight(2, Unit.Millimetre);
+                    page.PageColor(Colors.White);
+                    page.DefaultTextStyle(x => x.FontSize(8));
+
+                    page.Content()
+                        .PaddingVertical(1, Unit.Millimetre)
+                        .Column(x =>
+                        {
+                            x.Item()
+                                .PaddingTop(2, Unit.Millimetre)
+                                .PaddingLeft(8, Unit.Millimetre)
+                                .Grid(grid =>
+                                {
+                                    grid.Columns();
+
+                                    grid.Item(10)
+                                        .PaddingTop(2, Unit.Millimetre)
+                                        .Grid(textGrid =>
+                                        {
+                                            textGrid.Columns();
+                                            textGrid.Item(10)
+                                                .AlignLeft()
+                                                .Text(org.DisplayName)
+                                                .Bold()
+                                                .FontSize(10)
+                                                .FontFamily("Prompt");
+
+                                            textGrid.Columns();
+                                            textGrid.Item(10)
+                                                .AlignLeft()
+                                                .Text(org.FullAddress)
+                                                .FontSize(8)
+                                                .FontFamily("Prompt"); ;
+
+                                            textGrid.Columns();
+                                            textGrid.Item(10)
+                                                .AlignLeft()
+                                                .Text("โทรศัพท์: " + (org.TelNo ?? "") +
+                                                      (org.Website == null ? "" : " URL: " + org.Website) +
+                                                      (org.Email == null ? "" : " อีเมล: " + org.Email))
+                                                .FontSize(8)
+                                                .FontFamily("Prompt");
+                                        });
+
+                                    grid.Item(2)
+                                        .AlignCenter()
+                                        .PaddingRight(8, Unit.Millimetre)
+                                        .Image(bytes, ImageScaling.FitWidth);
+                                });
+
+                            x.Item()
+                                .PaddingLeft(8, Unit.Millimetre)
+                                .PaddingRight(8, Unit.Millimetre)
+                                .LineHorizontal(1);
+
+                            x.Spacing(1);
+
+                            x.Item()
+                                .PaddingRight(8, Unit.Millimetre)
+                                .Grid(grid =>
+                                {
+                                    grid.Columns();
+                                    grid.Item(12)
+                                        .AlignRight()
+                                        .Text("ใบเสร็จรับเงิน/ใบกำกับภาษีอย่างย่อ")
+                                        .FontSize(12)
+                                        .Bold()
+                                        .FontFamily("Prompt");
+                                });
+
+                            x.Item()
+                                .PaddingLeft(8, Unit.Millimetre)
+                                .PaddingRight(8, Unit.Millimetre)
+                                .Grid(grid =>
+                                {
+                                    grid.Columns();
+
+                                    grid.Item(6)
+                                        .AlignLeft()
+                                        .Text($"เลขประจำตัวผู้เสียภาษี: {org.TaxId}")
+                                        .Bold()
+                                        .FontFamily("Prompt");
+
+                                    grid.Item(6)
+                                        .AlignRight()
+                                        .Text($"เลขที: {paymentDetails.ReceiptNo}")
+                                        .Bold()
+                                        .FontFamily("Prompt");
+                                });
+
+
+                            x.Item()
+                                .PaddingLeft(8, Unit.Millimetre)
+                                .PaddingRight(8, Unit.Millimetre)
+                                .Grid(grid =>
+                                {
+                                    grid.Columns();
+
+                                    grid.Item(6)
+                                        .AlignLeft()
+                                        .Text($"สาขาที่ออกใบกำกับภาษีอย่างย่อ: {brn}")
+                                        .Bold()
+                                        .FontFamily("Prompt");
+
+                                    grid.Item(6)
+                                        .AlignRight()
+                                        .Text($"วันที่: {paymentDetails.ReceiptDate!.Value.ToString("dd.MM.yyyy")}")
+                                        .Bold()
+                                        .FontFamily("Prompt");
+                                });
+
+                            x.Item()
+                                .PaddingLeft(8, Unit.Millimetre)
+                                .PaddingRight(8, Unit.Millimetre)
+                                .Background("#D9D9D9")
+                                .Grid(grid =>
+                                {
+                                    grid.Columns();
+                                    grid.Item(1)
+                                        .AlignCenter()
+                                        .Text("#")
+                                        .FontFamily("Prompt");
+
+                                    grid.Item(5)
+                                        .AlignCenter()
+                                        .Text("รายการสินค้า")
+                                        .FontFamily("Prompt");
+
+                                    grid.Columns();
                                     grid.Item(2)
                                         .AlignCenter()
                                         .Text("จำนวน")
@@ -651,7 +1050,7 @@ namespace Promrub.Services.API.Services.Payment
                                             .FontFamily("Prompt");
                                     });
 
-                                if(!string.IsNullOrEmpty(item.ItemCode) && string.IsNullOrEmpty(item.ItemName))
+                                if (!string.IsNullOrEmpty(item.ItemCode) && string.IsNullOrEmpty(item.ItemName))
                                 {
                                     x.Item()
                                         .PaddingLeft(8, Unit.Millimetre)

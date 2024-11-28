@@ -12,6 +12,7 @@ namespace Promrub.Services.API.Configurations
                 .ForMember(dest => dest.Saler, opt => opt.MapFrom(x => x.Cashier))
                 .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(_ => 1));
             CreateMap<PaymentTransactionRequestItemList, PaymentTransactionItemEntity>();
+            CreateMap<PaymentTransactionRequestDiscountList, CouponEntity>();
             CreateMap<ScbQrGenerateData, Qr30GenerateResponse>();
         }
     }
