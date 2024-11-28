@@ -650,7 +650,7 @@ namespace Promrub.Services.API.Services.Payment
                                             .Text(count)
                                             .FontFamily("Prompt");
 
-                                        grid.Item(5)
+                                        grid.Item(4)
                                             .AlignLeft()
                                             .Text(string.IsNullOrEmpty(item.ItemCode) ? item.ItemName : item.ItemCode)
                                             .FontFamily("Prompt");
@@ -687,7 +687,7 @@ namespace Promrub.Services.API.Services.Payment
                                             grid.Columns();
                                             grid.Item(1);
 
-                                            grid.Item(5)
+                                            grid.Item(4)
                                                 .AlignLeft()
                                                 .Text(string.IsNullOrEmpty(item.ItemCode) ? "" : item.ItemName)
                                                 .FontSize(8)
