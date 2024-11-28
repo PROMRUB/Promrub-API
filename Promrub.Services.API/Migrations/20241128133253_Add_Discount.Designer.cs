@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Promrub.Services.API.PromServiceDbContext;
@@ -11,9 +12,10 @@ using Promrub.Services.API.PromServiceDbContext;
 namespace Promrub.Services.API.Migrations
 {
     [DbContext(typeof(PromrubDbContext))]
-    partial class PromrubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241128133253_Add_Discount")]
+    partial class Add_Discount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -93,7 +93,7 @@ namespace Promrub.Services.API.Services.Payment
                 mapper.Map<List<PaymentTransactionRequestItemList>, List<PaymentTransactionItemEntity>>(
                     request.RequestItemList).Select((item, index) =>
                     {
-                        item.Seq = index + 1; 
+                        item.Seq = index + 1;
                         return item;
                     })
                 .ToList();
@@ -212,7 +212,7 @@ namespace Promrub.Services.API.Services.Payment
             Base64QRCode qrCode = new Base64QRCode(qrCodeData);
             string qrCodeImageAsBase64 = qrCode.GetGraphic(20);
             byte[] qrByte = promptBytes = Convert.FromBase64String(qrCodeImageAsBase64);
-            if(pos != null && false)
+            if (pos != null && false)
             {
                 pdfBytes = await PosCarbonReciept(bytes, org, brn, paymentDetails, paymentItems, pos, promptPowered, qrByte);
             }
@@ -344,13 +344,13 @@ namespace Promrub.Services.API.Services.Payment
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.Price).ToString("N2"))
+                                            .Text(item.Price != null ? ((decimal)item.Price).ToString("N2") : 0)
                                             .FontFamily("Prompt");
 
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.TotalPrices).ToString("N2"))
+                                            .Text(item.TotalPrices != null ? ((decimal)item.TotalPrices).ToString("N2") : 0)
                                             .FontFamily("Prompt");
                                     });
 
@@ -360,14 +360,14 @@ namespace Promrub.Services.API.Services.Payment
                                         grid.Columns();
                                         grid.Item(10)
                                             .AlignRight()
-                                            .Text(DiscountPercentage((decimal)item.Percentage))
+                                            .Text(item.Percentage != null ? DiscountPercentage((decimal)item.Percentage) : 0)
                                             .FontFamily("Prompt");
 
 
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.TotalDiscount).ToString("N2"))
+                                            .Text(item.TotalDiscount != null ? ((decimal)item.TotalDiscount).ToString("N2") : 0)
                                             .FontFamily("Prompt");
                                     });
                             }
@@ -579,7 +579,7 @@ namespace Promrub.Services.API.Services.Payment
                                 {
                                     grid.Columns();
 
-                                    grid.Item(6) 
+                                    grid.Item(6)
                                         .AlignLeft()
                                         .Text($"สาขาที่ออกใบกำกับภาษีอย่างย่อ: {brn}")
                                         .Bold()
@@ -650,7 +650,7 @@ namespace Promrub.Services.API.Services.Payment
                                             .Text(count)
                                             .FontFamily("Prompt");
 
-                                        grid.Item(5)
+                                        grid.Item(4)
                                             .AlignLeft()
                                             .Text(string.IsNullOrEmpty(item.ItemCode) ? item.ItemName : item.ItemCode)
                                             .FontFamily("Prompt");
@@ -663,19 +663,19 @@ namespace Promrub.Services.API.Services.Payment
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.TotalPrices).ToString("N2"))
+                                            .Text(item.TotalPrices != null ? ((decimal)item.TotalPrices).ToString("N2") : 0.00.ToString("N2"))
                                             .FontFamily("Prompt");
 
                                         grid.Columns();
                                         grid.Item(1)
                                             .AlignRight()
-                                            .Text(((decimal)item.TotalDiscount).ToString("N2"))
+                                            .Text(item.TotalDiscount != null ? ((decimal)item.TotalDiscount).ToString("N2") : 0.ToString("N2"))
                                             .FontFamily("Prompt");
 
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.GrandTotal).ToString("N2"))
+                                            .Text(item.GrandTotal != null ? ((decimal)item.GrandTotal).ToString("N2") : 0.ToString("N2"))
                                             .FontFamily("Prompt");
                                     });
 
@@ -687,9 +687,9 @@ namespace Promrub.Services.API.Services.Payment
                                             grid.Columns();
                                             grid.Item(1);
 
-                                            grid.Item(5)
+                                            grid.Item(4)
                                                 .AlignLeft()
-                                                .Text(item.ItemName)
+                                                .Text(string.IsNullOrEmpty(item.ItemCode) ? "" : item.ItemName)
                                                 .FontSize(8)
                                                 .FontFamily("Prompt");
 
@@ -700,13 +700,13 @@ namespace Promrub.Services.API.Services.Payment
                                             grid.Columns();
                                             grid.Item(2)
                                                 .AlignRight()
-                                                .Text($"{item.Price} (ea)")
+                                                .Text($"{(item.Price != null ? (decimal)item.Price : 0).ToString("N2")} (ea)")
                                                 .FontSize(8);
 
                                             grid.Columns();
                                             grid.Item(1)
                                                 .AlignRight()
-                                                .Text($"{item.Discount} (ea)")
+                                                .Text($"{(item.Discount != null ? (decimal)item.Discount : 0).ToString("N2")} (ea)")
                                                 .FontSize(8);
 
                                             grid.Columns();
@@ -784,7 +784,7 @@ namespace Promrub.Services.API.Services.Payment
                                                         minGrid.Columns();
                                                         minGrid.Item(5)
                                                             .AlignLeft()
-                                                            .Text("รวมเงินทั้งหมด: ")
+                                                            .Text("QR30: ")
                                                             .FontFamily("Prompt");
 
                                                         minGrid.Columns();
@@ -795,7 +795,7 @@ namespace Promrub.Services.API.Services.Payment
                                                     });
 
                                             subGrid.Item(12)
-                                                    .LineHorizontal(2);
+                                                    .LineHorizontal(1);
 
                                             foreach (var item in couponItems)
                                             {
@@ -818,7 +818,7 @@ namespace Promrub.Services.API.Services.Payment
                                             }
 
                                             subGrid.Item(12)
-                                                    .LineHorizontal(6);
+                                                    .LineHorizontal(2);
 
                                             subGrid.Spacing(2);
 
@@ -1040,13 +1040,13 @@ namespace Promrub.Services.API.Services.Payment
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.Price).ToString("N2"))
+                                            .Text(item.Price != null ? ((decimal)item.Price).ToString("N2") : 0)
                                             .FontFamily("Prompt");
 
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.TotalPrices).ToString("N2"))
+                                            .Text(item.TotalPrices != null ? ((decimal)item.TotalPrices).ToString("N2") : 0)
                                             .FontFamily("Prompt");
                                     });
 
@@ -1204,9 +1204,9 @@ namespace Promrub.Services.API.Services.Payment
         public async Task<bool> SCBCallback(ScbCallbackRequest request)
         {
             var paymentDetails = paymentRepository.GetTransactionDetailById(request.TransactionId!).FirstOrDefault();
-            organizationRepository.SetCustomOrgId(paymentDetails.OrgId!);
+            organizationRepository.SetCustomOrgId(paymentDetails!.OrgId!);
             var orgDetail = await organizationRepository.GetOrganization();
-            var receiptData = await paymentRepository.ReceiptNumberAsync(paymentDetails!.OrgId, paymentDetails.PosId);
+            var receiptData = await paymentRepository.ReceiptNumberAsync(paymentDetails!.OrgId, paymentDetails!.PosId);
             var receiptNo = "EX" + receiptData.ReceiptDate + "-" + receiptData.Allocated!.Value.ToString("D6");
             var receiptDate = DateTime.UtcNow;
             string token = string.Empty;
