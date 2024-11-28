@@ -93,7 +93,7 @@ namespace Promrub.Services.API.Services.Payment
                 mapper.Map<List<PaymentTransactionRequestItemList>, List<PaymentTransactionItemEntity>>(
                     request.RequestItemList).Select((item, index) =>
                     {
-                        item.Seq = index + 1; 
+                        item.Seq = index + 1;
                         return item;
                     })
                 .ToList();
@@ -212,7 +212,7 @@ namespace Promrub.Services.API.Services.Payment
             Base64QRCode qrCode = new Base64QRCode(qrCodeData);
             string qrCodeImageAsBase64 = qrCode.GetGraphic(20);
             byte[] qrByte = promptBytes = Convert.FromBase64String(qrCodeImageAsBase64);
-            if(pos != null && false)
+            if (pos != null && false)
             {
                 pdfBytes = await PosCarbonReciept(bytes, org, brn, paymentDetails, paymentItems, pos, promptPowered, qrByte);
             }
@@ -579,7 +579,7 @@ namespace Promrub.Services.API.Services.Payment
                                 {
                                     grid.Columns();
 
-                                    grid.Item(6) 
+                                    grid.Item(6)
                                         .AlignLeft()
                                         .Text($"สาขาที่ออกใบกำกับภาษีอย่างย่อ: {brn}")
                                         .Bold()
@@ -663,19 +663,19 @@ namespace Promrub.Services.API.Services.Payment
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(item.TotalPrices != null ? ((decimal)item.TotalPrices).ToString("N2") : 0)
+                                            .Text(item.TotalPrices != null ? ((decimal)item.TotalPrices).ToString("N2") : 0.00.ToString("N2"))
                                             .FontFamily("Prompt");
 
                                         grid.Columns();
                                         grid.Item(1)
                                             .AlignRight()
-                                            .Text(item.TotalDiscount != null ? ((decimal)item.TotalDiscount).ToString("N2") : 0)
+                                            .Text(item.TotalDiscount != null ? ((decimal)item.TotalDiscount).ToString("N2") : 0.ToString("N2"))
                                             .FontFamily("Prompt");
 
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(item.GrandTotal != null ? ((decimal)item.GrandTotal).ToString("N2") : 0)
+                                            .Text(item.GrandTotal != null ? ((decimal)item.GrandTotal).ToString("N2") : 0.ToString("N2"))
                                             .FontFamily("Prompt");
                                     });
 
@@ -700,13 +700,13 @@ namespace Promrub.Services.API.Services.Payment
                                             grid.Columns();
                                             grid.Item(2)
                                                 .AlignRight()
-                                                .Text($"{item.Price} (ea)")
+                                                .Text($"{(item.Price != null ? (decimal)item.Price : 0).ToString("N2")} (ea)")
                                                 .FontSize(8);
 
                                             grid.Columns();
                                             grid.Item(1)
                                                 .AlignRight()
-                                                .Text($"{item.Discount} (ea)")
+                                                .Text($"{(item.Discount != null ? (decimal)item.Discount : 0).ToString("N2")} (ea)")
                                                 .FontSize(8);
 
                                             grid.Columns();
