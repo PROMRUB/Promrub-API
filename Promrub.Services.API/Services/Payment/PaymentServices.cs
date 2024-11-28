@@ -344,13 +344,13 @@ namespace Promrub.Services.API.Services.Payment
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.Price).ToString("N2"))
+                                            .Text(item.Price != null ? ((decimal)item.Price).ToString("N2") : 0)
                                             .FontFamily("Prompt");
 
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.TotalPrices).ToString("N2"))
+                                            .Text(item.TotalPrices != null ? ((decimal)item.TotalPrices).ToString("N2") : 0)
                                             .FontFamily("Prompt");
                                     });
 
@@ -360,14 +360,14 @@ namespace Promrub.Services.API.Services.Payment
                                         grid.Columns();
                                         grid.Item(10)
                                             .AlignRight()
-                                            .Text(DiscountPercentage((decimal)item.Percentage))
+                                            .Text(item.Percentage != null ? DiscountPercentage((decimal)item.Percentage) : 0)
                                             .FontFamily("Prompt");
 
 
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.TotalDiscount).ToString("N2"))
+                                            .Text(item.TotalDiscount != null ? ((decimal)item.TotalDiscount).ToString("N2") : 0)
                                             .FontFamily("Prompt");
                                     });
                             }
@@ -663,19 +663,19 @@ namespace Promrub.Services.API.Services.Payment
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.TotalPrices).ToString("N2"))
+                                            .Text(item.TotalPrices != null ? ((decimal)item.TotalPrices).ToString("N2") : 0)
                                             .FontFamily("Prompt");
 
                                         grid.Columns();
                                         grid.Item(1)
                                             .AlignRight()
-                                            .Text(((decimal)item.TotalDiscount).ToString("N2"))
+                                            .Text(item.TotalDiscount != null ? ((decimal)item.TotalDiscount).ToString("N2") : 0)
                                             .FontFamily("Prompt");
 
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.GrandTotal).ToString("N2"))
+                                            .Text(item.GrandTotal != null ? ((decimal)item.GrandTotal).ToString("N2") : 0)
                                             .FontFamily("Prompt");
                                     });
 
@@ -1040,13 +1040,13 @@ namespace Promrub.Services.API.Services.Payment
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.Price).ToString("N2"))
+                                            .Text(item.Price != null ? ((decimal)item.Price).ToString("N2") : 0)
                                             .FontFamily("Prompt");
 
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.TotalPrices).ToString("N2"))
+                                            .Text(item.TotalPrices != null ? ((decimal)item.TotalPrices).ToString("N2") : 0)
                                             .FontFamily("Prompt");
                                     });
 
@@ -1204,9 +1204,9 @@ namespace Promrub.Services.API.Services.Payment
         public async Task<bool> SCBCallback(ScbCallbackRequest request)
         {
             var paymentDetails = paymentRepository.GetTransactionDetailById(request.TransactionId!).FirstOrDefault();
-            organizationRepository.SetCustomOrgId(paymentDetails.OrgId!);
+            organizationRepository.SetCustomOrgId(paymentDetails!.OrgId!);
             var orgDetail = await organizationRepository.GetOrganization();
-            var receiptData = await paymentRepository.ReceiptNumberAsync(paymentDetails!.OrgId, paymentDetails.PosId);
+            var receiptData = await paymentRepository.ReceiptNumberAsync(paymentDetails!.OrgId, paymentDetails!.PosId);
             var receiptNo = "EX" + receiptData.ReceiptDate + "-" + receiptData.Allocated!.Value.ToString("D6");
             var receiptDate = DateTime.UtcNow;
             string token = string.Empty;
