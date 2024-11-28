@@ -67,6 +67,11 @@ namespace Promrub.Services.API.Repositories
             request.OrgId = orgId;
             context!.PaymentTransactionItems!.Add(request);
         }
+        public void AddCouponItem(CouponEntity request)
+        {
+            request.OrgId = orgId;
+            context!.Coupons!.Add(request);
+        }
         public IQueryable<PaymentTransactionEntity> GetTransactionDetail(string transactionId)
         {
                 return context!.PaymentTransactions!.Where(x => x.OrgId!.Equals(orgId) && x.TransactionId! == transactionId);
@@ -74,6 +79,11 @@ namespace Promrub.Services.API.Repositories
         public IQueryable<PaymentTransactionItemEntity> GetTransactionItem(Guid transactionId)
         {
             return context!.PaymentTransactionItems!.Where(x => x.OrgId!.Equals(orgId) && x.PaymentTransactionId! == transactionId);
+        }
+
+        public IQueryable<CouponEntity> GetTransactionCoupon(Guid transactionId)
+        {
+            return context!.Coupons!.Where(x => x.OrgId!.Equals(orgId) && x.PaymentTransactionId! == transactionId);
         }
 
         public IQueryable<PaymentTransactionEntity> GetTransactionDetailById(string transactionId)

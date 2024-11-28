@@ -97,10 +97,23 @@ namespace Promrub.Services.API.Services.Payment
                         return item;
                     })
                 .ToList();
+            var couponist =
+                mapper.Map<List<PaymentTransactionRequestDiscountList>, List<CouponEntity>>(
+                    request.CouponItemList).Select((item, index) =>
+                    {
+                        return item;
+                    })
+                .ToList();
             foreach (var item in orderList)
             {
                 item.PaymentTransactionId = transactionQuery.PaymentTransactionId;
                 paymentRepository.AddTransactionItem(item);
+            }
+
+            foreach (var item in couponist)
+            {
+                item.PaymentTransactionId = transactionQuery.PaymentTransactionId;
+                paymentRepository.AddCouponItem(item);
             }
 
             paymentRepository.Commit();
@@ -182,6 +195,8 @@ namespace Promrub.Services.API.Services.Payment
             var paymentDetails = paymentRepository.GetTransactionDetail(transactionId).FirstOrDefault();
             var paymentItems = paymentRepository.GetTransactionItem((Guid)paymentDetails.PaymentTransactionId!).OrderBy(x => x.Seq)
                 .ToList();
+            var couponItems = paymentRepository.GetTransactionCoupon((Guid)paymentDetails.PaymentTransactionId!)
+                .ToList();
             if (org is null || paymentDetails is null)
                 throw new ArgumentException("1102");
             FontManager.RegisterFont(File.OpenRead(Path.Combine("Fonts", "Prompt.ttf")));
@@ -203,7 +218,7 @@ namespace Promrub.Services.API.Services.Payment
             }
             else
             {
-                pdfBytes = await NA4Reciept(bytes, org, brn, paymentDetails, paymentItems, pos, promptPowered, qrByte);
+                pdfBytes = await NA4Reciept(bytes, org, brn, paymentDetails, paymentItems, couponItems, pos, promptPowered, qrByte);
             }
             return (new MemoryStream(pdfBytes), paymentDetails.ReceiptNo);
         }
@@ -457,7 +472,7 @@ namespace Promrub.Services.API.Services.Payment
         }
 
         [Obsolete]
-        public async Task<byte[]> NA4Reciept(byte[] bytes, OrganizationEntity org, string brn, PaymentTransactionEntity paymentDetails, List<PaymentTransactionItemEntity> paymentItems, PosEntity pos, byte[] promptBytes, byte[] qrCode)
+        public async Task<byte[]> NA4Reciept(byte[] bytes, OrganizationEntity org, string brn, PaymentTransactionEntity paymentDetails, List<PaymentTransactionItemEntity> paymentItems, List<CouponEntity> couponItems, PosEntity pos, byte[] promptBytes, byte[] qrCode)
         {
             byte[] pdfBytes = Document.Create(container =>
             {
@@ -595,7 +610,7 @@ namespace Promrub.Services.API.Services.Payment
                                         .FontFamily("Prompt");
 
                                     grid.Columns();
-                                    grid.Item(2)
+                                    grid.Item(1)
                                         .AlignCenter()
                                         .Text("จำนวน")
                                         .FontFamily("Prompt");
@@ -603,8 +618,15 @@ namespace Promrub.Services.API.Services.Payment
                                     grid.Columns();
                                     grid.Item(2)
                                         .AlignCenter()
-                                        .Text("ราคา/หน่วย")
+                                        .Text("จำนวนเงิน")
                                         .FontFamily("Prompt");
+
+                                    grid.Columns();
+                                    grid.Item(1)
+                                        .AlignCenter()
+                                        .Text("ส่วนลด")
+                                        .FontFamily("Prompt");
+
 
                                     grid.Columns();
                                     grid.Item(2)
@@ -641,19 +663,23 @@ namespace Promrub.Services.API.Services.Payment
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.Price).ToString("N2"))
+                                            .Text(((decimal)item.TotalPrices).ToString("N2"))
+                                            .FontFamily("Prompt");
+
+                                        grid.Columns();
+                                        grid.Item(1)
+                                            .AlignRight()
+                                            .Text(((decimal)item.TotalDiscount).ToString("N2"))
                                             .FontFamily("Prompt");
 
                                         grid.Columns();
                                         grid.Item(2)
                                             .AlignRight()
-                                            .Text(((decimal)item.TotalPrices).ToString("N2"))
+                                            .Text(((decimal)item.GrandTotal).ToString("N2"))
                                             .FontFamily("Prompt");
                                     });
 
-                                if(!string.IsNullOrEmpty(item.ItemCode) && string.IsNullOrEmpty(item.ItemName))
-                                {
-                                    x.Item()
+                                x.Item()
                                         .PaddingLeft(8, Unit.Millimetre)
                                         .PaddingRight(8, Unit.Millimetre)
                                         .Grid(grid =>
@@ -664,6 +690,7 @@ namespace Promrub.Services.API.Services.Payment
                                             grid.Item(5)
                                                 .AlignLeft()
                                                 .Text(item.ItemName)
+                                                .FontSize(8)
                                                 .FontFamily("Prompt");
 
                                             grid.Columns();
@@ -671,12 +698,21 @@ namespace Promrub.Services.API.Services.Payment
                                                 .AlignRight();
 
                                             grid.Columns();
-                                            grid.Item(2);
+                                            grid.Item(2)
+                                                .AlignRight()
+                                                .Text($"{item.Price} (ea)")
+                                                .FontSize(8);
+
+                                            grid.Columns();
+                                            grid.Item(1)
+                                                .AlignRight()
+                                                .Text($"{item.Discount} (ea)")
+                                                .FontSize(8);
 
                                             grid.Columns();
                                             grid.Item(2);
                                         });
-                                }
+
                                 count++;
                             }
 
@@ -746,7 +782,7 @@ namespace Promrub.Services.API.Services.Payment
                                                     {
 
                                                         minGrid.Columns();
-                                                        minGrid.Item(4)
+                                                        minGrid.Item(5)
                                                             .AlignLeft()
                                                             .Text("รวมเงินทั้งหมด: ")
                                                             .FontFamily("Prompt");
@@ -756,16 +792,33 @@ namespace Promrub.Services.API.Services.Payment
                                                             .AlignRight()
                                                             .Text(paymentDetails.TotalTransactionPrices.ToString("N2"))
                                                             .FontFamily("Prompt");
-
-                                                        minGrid.Columns();
-                                                        minGrid.Item(1)
-                                                            .AlignRight()
-                                                            .Text("บาท")
-                                                            .FontFamily("Prompt");
                                                     });
 
                                             subGrid.Item(12)
                                                     .LineHorizontal(2);
+
+                                            foreach (var item in couponItems)
+                                            {
+                                                subGrid.Item(12)
+                                                       .Grid(minGrid =>
+                                                       {
+
+                                                           minGrid.Columns();
+                                                           minGrid.Item(5)
+                                                               .AlignLeft()
+                                                               .Text(item.ItemName)
+                                                               .FontFamily("Prompt");
+
+                                                           minGrid.Columns();
+                                                           minGrid.Item(7)
+                                                               .AlignRight()
+                                                               .Text(item.Price?.ToString("N2"))
+                                                               .FontFamily("Prompt");
+                                                       });
+                                            }
+
+                                            subGrid.Item(12)
+                                                    .LineHorizontal(6);
 
                                             subGrid.Spacing(2);
 
