@@ -689,7 +689,7 @@ namespace Promrub.Services.API.Services.Payment
 
                                             grid.Item(5)
                                                 .AlignLeft()
-                                                .Text(item.ItemName)
+                                                .Text(string.IsNullOrEmpty(item.ItemCode) ? "" : item.ItemName)
                                                 .FontSize(8)
                                                 .FontFamily("Prompt");
 
@@ -795,7 +795,7 @@ namespace Promrub.Services.API.Services.Payment
                                                     });
 
                                             subGrid.Item(12)
-                                                    .LineHorizontal(2);
+                                                    .LineHorizontal(1);
 
                                             foreach (var item in couponItems)
                                             {
@@ -818,7 +818,7 @@ namespace Promrub.Services.API.Services.Payment
                                             }
 
                                             subGrid.Item(12)
-                                                    .LineHorizontal(6);
+                                                    .LineHorizontal(2);
 
                                             subGrid.Spacing(2);
 
