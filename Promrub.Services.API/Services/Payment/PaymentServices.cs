@@ -775,6 +775,74 @@ namespace Promrub.Services.API.Services.Payment
                                         .AlignRight()
                                         .Grid(subGrid =>
                                         {
+                                            subGrid.Columns();
+                                            subGrid.Item(6)
+                                                    .AlignLeft()
+                                                    .Text("REF#: " + paymentDetails.RefTransactionId)
+                                                    .FontFamily("Prompt");
+
+                                            subGrid.Columns();
+                                            subGrid.Item(6)
+                                                    .AlignRight()
+                                                    .Text("รัับชำระด้วย")
+                                                    .FontFamily("Prompt");
+                                        });
+                                });
+
+                            x.Item()
+                                .PaddingLeft(8, Unit.Millimetre)
+                                .PaddingRight(8, Unit.Millimetre)
+                                .Grid(grid =>
+                                {
+                                    grid.Columns();
+                                    grid.Item(3)
+                                        .PaddingTop(2, Unit.Millimetre)
+                                        .Grid(subGrid =>
+                                        {
+                                            subGrid.Columns();
+
+                                            subGrid.Item(12)
+                                                .AlignLeft()
+                                                .Text("สแกน QR Code นี้เพื่อ")
+                                                .Bold()
+                                                .FontFamily("Prompt");
+
+                                            subGrid.Item(12)
+                                                .AlignLeft()
+                                                .Text("1. ทำใบกำกับภาษีเต็มรูปแบบ")
+                                                .FontFamily("Prompt");
+
+                                            //subGrid.Columns();
+                                            //subGrid.Item(12)
+                                            //    .AlignLeft()
+                                            //    .Text("1. ชำระค่าจอดรถ")
+                                            //    .FontFamily("Prompt");
+
+                                            //subGrid.Columns();
+                                            //subGrid.Item(12)
+                                            //    .AlignLeft()
+                                            //    .Text("2. ทำส่วนลดค่าจอดรถ")
+                                            //    .FontFamily("Prompt");
+
+                                            //subGrid.Columns();
+                                            //subGrid.Item(12)
+                                            //    .AlignLeft()
+                                            //    .Text("4. อื่นๆ")
+                                            //    .FontFamily("Prompt");
+
+                                        });
+
+                                    grid.Item(2)
+                                        .AlignLeft()
+                                        .Image(qrCode);
+
+                                    grid.Item(3);
+
+                                    grid.Item(4)
+                                        .PaddingTop(2, Unit.Millimetre)
+                                        .AlignRight()
+                                        .Grid(subGrid =>
+                                        {
 
                                             subGrid.Columns();
                                             subGrid.Item(12)
