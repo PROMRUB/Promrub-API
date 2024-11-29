@@ -752,16 +752,16 @@ namespace Promrub.Services.API.Services.Payment
                                         {
                                             subGrid.Columns();
 
-                                            subGrid.Item(12)
-                                                .AlignLeft()
-                                                .Text("สแกน QR Code นี้เพื่อ")
-                                                .Bold()
-                                                .FontFamily("Prompt");
+                                            //subGrid.Item(12)
+                                            //    .AlignLeft()
+                                            //    .Text("สแกน QR Code นี้เพื่อ")
+                                            //    .Bold()
+                                            //    .FontFamily("Prompt");
 
-                                            subGrid.Item(12)
-                                                .AlignLeft()
-                                                .Text("1. ทำใบกำกับภาษีเต็มรูปแบบ")
-                                                .FontFamily("Prompt");
+                                            //subGrid.Item(12)
+                                            //    .AlignLeft()
+                                            //    .Text("1. ทำใบกำกับภาษีเต็มรูปแบบ")
+                                            //    .FontFamily("Prompt");
 
                                             //subGrid.Columns();
                                             //subGrid.Item(12)
@@ -783,11 +783,13 @@ namespace Promrub.Services.API.Services.Payment
 
                                         });
 
-                                    grid.Item(2)
-                                        .AlignLeft()
-                                        .Image(qrCode);
+                                    //grid.Item(2)
+                                    //    .AlignLeft()
+                                    //    .Image(qrCode);
 
-                                    grid.Item(3);
+                                    //grid.Item(3);
+
+                                    grid.Item(5);
 
                                     grid.Item(4)
                                         .PaddingTop(2, Unit.Millimetre)
