@@ -27,7 +27,7 @@ namespace Promrub.Services.API.Models.RequestModels.Payment
         public decimal? Percentage { get; set; } = 0;
         public decimal? Discount { get; set; } = 0;
         public decimal? TotalDiscount { get; set; } = 0;
-        public decimal? GrandPrice { get; set; } = 0;
+        public decimal? GrandTotal { get; set; } = 0;
     }
     public class PaymentTransactionRequestDiscountList
     {
