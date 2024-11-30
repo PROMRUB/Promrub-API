@@ -5,6 +5,7 @@ using Promrub.Services.API.Interfaces;
 using Promrub.Services.API.Models.RequestModels.Payment;
 using Promrub.Services.API.Models.ResponseModels.Payment;
 using System.Net.Http.Headers;
+using System.Drawing;
 
 namespace Promrub.Services.API.Controllers.v1
 {
@@ -129,6 +130,25 @@ namespace Promrub.Services.API.Controllers.v1
                     throw new ArgumentException("1101");
                 var result = await services.GenerateReceipt(id, transactionId);
                 return File(result.Item1, "application/pdf", $"{result.ReceiptNo}.pdf");
+            }
+            catch (Exception ex)
+            {
+                return Ok(ResponseHandler.Response(ex.Message, null));
+            }
+        }
+        
+        [HttpGet]
+        [Route("org/{id}/action/GetReceiptImage/{transactionId}")]
+        [MapToApiVersion("1")]
+        public async Task<IActionResult> GetReceiptImage(string id, string transactionId)
+        {
+            try
+            {
+                if (!ModelState.IsValid || string.IsNullOrEmpty(id))
+                    throw new ArgumentException("1101");
+                var result = await services.GenerateReceipt(id, transactionId);
+                Image returnImage = System.Drawing.Image.FromStream(result.Item1); 
+                return File(result.Item1, "image/jpeg");
             }
             catch (Exception ex)
             {
