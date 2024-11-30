@@ -736,7 +736,7 @@ namespace Promrub.Services.API.Services.Payment
                                     grid.Columns();
                                     grid.Item(6)
                                             .AlignRight()
-                                            .Text("รัับชำระด้วย")
+                                            .Text("รับชำระด้วย")
                                             .FontFamily("Prompt");
                                 });
 
