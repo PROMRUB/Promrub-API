@@ -27,11 +27,11 @@ namespace Promrub.Services.API.Models.RequestModels.Payment
         public decimal? Percentage { get; set; } = 0;
         public decimal? Discount { get; set; } = 0;
         public decimal? TotalDiscount { get; set; } = 0;
-        public decimal? GrandPrice { get; set; } = 0;
+        public decimal? GrandTotal { get; set; } = 0;
     }
     public class PaymentTransactionRequestDiscountList
     {
-        public string? ItemCode { get; set; } = string.Empty;
+        public string? ItemName { get; set; } = string.Empty;
         public decimal? Price { get; set; } = 0;
     }
 }
