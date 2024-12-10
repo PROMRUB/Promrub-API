@@ -1,36 +1,15 @@
 ﻿using AutoMapper;
-using Microsoft.SqlServer.Server;
 using Promrub.Services.API.Entities;
 using Promrub.Services.API.Interfaces;
 using Promrub.Services.API.Models.RequestModels.Payment;
 using Promrub.Services.API.Models.ResponseModels.Payment;
-using Promrub.Services.API.Repositories;
 using Promrub.Services.API.Utils;
-using System.Linq;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using System.Xml.Linq;
-using TheArtOfDev.HtmlRenderer.PdfSharp;
 using Promrub.Services.API.Enum;
-using System.Text;
-using SkiaSharp;
 using QuestPDF.Drawing;
-using QuestPDF;
-using QuestPDF.Infrastructure;
-using static System.Net.Mime.MediaTypeNames;
-using Promrub.Services.API.Extensions;
-using Microsoft.AspNetCore.Http;
 using QRCoder;
-using System.Reflection.Emit;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Promrub.Services.API.Migrations;
 
 namespace Promrub.Services.API.Services.Payment
 {
