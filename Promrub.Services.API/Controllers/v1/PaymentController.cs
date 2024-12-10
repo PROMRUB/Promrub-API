@@ -147,7 +147,7 @@ namespace Promrub.Services.API.Controllers.v1
                 if (!ModelState.IsValid || string.IsNullOrEmpty(id))
                     throw new ArgumentException("1101");
                 var result = await services.GenerateReceipt(id, transactionId);
-                return File(result.Item1.ToArray(), "image/jpeg");
+                return Ok(result.Item1.ToArray());
             }
             catch (Exception ex)
             {
