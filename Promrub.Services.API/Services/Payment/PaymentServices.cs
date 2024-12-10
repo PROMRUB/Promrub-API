@@ -166,7 +166,7 @@ namespace Promrub.Services.API.Services.Payment
             return mapper.Map<ScbQrGenerateData, Qr30GenerateResponse>(result.Data!);
         }
 
-        public async Task<(MemoryStream, string ReceiptNo)> GenerateReceipt(string orgId, string transactionId,bool isImage)
+        public async Task<(MemoryStream, string ReceiptNo)> GenerateReceipt(string orgId, string transactionId,bool isImage = false)
         {
             SetOrgId(orgId);
             var org = await organizationRepository.GetOrganization();
@@ -1227,7 +1227,7 @@ namespace Promrub.Services.API.Services.Payment
                 ReceiptAmount = (decimal?)request.Amount
             };
             await paymentRepository.ReceiptUpdate(receipt);
-            var receiptDoc = await GenerateReceipt(paymentDetails.OrgId!, paymentDetails.TransactionId!);
+            var receiptDoc = await GenerateReceipt(paymentDetails.OrgId!, paymentDetails.TransactionId!,false);
             var bytes = receiptDoc.Item1.ToArray();
             string base64 = "data:application/pdf;base64," + Convert.ToBase64String(bytes);
             switch (orgDetail.Security)
