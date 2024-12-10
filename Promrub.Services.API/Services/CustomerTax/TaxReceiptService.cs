@@ -69,6 +69,7 @@ public class TaxReceiptService : ITaxReceiptService
     public async Task<CustomerResponse> Create(TaxReceiptController.BusinessResource request)
     {
         var entity = new CustomerTaxEntity();
+        entity.TaxId = request.TaxId;
         entity.Email = request.Email;
         entity.FullAddress = request.Address;
         entity.PostCode = request.PostCode;
