@@ -8,4 +8,5 @@ public class CustomerResponse
     public string PostCode { get; set; }
     public string Email { get; set; }
     public string Tel { get; set; }
+    public string Name { get; set; }
 }

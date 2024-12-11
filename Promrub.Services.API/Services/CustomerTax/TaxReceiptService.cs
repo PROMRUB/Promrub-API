@@ -31,7 +31,8 @@ public class TaxReceiptService : ITaxReceiptService
             Address = entity.FullAddress,
             PostCode = entity.PostCode,
             Email = entity.Email,
-            Tel = entity.Tel
+            Tel = entity.Tel,
+            Name = entity.Name,
         };
     }
 
