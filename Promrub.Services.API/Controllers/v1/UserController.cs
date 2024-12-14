@@ -11,7 +11,6 @@ using System.Diagnostics.CodeAnalysis;
 namespace Promrub.Services.API.Controllers.v1
 {
     [ApiController]
-    [Authorize(Policy = "GenericRolePolicy")]
     [Route("v{version:apiVersion}/api/[controller]")]
     [ApiVersion("1")]
     public class UserController : BaseController
