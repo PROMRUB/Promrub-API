@@ -64,5 +64,5 @@ public class TaxReceiptController : BaseController
         }
     }
 
-    public record BusinessResource(string Name,string Address,string PostCode,string Email,string Tel,bool IsMemo,string TransactionId);
+    public record BusinessResource(string TaxId,string Name,string Address,string PostCode,string Email,string Tel,bool IsMemo,string TransactionId);
 }
