@@ -197,8 +197,12 @@ namespace Promrub.Services.API.Services.Payment
 
             if (paymentDetails.CustomerTaxId != null)
             {
+                var receiptData = await paymentRepository.FullTaxNumberAsync(paymentDetails!.OrgId, org.OrgAbbr, paymentDetails!.PosId, org.BrnId, paymentDetails.PosId);
+                var receiptNo = $"{receiptData.OrgCode}.{receiptData.BranchCode}.{receiptData.CashierCode}.{receiptData.EmployeeCode}.{receiptData.ReceiptDate}-{receiptData.Allocated!.Value.ToString("D4")}";
+                paymentDetails.FullReceiptNo = receiptNo;
                 var customerDetail = customerTaxRepository.GetCustomerTaxQuery().Where(x => x.Id == paymentDetails.CustomerTaxId).FirstOrDefault();
                 pdfBytes = await FullTaxReciept(bytes, org, brn, paymentDetails, paymentItems, pos, promptPowered, qrByte, customerDetail, isImage);
+                await paymentRepository.FullTaxUpdate(paymentDetails);
             }
             else
             {
@@ -992,7 +996,7 @@ namespace Promrub.Services.API.Services.Payment
 
                                     grid.Item(6)
                                         .AlignRight()
-                                        .Text($"เลขที: {paymentDetails.ReceiptNo}")
+                                        .Text($"เลขที: {paymentDetails.FullReceiptNo}")
                                         .Bold()
                                         .FontFamily("Prompt");
                                 });

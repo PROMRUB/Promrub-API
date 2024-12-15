@@ -43,6 +43,9 @@ namespace Promrub.Services.API.Entities
 
         [Column("receipt_no")]
         public string? ReceiptNo { get; set; }
+
+        [Column("full_receipt_no")]
+        public string? FullReceiptNo { get; set; }
         [Column("receipt_date")]
         public DateTime? ReceiptDate { get; set; }
 
