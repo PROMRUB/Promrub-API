@@ -10,6 +10,6 @@ namespace Promrub.Services.API.Interfaces
         public Task<PaymentTransactionDetails> GetPaymentTransactionDetails(string orgId, string transactionId);
         public Task<Qr30GenerateResponse> GetPromtPayQrCode(string orgId, string transactionId);
         public Task<(MemoryStream, string ReceiptNo)> GenerateReceipt(string orgId, string transactionId,bool isImage);
-        public Task<bool> SCBCallback(ScbCallbackRequest request);
+        public Task<string> SCBCallback(ScbCallbackRequest request);
     }
 }

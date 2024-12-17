@@ -1260,7 +1260,7 @@ namespace Promrub.Services.API.Services.Payment
             return pdfBytes;
         }
 
-        public async Task<bool> SCBCallback(ScbCallbackRequest request)
+        public async Task<string> SCBCallback(ScbCallbackRequest request)
         {
             var paymentDetails = paymentRepository.GetTransactionDetailById(request.TransactionId!).FirstOrDefault();
             organizationRepository.SetCustomOrgId(paymentDetails!.OrgId!);
@@ -1294,7 +1294,7 @@ namespace Promrub.Services.API.Services.Payment
                     break;
             }
 
-            return true;
+            return paymentDetails.TransactionId;
         }
 
         private string DiscountPercentage(decimal? percentage)

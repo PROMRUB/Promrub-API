@@ -95,7 +95,7 @@ namespace Promrub.Services.API.Repositories
 
         public IQueryable<PaymentTransactionEntity> GetTransactionDetailById(string transactionId)
         {
-            return context!.PaymentTransactions!.Where(x => x.TransactionId! == transactionId);
+            return context!.PaymentTransactions!.Where(x => x.TransactionId! == transactionId || x.RefTransactionId == transactionId);
         }
 
         public async Task<ScbQrGenerateResponse> QRGenerate(ScbQr30PaymentRequest request)
