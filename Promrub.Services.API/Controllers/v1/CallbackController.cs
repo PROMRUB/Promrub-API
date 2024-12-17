@@ -2,6 +2,8 @@
 using Promrub.Services.API.Handlers;
 using Promrub.Services.API.Interfaces;
 using Promrub.Services.API.Models.RequestModels.Payment;
+using Promrub.Services.API.Models.ResponseModels.Payment;
+using static SkiaSharp.HarfBuzz.SKShaper;
 
 namespace Promrub.Services.API.Controllers.v1
 {
@@ -25,8 +27,8 @@ namespace Promrub.Services.API.Controllers.v1
             {
                 if (!ModelState.IsValid)
                     throw new ArgumentException("1101");
-                await services.SCBCallback(request);
-                return Ok(ResponseHandler.Response("1000", null));
+                var detail = await services.SCBCallback(request);
+                return Ok(ResponseHandler.Response("1000", null, detail));
 
             }
             catch (Exception ex)
