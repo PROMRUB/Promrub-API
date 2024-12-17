@@ -43,6 +43,7 @@ public class ReceivePaymentService : IReceivePaymentService
                         && (string.IsNullOrEmpty(keyword) || x.ReceiptNo.Contains(keyword))
                         && (!start.HasValue || x.CreateAt > start.Value)
                         && (!end.HasValue || x.CreateAt < end.Value)
+                        && (!string.IsNullOrEmpty(x.BillerId) && x.BillerId.Equals("010556109879888"))
             )
             .OrderByDescending(x => x.CreateAt);
 
