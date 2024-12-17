@@ -16,6 +16,7 @@ namespace Promrub.Services.API.Interfaces
         public PaymentTransactionEntity AddTransaction(string transactionId, PaymentTransactionEntity request);
         public void AddTransactionItem(PaymentTransactionItemEntity request);
         public void AddCouponItem(CouponEntity request);
+        public void UpdateBillerId(string transactionId, string billerId);
         public IQueryable<PaymentTransactionEntity> GetTransactionDetail(string transactionId);
         public IQueryable<PaymentTransactionItemEntity> GetTransactionItem(Guid transactionId);
         public IQueryable<CouponEntity> GetTransactionCoupon(Guid transactionId);

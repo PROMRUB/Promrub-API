@@ -166,6 +166,7 @@ namespace Promrub.Services.API.Services.Payment
                 TransactionId = paymentDetails.TransactionId
             };
             var result = await paymentRepository.QRGenerate(request);
+            paymentRepository.UpdateBillerId(transactionId, paymentChannelDetails.BillerId);
             return mapper.Map<ScbQrGenerateData, Qr30GenerateResponse>(result.Data!);
         }
 

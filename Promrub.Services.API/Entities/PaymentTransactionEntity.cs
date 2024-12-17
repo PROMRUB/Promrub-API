@@ -69,6 +69,9 @@ namespace Promrub.Services.API.Entities
 
         [Column("customer_tax_id")]
         public Guid? CustomerTaxId { get; set; }
+
+        [Column("biller_id")]
+        public string? BillerId { get; set; }
         public CustomerTaxEntity? CustomerTaxEntity { get; set; }
     }
 }

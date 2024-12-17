@@ -72,6 +72,13 @@ namespace Promrub.Services.API.Repositories
             request.OrgId = orgId;
             context!.Coupons!.Add(request);
         }
+        public void UpdateBillerId(string transactionId, string billerId)
+        {
+            var data = context!.PaymentTransactions!.Where(x => x.OrgId!.Equals(orgId) && x.TransactionId! == transactionId).FirstOrDefault();
+            data.BillerId = billerId;
+            context.SaveChanges();
+        }
+
         public IQueryable<PaymentTransactionEntity> GetTransactionDetail(string transactionId)
         {
                 return context!.PaymentTransactions!.Where(x => x.OrgId!.Equals(orgId) && x.TransactionId! == transactionId);
