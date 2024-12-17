@@ -37,16 +37,17 @@ namespace Promrub.Services.API.Services.Organization
         {
             var customOrgId = org.OrgCustomId;
             repository!.SetCustomOrgId(customOrgId!);
-            var orgDetail = await repository.GetOrganization();
-            orgDetail.OrgName = org.OrgName;
-            orgDetail.TaxId = org.TaxId;
-            orgDetail.DisplayName = org.DisplayName;
-            orgDetail.CallbackUrl = org.CallBackUrl;
-            orgDetail.OrgLogo = org.OrgLogo;
-            orgDetail.FullAddress = org.FullAddress;
-            orgDetail.TelNo = org.TelNo;
-            orgDetail.Website = org.Website;
-            orgDetail.Email = org.Email;
+            var orgDetail = await repository.GetOrganization(); 
+            orgDetail.OrgName = !string.IsNullOrEmpty(org.OrgName) ? org.OrgName : orgDetail.OrgName;
+            orgDetail.TaxId = !string.IsNullOrEmpty(org.TaxId) ? org.TaxId : orgDetail.TaxId;
+            orgDetail.DisplayName = !string.IsNullOrEmpty(org.DisplayName) ? org.DisplayName : orgDetail.DisplayName;
+            orgDetail.CallbackUrl = !string.IsNullOrEmpty(org.CallBackUrl) ? org.CallBackUrl : orgDetail.CallbackUrl;
+            orgDetail.OrgLogo = !string.IsNullOrEmpty(org.OrgLogo) ? org.OrgLogo : orgDetail.OrgLogo;
+            orgDetail.FullAddress = !string.IsNullOrEmpty(org.FullAddress) ? org.FullAddress : orgDetail.FullAddress;
+            orgDetail.TelNo = !string.IsNullOrEmpty(org.TelNo) ? org.TelNo : orgDetail.TelNo;
+            orgDetail.Website = !string.IsNullOrEmpty(org.Website) ? org.Website : orgDetail.Website;
+            orgDetail.Email = !string.IsNullOrEmpty(org.Email) ? org.Email : orgDetail.Email;
+            orgDetail.OrgAbbr = !string.IsNullOrEmpty(org.OrgAbbr) ? org.OrgAbbr : orgDetail.OrgAbbr;
             repository.Commit();
             return true;
         }

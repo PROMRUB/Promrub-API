@@ -109,7 +109,7 @@ namespace Promrub.Services.API.Controllers.v1
             {
                 if (!ModelState.IsValid || string.IsNullOrEmpty(id))
                     throw new ArgumentException("1101");
-                var result = await services.GenerateReceipt(id, transactionId,false);
+                var result = await services.GenerateReceipt(id, transactionId, false);
                 return File(result.Item1, "application/pdf", $"{result.ReceiptNo}.pdf");
             }
             catch (Exception ex)
@@ -128,7 +128,7 @@ namespace Promrub.Services.API.Controllers.v1
             {
                 if (!ModelState.IsValid || string.IsNullOrEmpty(id))
                     throw new ArgumentException("1101");
-                var result = await services.GenerateReceipt(id, transactionId,false);
+                var result = await services.GenerateReceipt(id, transactionId, false);
                 return File(result.Item1, "application/pdf", $"{result.ReceiptNo}.pdf");
             }
             catch (Exception ex)
@@ -146,7 +146,7 @@ namespace Promrub.Services.API.Controllers.v1
             {
                 if (!ModelState.IsValid || string.IsNullOrEmpty(id))
                     throw new ArgumentException("1101");
-                var result = await services.GenerateReceipt(id, transactionId,true);
+                var result = await services.GenerateReceipt(id, transactionId, true);
                 return Ok(Convert.ToBase64String(result.Item1.ToArray()));
             }
             catch (Exception ex)

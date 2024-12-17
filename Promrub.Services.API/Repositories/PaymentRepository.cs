@@ -72,6 +72,13 @@ namespace Promrub.Services.API.Repositories
             request.OrgId = orgId;
             context!.Coupons!.Add(request);
         }
+        public void UpdateBillerId(string transactionId, string billerId)
+        {
+            var data = context!.PaymentTransactions!.Where(x => x.OrgId!.Equals(orgId) && x.TransactionId! == transactionId).FirstOrDefault();
+            data.BillerId = billerId;
+            context.SaveChanges();
+        }
+
         public IQueryable<PaymentTransactionEntity> GetTransactionDetail(string transactionId)
         {
                 return context!.PaymentTransactions!.Where(x => x.OrgId!.Equals(orgId) && x.TransactionId! == transactionId);
@@ -131,6 +138,42 @@ namespace Promrub.Services.API.Repositories
             return query;
         }
 
+
+        public async Task<FullTaxNumberEntity> FullTaxNumberAsync(string? orgId, string? orgCode, string posId, string? branchCode, string cashierCode)
+        {
+            var sub = string.IsNullOrEmpty(posId) ? "" : posId.Substring(posId.Length - 4, 4);
+            var currentDate = DateTime.Today.Date.ToUniversalTime().ToString("yyMMdd") + sub;
+            var query = await context!.FullTaxNumbers!.Where(x => x.ReceiptDate == currentDate && x.OrgCode == orgCode && x.BranchCode == branchCode && x.CashierCode == cashierCode && x.CashierCode == posId && x.OrgId == orgId).FirstOrDefaultAsync();
+            bool HaveReciept = true;
+            while (HaveReciept)
+            {
+                if (query == null)
+                {
+                    var newRec = new FullTaxNumberEntity
+                    {
+                        ReceiptId = Guid.NewGuid(),
+                        OrgId = orgId,
+                        OrgCode = orgCode,
+                        BranchCode = branchCode,
+                        CashierCode = cashierCode,
+                        EmployeeCode = posId,
+                        ReceiptDate = currentDate,
+                        Allocated = 0
+                    };
+                    context.FullTaxNumbers!.Add(newRec);
+                    context.SaveChanges();
+                    query = await context.FullTaxNumbers!.Where(x => x.ReceiptDate == currentDate && x.OrgId == orgId).FirstOrDefaultAsync();
+                }
+                else
+                {
+                    HaveReciept = false;
+                }
+            }
+            query!.Allocated++;
+            context.SaveChanges();
+            return query;
+        }
+
         public async Task<PaymentTransactionEntity> ReceiptUpdate(PaymentTransactionEntity request)
         {
 
@@ -140,6 +183,17 @@ namespace Promrub.Services.API.Repositories
             query.ReceiptNo = request.ReceiptNo;
             query.ReceiptDate = request.ReceiptDate;
             query.PaymentStatus = 3;
+            context!.SaveChanges();
+            return query;
+        }
+
+        public async Task<PaymentTransactionEntity> FullTaxUpdate(PaymentTransactionEntity request)
+        {
+
+            var query = await context!.PaymentTransactions!.Where(x => x.TransactionId == request.TransactionId).FirstOrDefaultAsync();
+            if (query == null)
+                throw new ArgumentException("1102");
+            query.FullReceiptNo = request.FullReceiptNo;
             context!.SaveChanges();
             return query;
         }

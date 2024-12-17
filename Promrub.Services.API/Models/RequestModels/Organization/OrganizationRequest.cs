@@ -7,6 +7,7 @@ namespace Promrub.Services.API.Models.RequestModels.Organization
     {
         public string? OrgCustomId { get; set; }
         public string? OrgName { get; set; }
+        public string? OrgAbbr { get; set; }
         public string? TaxId { get; set; }
         public string? BrnId { get; set; }
         public string? No { get; set; }

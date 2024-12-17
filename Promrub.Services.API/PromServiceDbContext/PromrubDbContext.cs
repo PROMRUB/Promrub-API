@@ -28,6 +28,7 @@ namespace Promrub.Services.API.PromServiceDbContext
         public DbSet<PaymentChannelEntity> paymentChannels { get; set; }
         public DbSet<PaymentTransactionItemEntity>? PaymentTransactionItems { get; set; }
         public DbSet<ReceiptNumbersEntity>? ReceiptNumbers { get; set; }
+        public DbSet<FullTaxNumberEntity> FullTaxNumbers { get; set; }
         public DbSet<TaxScheduleEntity>? Tax { get; set; }
         public DbSet<TaxReceiptEntity>? TaxReceiptItem { get; set; }
         public DbSet<ReceiptScheduleEntity>? ReceiptSchedule { get; set; }
@@ -52,6 +53,7 @@ namespace Promrub.Services.API.PromServiceDbContext
             modelBuilder.Entity<PaymentChannelEntity>();
             modelBuilder.Entity<PaymentTransactionItemEntity>();
             modelBuilder.Entity<ReceiptNumbersEntity>();
+            modelBuilder.Entity<FullTaxNumberEntity>();
             modelBuilder.Entity<CustomerTaxEntity>();
             modelBuilder.Entity<CouponEntity>();
 

@@ -25,6 +25,8 @@ namespace Promrub.Services.API.Entities
 
         [Column("org_name")]
         public string? OrgName { get; set; }
+        [Column("org_abbr")]
+        public string? OrgAbbr { get; set; }
 
         [Column("display_name")]
         public string? DisplayName { get; set; }

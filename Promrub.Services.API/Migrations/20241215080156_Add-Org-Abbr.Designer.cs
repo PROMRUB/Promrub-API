@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Promrub.Services.API.PromServiceDbContext;
@@ -11,9 +12,10 @@ using Promrub.Services.API.PromServiceDbContext;
 namespace Promrub.Services.API.Migrations
 {
     [DbContext(typeof(PromrubDbContext))]
-    partial class PromrubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241215080156_Add-Org-Abbr")]
+    partial class AddOrgAbbr
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -484,10 +486,6 @@ namespace Promrub.Services.API.Migrations
                         .HasColumnType("text")
                         .HasColumnName("api_Key");
 
-                    b.Property<string>("BillerId")
-                        .HasColumnType("text")
-                        .HasColumnName("biller_id");
-
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("create_at");
@@ -495,10 +493,6 @@ namespace Promrub.Services.API.Migrations
                     b.Property<Guid?>("CustomerTaxId")
                         .HasColumnType("uuid")
                         .HasColumnName("customer_tax_id");
-
-                    b.Property<string>("FullReceiptNo")
-                        .HasColumnType("text")
-                        .HasColumnName("full_receipt_no");
 
                     b.Property<bool?>("IsRedirect")
                         .HasColumnType("boolean")
