@@ -117,6 +117,7 @@ namespace Promrub.Services.API.Services.Payment
             var result = new PaymentTransactionDetails()
             {
                 RefTransactionId = paymentDetails.RefTransactionId,
+                PromprubTransaction = paymentDetails.TransactionId,
                 OrgName = org.DisplayName,
                 Prices = paymentDetails!.TotalTransactionPrices,
                 HvMobileBanking = org.HvMobileBanking,
