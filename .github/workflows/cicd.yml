@@ -12,45 +12,45 @@ env:
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
 jobs:
-  unittest:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repo
-      uses: actions/checkout@v2
+  # unittest:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checkout repo
+  #     uses: actions/checkout@v2
 
-    - name: Slack notification start
-      if: always()
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,message,commit,author,ref,workflow # selectable (default: repo,message)
-        text: "Start unit testing [promrub-api]"
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_URL }} # required
+  #   - name: Slack notification start
+  #     if: always()
+  #     uses: 8398a7/action-slack@v3
+  #     with:
+  #       status: ${{ job.status }}
+  #       fields: repo,message,commit,author,ref,workflow # selectable (default: repo,message)
+  #       text: "Start unit testing [promrub-api]"
+  #     env:
+  #       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_URL }} # required
 
-    - name: Setup dotnet
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '7.0.x'
+  #   - name: Setup dotnet
+  #     uses: actions/setup-dotnet@v3
+  #     with:
+  #       dotnet-version: '7.0.x'
   
-    - id: 'auth'
-      name: 'Authenticate to Google Cloud'
-      uses: 'google-github-actions/auth@v0'
-      with:
-        credentials_json: '${{ secrets.GCR_KEY }}'
+  #   - id: 'auth'
+  #     name: 'Authenticate to Google Cloud'
+  #     uses: 'google-github-actions/auth@v0'
+  #     with:
+  #       credentials_json: '${{ secrets.GCR_KEY }}'
 
-    #- name: Test with the dotnet CLI
-    #  run: dotnet test carpark-api.test
+  #   #- name: Test with the dotnet CLI
+  #   #  run: dotnet test carpark-api.test
 
-    - name: Slack notification end
-      if: always()
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,message,commit,author,ref,workflow # selectable (default: repo,message)
-        text: "Done unit testing [promrub-api] with status [${{job.status}}]"
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_URL }} # required
+  #   - name: Slack notification end
+  #     if: always()
+  #     uses: 8398a7/action-slack@v3
+  #     with:
+  #       status: ${{ job.status }}
+  #       fields: repo,message,commit,author,ref,workflow # selectable (default: repo,message)
+  #       text: "Done unit testing [promrub-api] with status [${{job.status}}]"
+  #     env:
+  #       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_URL }} # required
 
   deploy:
     needs: [ build1 ]
