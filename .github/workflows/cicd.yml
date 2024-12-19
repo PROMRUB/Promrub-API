@@ -57,15 +57,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: Slack notification start
-      if: always()
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,message,commit,author,ref,workflow # selectable (default: repo,message)
-        text: "Start deploying [promrub-api] [${{ needs.build1.outputs.imageTag }}] to [${{ needs.build1.outputs.autoDeployEnv }}]..."
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_URL }} # required
+    # - name: Slack notification start
+    #   if: always()
+    #   uses: 8398a7/action-slack@v3
+    #   with:
+    #     status: ${{ job.status }}
+    #     fields: repo,message,commit,author,ref,workflow # selectable (default: repo,message)
+    #     text: "Start deploying [promrub-api] [${{ needs.build1.outputs.imageTag }}] to [${{ needs.build1.outputs.autoDeployEnv }}]..."
+    #   env:
+    #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_URL }} # required
 
     # Auto deploy
     - name: Deploy
@@ -89,15 +89,15 @@ jobs:
 
         git add ${VALUE_FILE}; git commit --m "Update image tag by Promrub-API auto deploy script"; git push
 
-    - name: Slack notification end
-      if: always()
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,message,commit,author,ref,workflow # selectable (default: repo,message)
-        text: "Done deploying [promrub-api] [${{ needs.build1.outputs.imageTag }}] to [${{ needs.build1.outputs.autoDeployEnv }}]"
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_URL }} # required
+    # - name: Slack notification end
+    #   if: always()
+    #   uses: 8398a7/action-slack@v3
+    #   with:
+    #     status: ${{ job.status }}
+    #     fields: repo,message,commit,author,ref,workflow # selectable (default: repo,message)
+    #     text: "Done deploying [promrub-api] [${{ needs.build1.outputs.imageTag }}] to [${{ needs.build1.outputs.autoDeployEnv }}]"
+    #   env:
+    #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_URL }} # required
 
   build1:
     runs-on: ubuntu-latest
@@ -156,14 +156,14 @@ jobs:
         echo ::set-output name=autoDeployBranch::${DEPLOYMENT_BRANCH}
         echo ::set-output name=dockerFile::${DOCKERFILE}
 
-    - name: Slack notification start
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,message,commit,author,ref,workflow # selectable (default: repo,message)
-        text: "Start building [${{matrix.service}}] [${{ steps.prep.outputs.version }}]..."
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_URL }} # required
+    # - name: Slack notification start
+    #   uses: 8398a7/action-slack@v3
+    #   with:
+    #     status: ${{ job.status }}
+    #     fields: repo,message,commit,author,ref,workflow # selectable (default: repo,message)
+    #     text: "Start building [${{matrix.service}}] [${{ steps.prep.outputs.version }}]..."
+    #   env:
+    #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_URL }} # required
 
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
@@ -192,12 +192,12 @@ jobs:
         tags: ${{ steps.prep.outputs.gcr_tags }}
         build-args: version=0.0.1
 
-    - name: Slack notification end
-      if: always()
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,message,commit,author,ref,workflow # selectable (default: repo,message)
-        text: "Done building [${{matrix.service}}] [${{ steps.prep.outputs.version }}] with status [${{job.status}}]"
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_URL }} # required
+    # - name: Slack notification end
+    #   if: always()
+    #   uses: 8398a7/action-slack@v3
+    #   with:
+    #     status: ${{ job.status }}
+    #     fields: repo,message,commit,author,ref,workflow # selectable (default: repo,message)
+    #     text: "Done building [${{matrix.service}}] [${{ steps.prep.outputs.version }}] with status [${{job.status}}]"
+    #   env:
+    #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_URL }} # required
