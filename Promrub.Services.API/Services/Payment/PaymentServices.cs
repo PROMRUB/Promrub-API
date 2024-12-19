@@ -58,6 +58,9 @@ namespace Promrub.Services.API.Services.Payment
         public async Task<GeneratePaymentLinkModel> GeneratePaymentTransaction(string orgId,
             GeneratePaymentTransactionLinkRequestModel request, string key)
         {
+            if(string.IsNullOrWhiteSpace(request.PosId))
+                request.PosId = "N/A";
+
             var refTransactionId = request.TransactionId;
             SetOrgId(orgId);
             var organization = await organizationRepository.GetOrganization();
@@ -201,7 +204,7 @@ namespace Promrub.Services.API.Services.Payment
             {
                 if(string.IsNullOrEmpty(paymentDetails.FullReceiptNo))
                 {
-                    var receiptData = await paymentRepository.FullTaxNumberAsync(paymentDetails!.OrgId, org.OrgAbbr, paymentDetails!.PosId, org.BrnId, paymentDetails.PosId);
+                    var receiptData = await paymentRepository.FullTaxNumberAsync(paymentDetails!.OrgId, org.OrgAbbr, paymentDetails!.Saler, org.BrnId, paymentDetails.PosId);
                     var receiptNo = $"{receiptData.OrgCode}.{receiptData.BranchCode}.{receiptData.CashierCode}.{receiptData.EmployeeCode}.{receiptData.ReceiptDate}-{receiptData.Allocated!.Value.ToString("D4")}";
                     paymentDetails.FullReceiptNo = receiptNo;
                 }
