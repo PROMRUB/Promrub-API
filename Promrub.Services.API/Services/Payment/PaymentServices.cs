@@ -204,7 +204,7 @@ namespace Promrub.Services.API.Services.Payment
             {
                 if(string.IsNullOrEmpty(paymentDetails.FullReceiptNo))
                 {
-                    var receiptData = await paymentRepository.FullTaxNumberAsync(paymentDetails!.OrgId, org.OrgAbbr, paymentDetails!.Saler, org.BrnId, paymentDetails.PosId);
+                    var receiptData = await paymentRepository.FullTaxNumberAsync(paymentDetails!.OrgId, org.OrgAbbr, paymentDetails!.EmployeeId, org.BrnId, paymentDetails.Saler);
                     var receiptNo = $"{receiptData.OrgCode}.{receiptData.BranchCode}.{receiptData.CashierCode}.{receiptData.EmployeeCode}.{receiptData.ReceiptDate}-{receiptData.Allocated!.Value.ToString("D4")}";
                     paymentDetails.FullReceiptNo = receiptNo;
                 }
