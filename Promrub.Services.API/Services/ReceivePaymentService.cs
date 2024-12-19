@@ -36,6 +36,7 @@ public class ReceivePaymentService : IReceivePaymentService
         if (!string.IsNullOrEmpty(endDate))
         {
             end = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            
             end = DateTime.SpecifyKind(end.Value, DateTimeKind.Utc);
         }
 
