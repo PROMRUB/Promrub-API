@@ -109,7 +109,7 @@ namespace Promrub.Services.API.Repositories
 
         public async Task<ReceiptNumbersEntity> ReceiptNumberAsync(string? orgId,string posId)
         {
-            var sub = string.IsNullOrEmpty(posId) ? "" : posId.Substring(posId.Length - 4, 4);
+            var sub = posId.Equals("N/A") ? "" : posId.Substring(posId.Length - 4, 4);
             var currentDate = DateTime.Today.Date.ToUniversalTime().ToString("yyMMdd") + sub;
             var query = await context!.ReceiptNumbers!.Where(x => x.ReceiptDate == currentDate && x.OrgId == orgId).FirstOrDefaultAsync();
             bool HaveReciept = true;
