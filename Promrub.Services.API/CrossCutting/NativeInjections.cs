@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Promrub.Services.API.Authentications;
+using Promrub.Services.API.BackgroundService;
 using Promrub.Services.API.Controllers.v1;
 using Promrub.Services.API.ExternalServices.Cache;
 using Promrub.Services.API.Handlers;
@@ -51,6 +52,8 @@ namespace Promrub.Services.API.CrossCutting
             services.AddTransient<IAuthorizationHandler, GenericRbacHandler>();
             services.AddScoped<IBasicAuthenticationRepo, BasicAuthenticationRepo>();
             services.AddScoped<IBearerAuthenticationRepo, BearerAuthenticationRepo>();
+            
+            services.AddHostedService<Background>();
         }
     }
 }

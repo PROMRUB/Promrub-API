@@ -79,12 +79,15 @@ public class ReceivePaymentService : IReceivePaymentService
         if (!string.IsNullOrEmpty(startDate))
         {
             start = DateTime.ParseExact(startDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            start = DateTime.SpecifyKind(start.Value, DateTimeKind.Utc);
         }
 
         DateTime? end = null;
         if (!string.IsNullOrEmpty(endDate))
         {
             end = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            end = DateTime.SpecifyKind(end.Value, DateTimeKind.Utc);
+
         }
 
         var query = _receiptRepository.GetReceiptScheduleQuery()
