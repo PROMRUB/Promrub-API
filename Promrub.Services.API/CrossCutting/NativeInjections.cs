@@ -53,7 +53,7 @@ namespace Promrub.Services.API.CrossCutting
             services.AddScoped<IBasicAuthenticationRepo, BasicAuthenticationRepo>();
             services.AddScoped<IBearerAuthenticationRepo, BearerAuthenticationRepo>();
             
-            services.AddHostedService<Background>();
+            // services.AddHostedService<Background>();
         }
     }
 }
