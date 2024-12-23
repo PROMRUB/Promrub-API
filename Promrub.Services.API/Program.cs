@@ -12,6 +12,7 @@ using QuestPDF.Infrastructure;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
+using sib_api_v3_sdk.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,10 @@ Log.Logger = log;
 var cfg = builder.Configuration;
 
 QuestPDF.Settings.License = LicenseType.Community;
+
+// Configuration.Default.ApiKey.Add("api-key",
+//     Environment.GetEnvironmentVariable("ERP_EMAIL"));
+
 
 cfg["IsDev"] = Environment.GetEnvironmentVariable("IsDev")!;
 cfg["PostgreSQL:Host"] = Environment.GetEnvironmentVariable("PostgreSQL_Host")!;
