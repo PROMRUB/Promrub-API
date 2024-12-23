@@ -991,46 +991,112 @@ namespace Promrub.Services.API.Services.Payment
                                             .Bold()
                                             .FontFamily("Prompt");
                                     });
-
+                                
                                 x.Item()
                                     .PaddingLeft(8, Unit.Millimetre)
                                     .PaddingRight(8, Unit.Millimetre)
                                     .Grid(grid =>
                                     {
                                         grid.Columns();
+                                        grid.Item(6)
+                                            .PaddingTop(2, Unit.Millimetre)
+                                            .Grid(subGrid =>
+                                            {
+                                                subGrid.Columns();
+                                                subGrid.Item(12)
+                                                    .AlignLeft()
+                                                    .Text($"ลูกค้า: {org.TaxId}")
+                                                    .Bold()
+                                                    .FontFamily("Prompt");
+
+                                                subGrid.Item(12)
+                                                    .AlignLeft()
+                                                    .Text($"เลขประจำตัวผู้เสียภาษีอากร: {org.TaxId}")
+                                                    .FontFamily("Prompt");
+
+                                                subGrid.Item(12)
+                                                    .AlignLeft()
+                                                    .Text($"{custDetail.Name}")
+                                                    .Bold()
+                                                    .FontFamily("Prompt");
+
+                                                subGrid.Item(12)
+                                                    .AlignLeft()
+                                                    .Text($"{custDetail.FullAddress}")
+                                                    .FontFamily("Prompt");
+                                            });
 
                                         grid.Item(6)
-                                            .AlignLeft()
-                                            .Text($"เลขประจำตัวผู้เสียภาษี: {org.TaxId}")
-                                            .Bold()
-                                            .FontFamily("Prompt");
+                                            .PaddingTop(2, Unit.Millimetre)
+                                            .Grid(subGrid =>
+                                            {
+                                                subGrid.Columns();
+                                                subGrid.Item(7)
+                                                    .AlignRight()
+                                                    .Text($"เลขที่ใบกำกับภาษี: ")
+                                                    .Bold()
+                                                    .FontFamily("Prompt");
 
-                                        grid.Item(6)
-                                            .AlignRight()
-                                            .Text($"เลขที: {paymentDetails.FullReceiptNo}")
-                                            .Bold()
-                                            .FontFamily("Prompt");
-                                    });
+                                                subGrid.Item(5)
+                                                    .AlignLeft()
+                                                    .Text($"{paymentDetails.FullReceiptNo}")
+                                                    .FontFamily("Prompt");
 
+                                                subGrid.Item(7)
+                                                    .AlignRight()
+                                                    .Text($"วันที่: ")
+                                                    .Bold()
+                                                    .FontFamily("Prompt");
 
-                                x.Item()
-                                    .PaddingLeft(8, Unit.Millimetre)
-                                    .PaddingRight(8, Unit.Millimetre)
-                                    .Grid(grid =>
-                                    {
-                                        grid.Columns();
+                                                subGrid.Item(5)
+                                                    .AlignLeft()
+                                                    .Text($"{paymentDetails.ReceiptDate.Value.ToString("mm.dd.yyyy")}")
+                                                    .FontFamily("Prompt");
 
-                                        grid.Item(6)
-                                            .AlignLeft()
-                                            .Text($"สาขาที่ออกใบกำกับภาษีอย่างย่อ: {brn}")
-                                            .Bold()
-                                            .FontFamily("Prompt");
+                                                subGrid.Item(7)
+                                                    .AlignRight()
+                                                    .Text($"เลขที่ใบส่งสินค้า: ")
+                                                    .Bold()
+                                                    .FontFamily("Prompt");
 
-                                        grid.Item(6)
-                                            .AlignRight()
-                                            .Text($"วันที่: {paymentDetails.ReceiptDate!.Value.ToString("dd.MM.yyyy")}")
-                                            .Bold()
-                                            .FontFamily("Prompt");
+                                                subGrid.Item(5)
+                                                    .AlignLeft()
+                                                    .Text($"")
+                                                    .FontFamily("Prompt");
+
+                                                subGrid.Item(7)
+                                                    .AlignRight()
+                                                    .Text($"เลขที่ใบเสนอราคา: ")
+                                                    .Bold()
+                                                    .FontFamily("Prompt");
+
+                                                subGrid.Item(5)
+                                                    .AlignLeft()
+                                                    .Text($"")
+                                                    .FontFamily("Prompt");
+
+                                                subGrid.Item(7)
+                                                    .AlignRight()
+                                                    .Text($"เลขที่ใบสั่งซื้อ: ")
+                                                    .Bold()
+                                                    .FontFamily("Prompt");
+
+                                                subGrid.Item(5)
+                                                    .AlignLeft()
+                                                    .Text($"")
+                                                    .FontFamily("Prompt");
+
+                                                subGrid.Item(7)
+                                                    .AlignRight()
+                                                    .Text($"พนักงานขาย: ")
+                                                    .Bold()
+                                                    .FontFamily("Prompt");
+
+                                                subGrid.Item(5)
+                                                    .AlignLeft()
+                                                    .Text($"")
+                                                    .FontFamily("Prompt");
+                                            });
                                     });
 
                                 x.Item()
