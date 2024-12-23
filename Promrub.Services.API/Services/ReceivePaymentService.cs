@@ -29,6 +29,8 @@ public class ReceivePaymentService : IReceivePaymentService
         if (!string.IsNullOrEmpty(startDate))
         {
             start = DateTime.ParseExact(startDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            TimeSpan ts = new TimeSpan(0, 0, 0);
+            start = start.Value.Add(ts);
             start = DateTime.SpecifyKind(start.Value, DateTimeKind.Utc);
         }
 
@@ -36,7 +38,8 @@ public class ReceivePaymentService : IReceivePaymentService
         if (!string.IsNullOrEmpty(endDate))
         {
             end = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            
+            TimeSpan ts = new TimeSpan(23, 59, 59);
+            end = end.Value.Add(ts);
             end = DateTime.SpecifyKind(end.Value, DateTimeKind.Utc);
         }
 
@@ -79,12 +82,15 @@ public class ReceivePaymentService : IReceivePaymentService
         if (!string.IsNullOrEmpty(startDate))
         {
             start = DateTime.ParseExact(startDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            start = DateTime.SpecifyKind(start.Value, DateTimeKind.Utc);
         }
 
         DateTime? end = null;
         if (!string.IsNullOrEmpty(endDate))
         {
             end = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            end = DateTime.SpecifyKind(end.Value, DateTimeKind.Utc);
+
         }
 
         var query = _receiptRepository.GetReceiptScheduleQuery()
