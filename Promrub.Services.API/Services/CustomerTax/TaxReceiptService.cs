@@ -96,6 +96,10 @@ public class TaxReceiptService : ITaxReceiptService
         var json = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
         var url = "https://sales-api-dev.prom.co.th/v1/api/email";
         var result = await _httpClient.PostAsync(url, json);
+        if (result.StatusCode != System.Net.HttpStatusCode.OK)
+        {
+            throw new Exception("Error sending email");
+        }
     }
 
     public async Task<CustomerResponse> Create(TaxReceiptController.BusinessResource request)

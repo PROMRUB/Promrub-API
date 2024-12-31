@@ -28,7 +28,7 @@ public class TaxReceiptController : BaseController
         }
         catch (Exception ex)
         {
-            return Ok(ResponseHandler.Response(ex.Message, null));
+            return BadRequest(ResponseHandler.Response(ex.Message, null));
         }
     }
 
@@ -45,7 +45,7 @@ public class TaxReceiptController : BaseController
         }
         catch (Exception ex)
         {
-            return Ok(ResponseHandler.Response(ex.Message, null));
+            return BadRequest(ResponseHandler.Response(ex.Message, null));
         }
     }
     
@@ -60,7 +60,7 @@ public class TaxReceiptController : BaseController
         }
         catch (Exception ex)
         {
-            return Ok(ResponseHandler.Response(ex.Message, null));
+            return BadRequest(ResponseHandler.Response(ex.Message, null));
         }
     }
 
