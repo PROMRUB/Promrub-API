@@ -32,17 +32,23 @@ public class TaxReceiptController : BaseController
         }
     }
 
+    [HttpGet]
+    [Route("test")]
+    [MapToApiVersion("1")]
+    public async Task<IActionResult> Test()
+    {
+        return Ok(ResponseHandler.Response("1000", null, ""));
+    }
+
     [HttpPost]
     [Route("{id}")]
     [MapToApiVersion("1")]
     public async Task<IActionResult> Update(string id,
         [FromBody] BusinessResource request)
     {
-        return BadRequest(ResponseHandler.Response("ex.Message", null));
-
         try
         {
-            var result = await _service.Update(id,request);
+            var result = await _service.Update(id, request);
             return Ok(result);
         }
         catch (Exception ex)
@@ -50,7 +56,7 @@ public class TaxReceiptController : BaseController
             return BadRequest(ResponseHandler.Response(ex.Message, null));
         }
     }
-    
+
     [HttpPost]
     [MapToApiVersion("1")]
     public async Task<IActionResult> Create([FromBody] BusinessResource request)
@@ -66,5 +72,13 @@ public class TaxReceiptController : BaseController
         }
     }
 
-    public record BusinessResource(string TaxId,string Name,string Address,string PostCode,string Email,string Tel,bool IsMemo,string TransactionId);
+    public record BusinessResource(
+        string TaxId,
+        string Name,
+        string Address,
+        string PostCode,
+        string Email,
+        string Tel,
+        bool IsMemo,
+        string TransactionId);
 }
