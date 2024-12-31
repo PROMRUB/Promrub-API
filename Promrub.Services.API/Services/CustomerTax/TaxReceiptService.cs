@@ -63,7 +63,7 @@ public class TaxReceiptService : ITaxReceiptService
         
         var transaction = await _paymentRepository.GetPaymentTransaction(request.TransactionId);
         var link = GenerateLink("", transaction.OrgId, transaction.TransactionId);
-        SendEmail("kkunayothin@gmail.com", "korn", link, entity.Name, transaction.RefTransactionId);
+        await SendEmail("kkunayothin@gmail.com", "korn", link, entity.Name, transaction.RefTransactionId);
 
         return new CustomerResponse
         {
@@ -152,7 +152,7 @@ public class TaxReceiptService : ITaxReceiptService
         try
         {
             var sendSmtpEmail = new SendSmtpEmail(Email, To, null, null, HtmlContent, null, Subject);
-            CreateSmtpEmail result = apiInstance.SendTransacEmail(sendSmtpEmail);
+            CreateSmtpEmail result =  await apiInstance.SendTransacEmailAsync(sendSmtpEmail);
         }
         catch (Exception e)
         {
