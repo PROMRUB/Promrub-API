@@ -38,6 +38,8 @@ public class TaxReceiptController : BaseController
     public async Task<IActionResult> Update(string id,
         [FromBody] BusinessResource request)
     {
+        return BadRequest(ResponseHandler.Response("ex.Message", null));
+
         try
         {
             var result = await _service.Update(id,request);
