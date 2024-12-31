@@ -90,7 +90,7 @@ public class TaxReceiptService : ITaxReceiptService
             To = "kkunayothin@gmail.com",
             Name = "korn",
             Subject = subject,
-            Content = content
+            Body = content
         };
         
         var json = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
