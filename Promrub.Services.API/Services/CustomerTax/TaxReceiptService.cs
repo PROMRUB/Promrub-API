@@ -87,8 +87,8 @@ public class TaxReceiptService : ITaxReceiptService
 
         var data = new
         {
-            To = "kkunayothin@gmail.com",
-            Name = "korn",
+            To = entity.Email,
+            Name = entity.Name,
             Subject = subject,
             Body = content
         };
