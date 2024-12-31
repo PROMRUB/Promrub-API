@@ -45,13 +45,13 @@ public class TaxReceiptService : ITaxReceiptService
         };
     }
 
-    public async Task<CustomerResponse> Update(string id, TaxReceiptController.BusinessResource request)
+    public async Task<CustomerResponse> Update(Guid id, TaxReceiptController.BusinessResource request)
     {
-        var entity = await _customerTaxRepository.GetCustomerTaxQuery().FirstOrDefaultAsync(x => x.TaxId == id);
+        var entity = await _customerTaxRepository.GetCustomerTaxQuery().FirstOrDefaultAsync(x => x.Id == id);
 
         if (entity == null)
         {
-            return null;
+            throw new KeyNotFoundException(id.ToString());
         }
 
         entity.Email = request.Email;

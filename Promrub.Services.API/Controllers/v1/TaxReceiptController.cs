@@ -41,9 +41,9 @@ public class TaxReceiptController : BaseController
     }
 
     [HttpPost]
-    [Route("{id}")]
+    [Route("{id:guid}")]
     [MapToApiVersion("1")]
-    public async Task<IActionResult> Update(string id,
+    public async Task<IActionResult> Update(Guid id,
         [FromBody] BusinessResource request)
     {
         try
