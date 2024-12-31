@@ -98,7 +98,7 @@ public class TaxReceiptService : ITaxReceiptService
         var result = await _httpClient.PostAsync(url, json);
         if (result.StatusCode != System.Net.HttpStatusCode.OK)
         {
-            throw new Exception("Error sending email");
+            throw new Exception(await result.Content.ReadAsStringAsync());
         }
     }
 
