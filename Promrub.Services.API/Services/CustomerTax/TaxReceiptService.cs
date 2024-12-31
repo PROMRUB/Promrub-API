@@ -98,7 +98,7 @@ public class TaxReceiptService : ITaxReceiptService
         await _paymentRepository.Context().SaveChangesAsync();
         
         var link = GenerateLink("", transaction.OrgId, transaction.TransactionId);
-        SendEmail("kkunayothin@gmail.com", "korn", link, entity.Name, transaction.RefTransactionId);
+        await SendEmail("kkunayothin@gmail.com", "korn", link, entity.Name, transaction.RefTransactionId);
 
         return new CustomerResponse
         {
