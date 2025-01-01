@@ -40,6 +40,9 @@ if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SCBServicesUrl")))
 if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SCBGenerateQRUrl")))
     throw new ArgumentNullException($"{0} is Null", "SCBServicesUrl");
 
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("QR_Action")))
+    throw new ArgumentNullException($"{0} is Null", "QR_Action");
+
 builder.Services.AddControllers()
     .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
 
@@ -64,6 +67,7 @@ cfg["PostgreSQL:Password"] = Environment.GetEnvironmentVariable("PostgreSQL_Pass
 cfg["PaymentUrl"] = Environment.GetEnvironmentVariable("PaymentUrl")!;
 cfg["SCBServicesUrl"] = Environment.GetEnvironmentVariable("SCBServicesUrl")!;
 cfg["SCBGenerateQRUrl"] = Environment.GetEnvironmentVariable("SCBGenerateQRUrl")!;
+cfg["QRAction"] = Environment.GetEnvironmentVariable("QR_Action")!;
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
