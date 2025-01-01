@@ -55,8 +55,8 @@ var cfg = builder.Configuration;
 
 QuestPDF.Settings.License = LicenseType.Community;
 
-// Configuration.Default.ApiKey.Add("api-key",
-//     Environment.GetEnvironmentVariable("ERP_EMAIL"));
+Configuration.Default.ApiKey.Add("api-key",
+    Environment.GetEnvironmentVariable("ERP_EMAIL"));
 
 
 cfg["IsDev"] = Environment.GetEnvironmentVariable("IsDev")!;
