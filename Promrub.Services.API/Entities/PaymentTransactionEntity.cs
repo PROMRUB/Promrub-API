@@ -38,6 +38,9 @@ namespace Promrub.Services.API.Entities
         [Column("total_discount")]
         public decimal TotalDiscount { get; set; }
 
+        [Column("balance")]
+        public decimal Balance { get; set; }
+
         [Column("total_transaction_prices")]
         public decimal TotalTransactionPrices { get; set; }
 

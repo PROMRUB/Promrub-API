@@ -751,16 +751,82 @@ namespace Promrub.Services.API.Services.Payment
                                 {
 
                                     grid.Columns();
-                                    grid.Item(6)
+                                    grid.Item(5)
+                                            .AlignLeft()
+                                            .Text("จำนวนรายการ: " + paymentDetails.ItemTotal)
+                                            .FontFamily("Prompt");
+
+                                    grid.Columns();
+                                    grid.Item(7)
+                                        .Grid(subGrid =>
+                                        {
+                                            subGrid.Columns();
+                                            subGrid.Item(6)
+                                            .AlignRight()
+                                            .Text("มูลค่าก่อนหักส่วนลด:")
+                                            .FontFamily("Prompt");
+
+                                            subGrid.Item(6)
+                                            .AlignRight()
+                                            .Text(paymentDetails.TotalItemsPrices.ToString("N2"))
+                                            .FontFamily("Prompt");
+                                        });
+                                });
+
+                            x.Item()
+                                .PaddingLeft(8, Unit.Millimetre)
+                                .PaddingRight(8, Unit.Millimetre)
+                                .Grid(grid =>
+                                {
+
+                                    grid.Columns();
+                                    grid.Item(5)
+                                            .AlignLeft()
+                                            .Text("จำนวนสินค้า: " + paymentDetails.QuantityTotal)
+                                            .FontFamily("Prompt");
+
+                                    grid.Item(7)
+                                        .Grid(subGrid =>
+                                        {
+                                            subGrid.Columns();
+                                            subGrid.Item(6)
+                                            .AlignRight()
+                                            .Text("ส่วนลดทั้งหมด:")
+                                            .FontFamily("Prompt");
+
+                                            subGrid.Item(6)
+                                            .AlignRight()
+                                            .Text(paymentDetails.TotalDiscount.ToString("N2"))
+                                            .FontFamily("Prompt");
+                                        });
+                                });
+
+                            x.Item()
+                                .PaddingLeft(8, Unit.Millimetre)
+                                .PaddingRight(8, Unit.Millimetre)
+                                .Grid(grid =>
+                                {
+
+                                    grid.Columns();
+                                    grid.Item(5)
                                             .AlignLeft()
                                             .Text("REF#: " + paymentDetails.RefTransactionId)
                                             .FontFamily("Prompt");
 
-                                    grid.Columns();
-                                    grid.Item(6)
+                                    grid.Item(7)
+                                        .Grid(subGrid =>
+                                        {
+                                            subGrid.Columns();
+                                            subGrid.Item(6)
                                             .AlignRight()
-                                            .Text("รับชำระด้วย")
+                                            .Text("มูลค่าสุทธิ:")
                                             .FontFamily("Prompt");
+
+                                            subGrid.Item(6)
+                                            .AlignRight()
+                                            .Text(paymentDetails.Balance.ToString("N2"))
+                                            .FontFamily("Prompt");
+                                        });
                                 });
 
                             x.Item()
@@ -820,6 +886,14 @@ namespace Promrub.Services.API.Services.Payment
                                         {
 
                                             subGrid.Columns();
+
+
+                                            subGrid.Columns();
+                                            subGrid.Item(12)
+                                                    .AlignRight()
+                                                    .Text("รับชำระด้วย")
+                                                    .FontFamily("Prompt");
+
                                             subGrid.Item(12)
                                                     .Grid(minGrid =>
                                                     {
