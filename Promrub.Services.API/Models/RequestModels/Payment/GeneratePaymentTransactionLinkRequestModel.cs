@@ -5,6 +5,7 @@ namespace Promrub.Services.API.Models.RequestModels.Payment
     public class GeneratePaymentTransactionLinkRequestModel
     {
         public string? PosId { get; set; }
+        public string? EmployeeId { get; set; }
         public string? Cashier { get; set; }
         public string? TransactionId { get; set; }
         public List<PaymentTransactionRequestItemList> RequestItemList { get; set; } = new List<PaymentTransactionRequestItemList>();

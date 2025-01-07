@@ -5,6 +5,6 @@ namespace Promrub.Services.API.Interfaces;
 public interface ITaxReceiptService
 {
     Task<CustomerResponse> GetCustomerByTaxId(string id);
-    Task<CustomerResponse> Update(string id, TaxReceiptController.BusinessResource request);
+    Task<CustomerResponse> Update(Guid id, TaxReceiptController.BusinessResource request);
     Task<CustomerResponse> Create(TaxReceiptController.BusinessResource request);
 }

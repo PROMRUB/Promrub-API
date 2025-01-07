@@ -12,6 +12,7 @@ using QuestPDF.Infrastructure;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
+using sib_api_v3_sdk.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,9 @@ if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SCBServicesUrl")))
 if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SCBGenerateQRUrl")))
     throw new ArgumentNullException($"{0} is Null", "SCBServicesUrl");
 
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("QR_Action")))
+    throw new ArgumentNullException($"{0} is Null", "QR_Action");
+
 builder.Services.AddControllers()
     .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
 
@@ -51,6 +55,10 @@ var cfg = builder.Configuration;
 
 QuestPDF.Settings.License = LicenseType.Community;
 
+Configuration.Default.ApiKey.Add("api-key",
+    Environment.GetEnvironmentVariable("ERP_EMAIL"));
+
+
 cfg["IsDev"] = Environment.GetEnvironmentVariable("IsDev")!;
 cfg["PostgreSQL:Host"] = Environment.GetEnvironmentVariable("PostgreSQL_Host")!;
 cfg["PostgreSQL:Database"] = Environment.GetEnvironmentVariable("PostgreSQL_Database")!;
@@ -59,6 +67,7 @@ cfg["PostgreSQL:Password"] = Environment.GetEnvironmentVariable("PostgreSQL_Pass
 cfg["PaymentUrl"] = Environment.GetEnvironmentVariable("PaymentUrl")!;
 cfg["SCBServicesUrl"] = Environment.GetEnvironmentVariable("SCBServicesUrl")!;
 cfg["SCBGenerateQRUrl"] = Environment.GetEnvironmentVariable("SCBGenerateQRUrl")!;
+cfg["QRAction"] = Environment.GetEnvironmentVariable("QR_Action")!;
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
