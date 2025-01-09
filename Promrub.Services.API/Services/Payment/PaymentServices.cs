@@ -768,7 +768,7 @@ namespace Promrub.Services.API.Services.Payment
 
                                             subGrid.Item(6)
                                             .AlignRight()
-                                            .Text(paymentDetails.TotalItemsPrices.ToString("N2"))
+                                            .Text(paymentDetails.TotalItemsPrices != null ? ((decimal)paymentDetails.TotalItemsPrices).ToString("N2") : 0.ToString("N2"))
                                             .FontFamily("Prompt");
                                         });
                                 });
@@ -796,7 +796,7 @@ namespace Promrub.Services.API.Services.Payment
 
                                             subGrid.Item(6)
                                             .AlignRight()
-                                            .Text(paymentDetails.TotalDiscount.ToString("N2"))
+                                            .Text(paymentDetails.TotalDiscount != null ? ((decimal)paymentDetails.TotalDiscount).ToString("N2") : 0.ToString("N2"))
                                             .FontFamily("Prompt");
                                         });
                                 });
@@ -824,7 +824,7 @@ namespace Promrub.Services.API.Services.Payment
 
                                             subGrid.Item(6)
                                             .AlignRight()
-                                            .Text(paymentDetails.Balance.ToString("N2"))
+                                            .Text(paymentDetails.Balance != null ? ((decimal)paymentDetails.Balance).ToString("N2") : 0.ToString("N2"))
                                             .FontFamily("Prompt");
                                         });
                                 });
@@ -907,7 +907,7 @@ namespace Promrub.Services.API.Services.Payment
                                                         minGrid.Columns();
                                                         minGrid.Item(7)
                                                             .AlignRight()
-                                                            .Text(paymentDetails.ReceiptAmount!.Value.ToString("N2"))
+                                                            .Text(paymentDetails.ReceiptAmount != null ? ((decimal)paymentDetails.ReceiptAmount).ToString("N2") : 0.ToString("N2"))
                                                             .FontFamily("Prompt");
                                                     });
 
