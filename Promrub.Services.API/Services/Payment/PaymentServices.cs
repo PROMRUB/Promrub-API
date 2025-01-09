@@ -907,7 +907,7 @@ namespace Promrub.Services.API.Services.Payment
                                                         minGrid.Columns();
                                                         minGrid.Item(7)
                                                             .AlignRight()
-                                                            .Text(paymentDetails.ReceiptAmount != null ? ((decimal)paymentDetails.ReceiptAmount).ToString("N2") : 0.ToString("N2"))
+                                                            .Text(paymentDetails.TotalTransactionPrices != null ? ((decimal)paymentDetails.TotalTransactionPrices).ToString("N2") : 0.ToString("N2"))
                                                             .FontFamily("Prompt");
                                                     });
 
