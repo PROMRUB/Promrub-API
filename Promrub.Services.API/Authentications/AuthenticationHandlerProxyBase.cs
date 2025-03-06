@@ -30,21 +30,21 @@ namespace Promrub.Services.API.Authentications
 
             if (!Request.Headers.TryGetValue("Authorization", out var authData))
             {
-                LogFailure(ipAddress, "No Authorization header found");
+                //LogFailure(ipAddress, "No Authorization header found");
                 return AuthenticateResult.Fail("No Authorization header found");
             }
 
             var authHeader = AuthenticationHeaderValue.Parse(authData);
             if (!authHeader.Scheme.Equals("Bearer") && !authHeader.Scheme.Equals("Basic"))
             {
-                LogFailure(ipAddress, $"Unknown scheme [{authHeader.Scheme}]");
+                //LogFailure(ipAddress, $"Unknown scheme [{authHeader.Scheme}]");
                 return AuthenticateResult.Fail($"Unknown scheme [{authHeader.Scheme}]");
             }
 
-            if (IsBlocked(ipAddress))
-            {
-                return AuthenticateResult.Fail("Too many failed attempts. Try again later.");
-            }
+            //if (IsBlocked(ipAddress))
+            //{
+            //    return AuthenticateResult.Fail("Too many failed attempts. Try again later.");
+            //}
 
             User? user = null;
             try
@@ -63,17 +63,17 @@ namespace Promrub.Services.API.Authentications
             }
             catch (Exception e)
             {
-                LogFailure(ipAddress, $"Invalid Authorization Header for [{authHeader.Scheme}]");
+                //LogFailure(ipAddress, $"Invalid Authorization Header for [{authHeader.Scheme}]");
                 return AuthenticateResult.Fail($"Invalid Authorization Header for [{authHeader.Scheme}]");
             }
 
             if (user == null)
             {
-                LogFailure(ipAddress, $"Invalid username or password for [{authHeader.Scheme}]");
+                //LogFailure(ipAddress, $"Invalid username or password for [{authHeader.Scheme}]");
                 return AuthenticateResult.Fail($"Invalid username or password for [{authHeader.Scheme}]");
             }
 
-            ClearFailure(ipAddress);
+            //ClearFailure(ipAddress);
 
             var identity = new ClaimsIdentity(user.Claims, Scheme.Name);
             var principal = new ClaimsPrincipal(identity);
