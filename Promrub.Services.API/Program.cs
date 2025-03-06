@@ -95,19 +95,19 @@ builder.Services.AddAuthorization(options => {
     options.AddPolicy("GenericRolePolicy", policy => policy.AddRequirements(new GenericRbacRequirement()));
 });
 
-builder.Services.AddRateLimiter(options =>
-{
-    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, IPAddress>(context =>
-    {
-        var ip = context.Connection.RemoteIpAddress;
-        return RateLimitPartition.GetFixedWindowLimiter(ip!, factory => new FixedWindowRateLimiterOptions
-        {
-            PermitLimit = 5, 
-            Window = TimeSpan.FromMinutes(1), 
-            QueueLimit = 0
-        });
-    });
-});
+//builder.Services.AddRateLimiter(options =>
+//{
+//    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, IPAddress>(context =>
+//    {
+//        var ip = context.Connection.RemoteIpAddress;
+//        return RateLimitPartition.GetFixedWindowLimiter(ip!, factory => new FixedWindowRateLimiterOptions
+//        {
+//            PermitLimit = 5, 
+//            Window = TimeSpan.FromMinutes(1), 
+//            QueueLimit = 0
+//        });
+//    });
+//});
 
 
 builder.Services.AddSwaggerGen(config =>
