@@ -171,7 +171,7 @@ app.UseCors(x => x
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseRateLimiter();
+//app.UseRateLimiter();
 // app.UseHttpsRedirection();
 
 app.UseAuthorization();
