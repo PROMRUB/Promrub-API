@@ -13,6 +13,8 @@ using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using sib_api_v3_sdk.Client;
+using System.Net;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,6 +95,21 @@ builder.Services.AddAuthorization(options => {
     options.AddPolicy("GenericRolePolicy", policy => policy.AddRequirements(new GenericRbacRequirement()));
 });
 
+//builder.Services.AddRateLimiter(options =>
+//{
+//    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, IPAddress>(context =>
+//    {
+//        var ip = context.Connection.RemoteIpAddress;
+//        return RateLimitPartition.GetFixedWindowLimiter(ip!, factory => new FixedWindowRateLimiterOptions
+//        {
+//            PermitLimit = 5, 
+//            Window = TimeSpan.FromMinutes(1), 
+//            QueueLimit = 0
+//        });
+//    });
+//});
+
+
 builder.Services.AddSwaggerGen(config =>
 {
     config.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "Promrub API", Version = "v1", Description = "Promrub API Version 1", });
@@ -146,17 +163,17 @@ using (var scope = app.Services.CreateScope())
     // service.Seed();
 }
 
+app.UseRouting();
+
 app.UseCors(x => x
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
+app.UseAuthorization();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
-// app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 app.MapControllers();
 
