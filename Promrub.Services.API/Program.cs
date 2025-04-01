@@ -163,18 +163,17 @@ using (var scope = app.Services.CreateScope())
     // service.Seed();
 }
 
+app.UseRouting();
+
 app.UseCors(x => x
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
+app.UseAuthorization();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
-//app.UseRateLimiter();
-// app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 app.MapControllers();
 
